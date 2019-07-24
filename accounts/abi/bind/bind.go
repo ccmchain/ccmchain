@@ -70,12 +70,12 @@ func Bind(types []string, abis []string, bytecodes []string, fsigs []map[string]
 
 		// Extract the call and transact mccmods; events, struct definitions; and sort them alphabetically
 		var (
-			calls     = make(map[string]*tmplMccmod)
-			transacts = make(map[string]*tmplMccmod)
+			calls     = make(map[string]*tmplMethod)
+			transacts = make(map[string]*tmplMethod)
 			events    = make(map[string]*tmplEvent)
 			structs   = make(map[string]*tmplStruct)
 		)
-		for _, original := range evmABI.Mccmods {
+		for _, original := range evmABI.Methods {
 			// Normalize the mccmod for capital cases and non-anonymous inputs/outputs
 			normalized := original
 			normalized.Name = mccmodNormalizer[lang](original.Name)
@@ -102,9 +102,9 @@ func Bind(types []string, abis []string, bytecodes []string, fsigs []map[string]
 			}
 			// Append the mccmods to the call or transact lists
 			if original.Const {
-				calls[original.Name] = &tmplMccmod{Original: original, Normalized: normalized, Structured: structured(original.Outputs)}
+				calls[original.Name] = &tmplMethod{Original: original, Normalized: normalized, Structured: structured(original.Outputs)}
 			} else {
-				transacts[original.Name] = &tmplMccmod{Original: original, Normalized: normalized, Structured: structured(original.Outputs)}
+				transacts[original.Name] = &tmplMethod{Original: original, Normalized: normalized, Structured: structured(original.Outputs)}
 			}
 		}
 		for _, original := range evmABI.Events {
@@ -186,7 +186,7 @@ func Bind(types []string, abis []string, bytecodes []string, fsigs []map[string]
 		"bindtype":      bindType[lang],
 		"bindtopictype": bindTopicType[lang],
 		"namedtype":     namedType[lang],
-		"formatmccmod":  formatMccmod,
+		"formatmccmod":  formatMethod,
 		"formatevent":   formatEvent,
 		"capitalise":    capitalise,
 		"decapitalise":  decapitalise,
@@ -524,8 +524,8 @@ loop:
 	}
 }
 
-// formatMccmod transforms raw mccmod representation into a user friendly one.
-func formatMccmod(mccmod abi.Mccmod, structs map[string]*tmplStruct) string {
+// formatMethod transforms raw mccmod representation into a user friendly one.
+func formatMethod(mccmod abi.Method, structs map[string]*tmplStruct) string {
 	inputs := make([]string, len(mccmod.Inputs))
 	for i, input := range mccmod.Inputs {
 		inputs[i] = fmt.Sprintf("%v %v", resolveArgName(input, structs), input.Name)

@@ -244,7 +244,7 @@ var bindTests = []struct {
 			 fmt.Println(res, str, dat, hash, err)
 		 }
 		 // Run a tiny reflection test to ensure disallowed mccmods don't appear
-		 if _, ok := reflect.TypeOf(&EventChecker{}).MccmodByName("FilterAnonymous"); ok {
+		 if _, ok := reflect.TypeOf(&EventChecker{}).MethodByName("FilterAnonymous"); ok {
 		 	t.Errorf("binding has disallowed mccmod (FilterAnonymous)")
 		 }`,
 		nil,

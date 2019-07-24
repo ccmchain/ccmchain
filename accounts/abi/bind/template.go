@@ -31,20 +31,20 @@ type tmplContract struct {
 	InputABI    string                 // JSON ABI used as the input to generate the binding from
 	InputBin    string                 // Optional EVM bytecode used to denetare deploy code from
 	FuncSigs    map[string]string      // Optional map: string signature -> 4-byte signature
-	Constructor abi.Mccmod             // Contract constructor for deploy parametrization
-	Calls       map[string]*tmplMccmod // Contract calls that only read state data
-	Transacts   map[string]*tmplMccmod // Contract calls that write state data
+	Constructor abi.Method             // Contract constructor for deploy parametrization
+	Calls       map[string]*tmplMethod // Contract calls that only read state data
+	Transacts   map[string]*tmplMethod // Contract calls that write state data
 	Events      map[string]*tmplEvent  // Contract events accessors
 	Libraries   map[string]string      // Same as tmplData, but filtered to only keep what the contract needs
 	Structs     map[string]*tmplStruct // Contract struct type definitions
 	Library     bool
 }
 
-// tmplMccmod is a wrapper around an abi.Mccmod that contains a few preprocessed
+// tmplMethod is a wrapper around an abi.Method that contains a few preprocessed
 // and cached data fields.
-type tmplMccmod struct {
-	Original   abi.Mccmod // Original mccmod as parsed by the abi package
-	Normalized abi.Mccmod // Normalized version of the parsed mccmod (capitalized names, non-anonymous args/returns)
+type tmplMethod struct {
+	Original   abi.Method // Original mccmod as parsed by the abi package
+	Normalized abi.Method // Normalized version of the parsed mccmod (capitalized names, non-anonymous args/returns)
 	Structured bool       // Whccmer the returns should be accumulated into a struct
 }
 

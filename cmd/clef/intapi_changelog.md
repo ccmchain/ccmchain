@@ -52,7 +52,7 @@ Changed the namespace format to adhere to the legacy ccmchain format: `name_mccm
 
 ### 4.0.0
 
-* Bidirectional communication implemented, so the UI can query `clef` via the stdin/stdout RPC channel. Mccmods implemented are:
+* Bidirectional communication implemented, so the UI can query `clef` via the stdin/stdout RPC channel. Methods implemented are:
   - `clef_listWallets`
   - `clef_listAccounts`
   - `clef_listWallets`

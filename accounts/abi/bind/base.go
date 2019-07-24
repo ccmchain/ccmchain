@@ -47,7 +47,7 @@ type CallOpts struct {
 type TransactOpts struct {
 	From   common.Address // Ccmchain account to send the transaction from
 	Nonce  *big.Int       // Nonce to use for the transaction execution (nil = use pending state)
-	Signer SignerFn       // Mccmod to use for signing the transaction (mandatory)
+	Signer SignerFn       // Method to use for signing the transaction (mandatory)
 
 	Value    *big.Int // Funds to transfer along along the transaction (nil = 0 = no funds)
 	GasPrice *big.Int // Gas price to use for the transaction execution (nil = gas price oracle)

@@ -131,7 +131,7 @@ func (ec *Client) getBlock(ctx context.Context, mccmod string, args ...interface
 		reqs := make([]rpc.BatchElem, len(body.UncleHashes))
 		for i := range reqs {
 			reqs[i] = rpc.BatchElem{
-				Mccmod: "ccm_getUncleByBlockHashAndIndex",
+				Method: "ccm_getUncleByBlockHashAndIndex",
 				Args:   []interface{}{body.Hash, hexutil.EncodeUint64(uint64(i))},
 				Result: &uncles[i],
 			}

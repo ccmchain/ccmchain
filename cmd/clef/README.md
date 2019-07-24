@@ -145,7 +145,7 @@ See the [external API changelog](extapi_changelog.md) for information about chan
 
 All hex encoded values must be prefixed with `0x`.
 
-## Mccmods
+## Methods
 
 ### account_new
 

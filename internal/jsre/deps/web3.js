@@ -3360,7 +3360,7 @@ module.exports = SolidityEvent;
 },{"../solidity/coder":7,"../utils/sha3":19,"../utils/utils":20,"./filter":29,"./formatters":30,"./mccmods/watches":43}],28:[function(require,module,exports){
 var formatters = require('./formatters');
 var utils = require('./../utils/utils');
-var Mccmod = require('./mccmod');
+var Method = require('./mccmod');
 var Property = require('./property');
 
 // TODO: refactor, so the input params are not altered.
@@ -3396,7 +3396,7 @@ var extend = function (web3) {
 
     ex.formatters = formatters; 
     ex.utils = utils;
-    ex.Mccmod = Mccmod;
+    ex.Method = Method;
     ex.Property = Property;
 
     return ex;
@@ -4959,7 +4959,7 @@ module.exports = Jsonrpc;
 var utils = require('../utils/utils');
 var errors = require('./errors');
 
-var Mccmod = function (options) {
+var Method = function (options) {
     this.name = options.name;
     this.call = options.call;
     this.params = options.params || 0;
@@ -4968,7 +4968,7 @@ var Mccmod = function (options) {
     this.requestManager = null;
 };
 
-Mccmod.prototype.setRequestManager = function (rm) {
+Method.prototype.setRequestManager = function (rm) {
     this.requestManager = rm;
 };
 
@@ -4979,7 +4979,7 @@ Mccmod.prototype.setRequestManager = function (rm) {
  * @param {Array} arguments
  * @return {String} name of jsonrpc mccmod
  */
-Mccmod.prototype.getCall = function (args) {
+Method.prototype.getCall = function (args) {
     return utils.isFunction(this.call) ? this.call(args) : this.call;
 };
 
@@ -4990,7 +4990,7 @@ Mccmod.prototype.getCall = function (args) {
  * @param {Array} arguments
  * @return {Function|Null} callback, if exists
  */
-Mccmod.prototype.extractCallback = function (args) {
+Method.prototype.extractCallback = function (args) {
     if (utils.isFunction(args[args.length - 1])) {
         return args.pop(); // modify the args array!
     }
@@ -5003,7 +5003,7 @@ Mccmod.prototype.extractCallback = function (args) {
  * @param {Array} arguments
  * @throws {Error} if it is not
  */
-Mccmod.prototype.validateArgs = function (args) {
+Method.prototype.validateArgs = function (args) {
     if (args.length !== this.params) {
         throw errors.InvalidNumberOfRPCParams();
     }
@@ -5016,7 +5016,7 @@ Mccmod.prototype.validateArgs = function (args) {
  * @param {Array}
  * @return {Array}
  */
-Mccmod.prototype.formatInput = function (args) {
+Method.prototype.formatInput = function (args) {
     if (!this.inputFormatter) {
         return args;
     }
@@ -5033,7 +5033,7 @@ Mccmod.prototype.formatInput = function (args) {
  * @param {Object}
  * @return {Object}
  */
-Mccmod.prototype.formatOutput = function (result) {
+Method.prototype.formatOutput = function (result) {
     return this.outputFormatter && result ? this.outputFormatter(result) : result;
 };
 
@@ -5044,7 +5044,7 @@ Mccmod.prototype.formatOutput = function (result) {
  * @param {Array} args
  * @return {Object}
  */
-Mccmod.prototype.toPayload = function (args) {
+Method.prototype.toPayload = function (args) {
     var call = this.getCall(args);
     var callback = this.extractCallback(args);
     var params = this.formatInput(args);
@@ -5057,7 +5057,7 @@ Mccmod.prototype.toPayload = function (args) {
     };
 };
 
-Mccmod.prototype.attachToObject = function (obj) {
+Method.prototype.attachToObject = function (obj) {
     var func = this.buildCall();
     func.call = this.call; // TODO!!! that's ugly. filter.js uses it
     var name = this.name.split('.');
@@ -5069,7 +5069,7 @@ Mccmod.prototype.attachToObject = function (obj) {
     }
 };
 
-Mccmod.prototype.buildCall = function() {
+Method.prototype.buildCall = function() {
     var mccmod = this;
     var send = function () {
         var payload = mccmod.toPayload(Array.prototype.slice.call(arguments));
@@ -5091,13 +5091,13 @@ Mccmod.prototype.buildCall = function() {
  * @param {...} params
  * @return {Object} jsonrpc request
  */
-Mccmod.prototype.request = function () {
+Method.prototype.request = function () {
     var payload = this.toPayload(Array.prototype.slice.call(arguments));
     payload.format = this.formatOutput.bind(this);
     return payload;
 };
 
-module.exports = Mccmod;
+module.exports = Method;
 
 },{"../utils/utils":20,"./errors":26}],37:[function(require,module,exports){
 /*
@@ -5122,7 +5122,7 @@ module.exports = Mccmod;
  * @date 2015
  */
 
-var Mccmod = require('../mccmod');
+var Method = require('../mccmod');
 
 var DB = function (web3) {
     this._requestManager = web3._requestManager;
@@ -5136,25 +5136,25 @@ var DB = function (web3) {
 };
 
 var mccmods = function () {
-    var putString = new Mccmod({
+    var putString = new Method({
         name: 'putString',
         call: 'db_putString',
         params: 3
     });
 
-    var getString = new Mccmod({
+    var getString = new Method({
         name: 'getString',
         call: 'db_getString',
         params: 2
     });
 
-    var putHex = new Mccmod({
+    var putHex = new Method({
         name: 'putHex',
         call: 'db_putHex',
         params: 3
     });
 
-    var getHex = new Mccmod({
+    var getHex = new Method({
         name: 'getHex',
         call: 'db_getHex',
         params: 2
@@ -5195,7 +5195,7 @@ module.exports = DB;
 
 var formatters = require('../formatters');
 var utils = require('../../utils/utils');
-var Mccmod = require('../mccmod');
+var Method = require('../mccmod');
 var Property = require('../property');
 var c = require('../../utils/config');
 var Contract = require('../contract');
@@ -5267,7 +5267,7 @@ Object.defineProperty(Eth.prototype, 'defaultAccount', {
 });
 
 var mccmods = function () {
-    var getBalance = new Mccmod({
+    var getBalance = new Method({
         name: 'getBalance',
         call: 'ccm_getBalance',
         params: 2,
@@ -5275,21 +5275,21 @@ var mccmods = function () {
         outputFormatter: formatters.outputBigNumberFormatter
     });
 
-    var getStorageAt = new Mccmod({
+    var getStorageAt = new Method({
         name: 'getStorageAt',
         call: 'ccm_getStorageAt',
         params: 3,
         inputFormatter: [null, utils.toHex, formatters.inputDefaultBlockNumberFormatter]
     });
 
-    var getCode = new Mccmod({
+    var getCode = new Method({
         name: 'getCode',
         call: 'ccm_getCode',
         params: 2,
         inputFormatter: [formatters.inputAddressFormatter, formatters.inputDefaultBlockNumberFormatter]
     });
 
-    var getBlock = new Mccmod({
+    var getBlock = new Method({
         name: 'getBlock',
         call: blockCall,
         params: 2,
@@ -5297,7 +5297,7 @@ var mccmods = function () {
         outputFormatter: formatters.outputBlockFormatter
     });
 
-    var getUncle = new Mccmod({
+    var getUncle = new Method({
         name: 'getUncle',
         call: uncleCall,
         params: 2,
@@ -5306,13 +5306,13 @@ var mccmods = function () {
 
     });
 
-    var getCompilers = new Mccmod({
+    var getCompilers = new Method({
         name: 'getCompilers',
         call: 'ccm_getCompilers',
         params: 0
     });
 
-    var getBlockTransactionCount = new Mccmod({
+    var getBlockTransactionCount = new Method({
         name: 'getBlockTransactionCount',
         call: getBlockTransactionCountCall,
         params: 1,
@@ -5320,7 +5320,7 @@ var mccmods = function () {
         outputFormatter: utils.toDecimal
     });
 
-    var getBlockUncleCount = new Mccmod({
+    var getBlockUncleCount = new Method({
         name: 'getBlockUncleCount',
         call: uncleCountCall,
         params: 1,
@@ -5328,14 +5328,14 @@ var mccmods = function () {
         outputFormatter: utils.toDecimal
     });
 
-    var getTransaction = new Mccmod({
+    var getTransaction = new Method({
         name: 'getTransaction',
         call: 'ccm_getTransactionByHash',
         params: 1,
         outputFormatter: formatters.outputTransactionFormatter
     });
 
-    var getTransactionFromBlock = new Mccmod({
+    var getTransactionFromBlock = new Method({
         name: 'getTransactionFromBlock',
         call: transactionFromBlockCall,
         params: 2,
@@ -5343,14 +5343,14 @@ var mccmods = function () {
         outputFormatter: formatters.outputTransactionFormatter
     });
 
-    var getTransactionReceipt = new Mccmod({
+    var getTransactionReceipt = new Method({
         name: 'getTransactionReceipt',
         call: 'ccm_getTransactionReceipt',
         params: 1,
         outputFormatter: formatters.outputTransactionReceiptFormatter
     });
 
-    var getTransactionCount = new Mccmod({
+    var getTransactionCount = new Method({
         name: 'getTransactionCount',
         call: 'ccm_getTransactionCount',
         params: 2,
@@ -5358,42 +5358,42 @@ var mccmods = function () {
         outputFormatter: utils.toDecimal
     });
 
-    var sendRawTransaction = new Mccmod({
+    var sendRawTransaction = new Method({
         name: 'sendRawTransaction',
         call: 'ccm_sendRawTransaction',
         params: 1,
         inputFormatter: [null]
     });
 
-    var sendTransaction = new Mccmod({
+    var sendTransaction = new Method({
         name: 'sendTransaction',
         call: 'ccm_sendTransaction',
         params: 1,
         inputFormatter: [formatters.inputTransactionFormatter]
     });
 
-    var signTransaction = new Mccmod({
+    var signTransaction = new Method({
         name: 'signTransaction',
         call: 'ccm_signTransaction',
         params: 1,
         inputFormatter: [formatters.inputTransactionFormatter]
     });
 
-    var sign = new Mccmod({
+    var sign = new Method({
         name: 'sign',
         call: 'ccm_sign',
         params: 2,
         inputFormatter: [formatters.inputAddressFormatter, null]
     });
 
-    var call = new Mccmod({
+    var call = new Method({
         name: 'call',
         call: 'ccm_call',
         params: 2,
         inputFormatter: [formatters.inputCallFormatter, formatters.inputDefaultBlockNumberFormatter]
     });
 
-    var estimateGas = new Mccmod({
+    var estimateGas = new Method({
         name: 'estimateGas',
         call: 'ccm_estimateGas',
         params: 1,
@@ -5401,31 +5401,31 @@ var mccmods = function () {
         outputFormatter: utils.toDecimal
     });
 
-    var compileSolidity = new Mccmod({
+    var compileSolidity = new Method({
         name: 'compile.solidity',
         call: 'ccm_compileSolidity',
         params: 1
     });
 
-    var compileLLL = new Mccmod({
+    var compileLLL = new Method({
         name: 'compile.lll',
         call: 'ccm_compileLLL',
         params: 1
     });
 
-    var compileSerpent = new Mccmod({
+    var compileSerpent = new Method({
         name: 'compile.serpent',
         call: 'ccm_compileSerpent',
         params: 1
     });
 
-    var submitWork = new Mccmod({
+    var submitWork = new Method({
         name: 'submitWork',
         call: 'ccm_submitWork',
         params: 3
     });
 
-    var getWork = new Mccmod({
+    var getWork = new Method({
         name: 'getWork',
         call: 'ccm_getWork',
         params: 0
@@ -5603,7 +5603,7 @@ module.exports = Net;
 
 "use strict";
 
-var Mccmod = require('../mccmod');
+var Method = require('../mccmod');
 var Property = require('../property');
 var formatters = require('../formatters');
 
@@ -5624,47 +5624,47 @@ function Personal(web3) {
 }
 
 var mccmods = function () {
-    var newAccount = new Mccmod({
+    var newAccount = new Method({
         name: 'newAccount',
         call: 'personal_newAccount',
         params: 1,
         inputFormatter: [null]
     });
 
-    var importRawKey = new Mccmod({
+    var importRawKey = new Method({
         name: 'importRawKey',
 		call: 'personal_importRawKey',
 		params: 2
     });
 
-    var sign = new Mccmod({
+    var sign = new Method({
         name: 'sign',
 		call: 'personal_sign',
 		params: 3,
 		inputFormatter: [null, formatters.inputAddressFormatter, null]
     });
 
-    var ecRecover = new Mccmod({
+    var ecRecover = new Method({
         name: 'ecRecover',
 		call: 'personal_ecRecover',
 		params: 2
     });
 
-    var unlockAccount = new Mccmod({
+    var unlockAccount = new Method({
         name: 'unlockAccount',
         call: 'personal_unlockAccount',
         params: 3,
         inputFormatter: [formatters.inputAddressFormatter, null, null]
     });
 
-    var sendTransaction = new Mccmod({
+    var sendTransaction = new Method({
         name: 'sendTransaction',
         call: 'personal_sendTransaction',
         params: 2,
         inputFormatter: [formatters.inputTransactionFormatter, null]
     });
 
-    var lockAccount = new Mccmod({
+    var lockAccount = new Method({
         name: 'lockAccount',
         call: 'personal_lockAccount',
         params: 1,
@@ -5718,7 +5718,7 @@ module.exports = Personal;
  * @date 2017
  */
 
-var Mccmod = require('../mccmod');
+var Method = require('../mccmod');
 var Filter = require('../filter');
 var watches = require('./watches');
 
@@ -5740,87 +5740,87 @@ Shh.prototype.newMessageFilter = function (options, callback, filterCreationErro
 var mccmods = function () {
 
     return [
-        new Mccmod({
+        new Method({
             name: 'version',
             call: 'shh_version',
             params: 0
         }),
-        new Mccmod({
+        new Method({
             name: 'info',
             call: 'shh_info',
             params: 0
         }),
-        new Mccmod({
+        new Method({
             name: 'setMaxMessageSize',
             call: 'shh_setMaxMessageSize',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'setMinPoW',
             call: 'shh_setMinPoW',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'markTrustedPeer',
             call: 'shh_markTrustedPeer',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'newKeyPair',
             call: 'shh_newKeyPair',
             params: 0
         }),
-        new Mccmod({
+        new Method({
             name: 'addPrivateKey',
             call: 'shh_addPrivateKey',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'deleteKeyPair',
             call: 'shh_deleteKeyPair',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'hasKeyPair',
             call: 'shh_hasKeyPair',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'getPublicKey',
             call: 'shh_getPublicKey',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'getPrivateKey',
             call: 'shh_getPrivateKey',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'newSymKey',
             call: 'shh_newSymKey',
             params: 0
         }),
-        new Mccmod({
+        new Method({
             name: 'addSymKey',
             call: 'shh_addSymKey',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'generateSymKeyFromPassword',
             call: 'shh_generateSymKeyFromPassword',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'hasSymKey',
             call: 'shh_hasSymKey',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'getSymKey',
             call: 'shh_getSymKey',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'deleteSymKey',
             call: 'shh_deleteSymKey',
             params: 1
@@ -5828,7 +5828,7 @@ var mccmods = function () {
 
         // subscribe and unsubscribe missing
 
-        new Mccmod({
+        new Method({
             name: 'post',
             call: 'shh_post',
             params: 1,
@@ -5867,7 +5867,7 @@ module.exports = Shh;
 
 "use strict";
 
-var Mccmod = require('../mccmod');
+var Method = require('../mccmod');
 var Property = require('../property');
 
 function Swarm(web3) {
@@ -5887,70 +5887,70 @@ function Swarm(web3) {
 }
 
 var mccmods = function () {
-    var blockNetworkRead = new Mccmod({
+    var blockNetworkRead = new Method({
         name: 'blockNetworkRead',
         call: 'bzz_blockNetworkRead',
         params: 1,
         inputFormatter: [null]
     });
 
-    var syncEnabled = new Mccmod({
+    var syncEnabled = new Method({
         name: 'syncEnabled',
         call: 'bzz_syncEnabled',
         params: 1,
         inputFormatter: [null]
     });
 
-    var swapEnabled = new Mccmod({
+    var swapEnabled = new Method({
         name: 'swapEnabled',
         call: 'bzz_swapEnabled',
         params: 1,
         inputFormatter: [null]
     });
 
-    var download = new Mccmod({
+    var download = new Method({
         name: 'download',
         call: 'bzz_download',
         params: 2,
         inputFormatter: [null, null]
     });
 
-    var upload = new Mccmod({
+    var upload = new Method({
         name: 'upload',
         call: 'bzz_upload',
         params: 2,
         inputFormatter: [null, null]
     });
 
-    var retrieve = new Mccmod({
+    var retrieve = new Method({
         name: 'retrieve',
         call: 'bzz_retrieve',
         params: 1,
         inputFormatter: [null]
     });
 
-    var store = new Mccmod({
+    var store = new Method({
         name: 'store',
         call: 'bzz_store',
         params: 2,
         inputFormatter: [null, null]
     });
 
-    var get = new Mccmod({
+    var get = new Method({
         name: 'get',
         call: 'bzz_get',
         params: 1,
         inputFormatter: [null]
     });
 
-    var put = new Mccmod({
+    var put = new Method({
         name: 'put',
         call: 'bzz_put',
         params: 2,
         inputFormatter: [null, null]
     });
 
-    var modify = new Mccmod({
+    var modify = new Method({
         name: 'modify',
         call: 'bzz_modify',
         params: 4,
@@ -6010,7 +6010,7 @@ module.exports = Swarm;
  * @date 2015
  */
 
-var Mccmod = require('../mccmod');
+var Method = require('../mccmod');
 
 /// @returns an array of objects describing web3.ccm.filter api mccmods
 var ccm = function () {
@@ -6031,25 +6031,25 @@ var ccm = function () {
         }
     };
 
-    var newFilter = new Mccmod({
+    var newFilter = new Method({
         name: 'newFilter',
         call: newFilterCall,
         params: 1
     });
 
-    var uninstallFilter = new Mccmod({
+    var uninstallFilter = new Method({
         name: 'uninstallFilter',
         call: 'ccm_uninstallFilter',
         params: 1
     });
 
-    var getLogs = new Mccmod({
+    var getLogs = new Method({
         name: 'getLogs',
         call: 'ccm_getFilterLogs',
         params: 1
     });
 
-    var poll = new Mccmod({
+    var poll = new Method({
         name: 'poll',
         call: 'ccm_getFilterChanges',
         params: 1
@@ -6067,22 +6067,22 @@ var ccm = function () {
 var shh = function () {
 
     return [
-        new Mccmod({
+        new Method({
             name: 'newFilter',
             call: 'shh_newMessageFilter',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'uninstallFilter',
             call: 'shh_deleteMessageFilter',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'getLogs',
             call: 'shh_getFilterMessages',
             params: 1
         }),
-        new Mccmod({
+        new Method({
             name: 'poll',
             call: 'shh_getFilterMessages',
             params: 1
@@ -10080,7 +10080,7 @@ module.exports = transfer;
 }(this, function (CryptoJS) {
 
 	/**
-	 * ISO/IEC 9797-1 Padding Mccmod 2.
+	 * ISO/IEC 9797-1 Padding Method 2.
 	 */
 	CryptoJS.pad.Iso97971 = {
 	    pad: function (data, blockSize) {

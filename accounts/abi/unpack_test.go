@@ -506,7 +506,7 @@ func mccmodMultiReturn(require *require.Assertions) (ABI, []byte, mccmodMultiOut
 	return abi, buff.Bytes(), expected
 }
 
-func TestMccmodMultiReturn(t *testing.T) {
+func TestMethodMultiReturn(t *testing.T) {
 	type reversed struct {
 		String string
 		Int    *big.Int
@@ -1115,7 +1115,7 @@ func TestOOMMaliciousInput(t *testing.T) {
 		if err != nil {
 			t.Fatalf("invalid hex: %s" + test.enc)
 		}
-		_, err = abi.Mccmods["mccmod"].Outputs.UnpackValues(encb)
+		_, err = abi.Methods["mccmod"].Outputs.UnpackValues(encb)
 		if err == nil {
 			t.Fatalf("Expected error on malicious input, test %d", i)
 		}
