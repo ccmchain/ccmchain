@@ -152,7 +152,7 @@ func New(ctx *node.ServiceContext, config *Config) (*Ccmchain, error) {
 		shutdownChan:   make(chan bool),
 		networkID:      config.NetworkId,
 		gasPrice:       config.Miner.GasPrice,
-		ccmerbase:      config.Miner.Etherbase,
+		ccmerbase:      config.Miner.Ccmchainbase,
 		bloomRequests:  make(chan chan *bloombits.Retrieval),
 		bloomIndexer:   NewBloomIndexer(chainDb, params.BloomBitsBlocks, params.BloomConfirms),
 	}
@@ -343,7 +343,7 @@ func (s *Ccmchain) ResetWithGenesisBlock(gb *types.Block) {
 	s.blockchain.ResetWithGenesisBlock(gb)
 }
 
-func (s *Ccmchain) Etherbase() (eb common.Address, err error) {
+func (s *Ccmchain) Ccmchainbase() (eb common.Address, err error) {
 	s.lock.RLock()
 	ccmerbase := s.ccmerbase
 	s.lock.RUnlock()
@@ -359,7 +359,7 @@ func (s *Ccmchain) Etherbase() (eb common.Address, err error) {
 			s.ccmerbase = ccmerbase
 			s.lock.Unlock()
 
-			log.Info("Etherbase automatically configured", "address", ccmerbase)
+			log.Info("Ccmchainbase automatically configured", "address", ccmerbase)
 			return ccmerbase, nil
 		}
 	}
@@ -420,13 +420,13 @@ func (s *Ccmchain) shouldPreserve(block *types.Block) bool {
 	return s.isLocalBlock(block)
 }
 
-// SetEtherbase sets the mining reward address.
-func (s *Ccmchain) SetEtherbase(ccmerbase common.Address) {
+// SetCcmchainbase sets the mining reward address.
+func (s *Ccmchain) SetCcmchainbase(ccmerbase common.Address) {
 	s.lock.Lock()
 	s.ccmerbase = ccmerbase
 	s.lock.Unlock()
 
-	s.miner.SetEtherbase(ccmerbase)
+	s.miner.SetCcmchainbase(ccmerbase)
 }
 
 // StartMining starts the miner with the given number of CPU threads. If mining
@@ -453,7 +453,7 @@ func (s *Ccmchain) StartMining(threads int) error {
 		s.txPool.SetGasPrice(price)
 
 		// Configure the local mining address
-		eb, err := s.Etherbase()
+		eb, err := s.Ccmchainbase()
 		if err != nil {
 			log.Error("Cannot start mining without ccmerbase", "err", err)
 			return fmt.Errorf("ccmerbase missing: %v", err)
@@ -461,7 +461,7 @@ func (s *Ccmchain) StartMining(threads int) error {
 		if clique, ok := s.engine.(*clique.Clique); ok {
 			wallet, err := s.accountManager.Find(accounts.Account{Address: eb})
 			if wallet == nil || err != nil {
-				log.Error("Etherbase account unavailable locally", "err", err)
+				log.Error("Ccmchainbase account unavailable locally", "err", err)
 				return fmt.Errorf("signer missing: %v", err)
 			}
 			clique.Authorize(eb, wallet.SignData)

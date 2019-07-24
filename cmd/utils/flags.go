@@ -427,12 +427,12 @@ var (
 		Usage: "Minimum gas price for mining a transaction (deprecated, use --miner.gasprice)",
 		Value: ccm.DefaultConfig.Miner.GasPrice,
 	}
-	MinerEtherbaseFlag = cli.StringFlag{
+	MinerCcmchainbaseFlag = cli.StringFlag{
 		Name:  "miner.ccmerbase",
 		Usage: "Public address for block mining rewards (default = first account)",
 		Value: "0",
 	}
-	MinerLegacyEtherbaseFlag = cli.StringFlag{
+	MinerLegacyCcmchainbaseFlag = cli.StringFlag{
 		Name:  "ccmerbase",
 		Usage: "Public address for block mining rewards (default = first account, deprecated, use --miner.ccmerbase)",
 		Value: "0",
@@ -1034,16 +1034,16 @@ func MakeAddress(ks *keystore.KeyStore, account string) (accounts.Account, error
 	return accs[index], nil
 }
 
-// setEtherbase retrieves the ccmerbase either from the directly specified
+// setCcmchainbase retrieves the ccmerbase either from the directly specified
 // command line flags or from the keystore if CLI indexed.
-func setEtherbase(ctx *cli.Context, ks *keystore.KeyStore, cfg *ccm.Config) {
+func setCcmchainbase(ctx *cli.Context, ks *keystore.KeyStore, cfg *ccm.Config) {
 	// Extract the current ccmerbase, new flag overriding legacy one
 	var ccmerbase string
-	if ctx.GlobalIsSet(MinerLegacyEtherbaseFlag.Name) {
-		ccmerbase = ctx.GlobalString(MinerLegacyEtherbaseFlag.Name)
+	if ctx.GlobalIsSet(MinerLegacyCcmchainbaseFlag.Name) {
+		ccmerbase = ctx.GlobalString(MinerLegacyCcmchainbaseFlag.Name)
 	}
-	if ctx.GlobalIsSet(MinerEtherbaseFlag.Name) {
-		ccmerbase = ctx.GlobalString(MinerEtherbaseFlag.Name)
+	if ctx.GlobalIsSet(MinerCcmchainbaseFlag.Name) {
+		ccmerbase = ctx.GlobalString(MinerCcmchainbaseFlag.Name)
 	}
 	// Convert the ccmerbase into an address and configure it
 	if ccmerbase != "" {
@@ -1052,7 +1052,7 @@ func setEtherbase(ctx *cli.Context, ks *keystore.KeyStore, cfg *ccm.Config) {
 			if err != nil {
 				Fatalf("Invalid miner ccmerbase: %v", err)
 			}
-			cfg.Miner.Etherbase = account.Address
+			cfg.Miner.Ccmchainbase = account.Address
 		} else {
 			Fatalf("No ccmerbase configured")
 		}
@@ -1405,7 +1405,7 @@ func SetEthConfig(ctx *cli.Context, stack *node.Node, cfg *ccm.Config) {
 	if keystores := stack.AccountManager().Backends(keystore.KeyStoreType); len(keystores) > 0 {
 		ks = keystores[0].(*keystore.KeyStore)
 	}
-	setEtherbase(ctx, ks, cfg)
+	setCcmchainbase(ctx, ks, cfg)
 	setGPO(ctx, &cfg.GPO)
 	setTxPool(ctx, &cfg.TxPool)
 	setEthash(ctx, cfg)

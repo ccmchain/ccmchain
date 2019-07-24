@@ -99,7 +99,7 @@ func newTester(t *testing.T, confOverride func(*ccm.Config)) *tester {
 	ccmConf := &ccm.Config{
 		Genesis: core.DeveloperGenesisBlock(15, common.Address{}),
 		Miner: miner.Config{
-			Etherbase: common.HexToAddress(testAddress),
+			Ccmchainbase: common.HexToAddress(testAddress),
 		},
 		Ethash: ccmash.Config{
 			PowMode: ccmash.ModeTest,

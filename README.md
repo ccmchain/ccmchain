@@ -78,7 +78,7 @@ Transitioning towards developers, if you'd like to play around with creating Ccm
 contracts, you almost certainly would like to do that without any real money involved until
 you get the hang of the entire system. In other words, instead of attaching to the main
 network, you want to join the **test** network with your node, which is fully equivalent to
-the main network, but with play-Ether only.
+the main network, but with play-Ccmchain only.
 
 ```shell
 $ gccm --testnet console
@@ -289,7 +289,7 @@ also need to configure a miner to process transactions and create new blocks for
 
 Mining on the public Ccmchain network is a complex task as it's only feasible using GPUs,
 requiring an OpenCL or CUDA enabled `ccmminer` instance. For information on such a
-setup, please consult the [EtherMining subreddit](https://www.reddit.com/r/EtherMining/)
+setup, please consult the [CcmchainMining subreddit](https://www.reddit.com/r/CcmchainMining/)
 and the [Genoil miner](https://github.com/Genoil/cpp-ccmchain) repository.
 
 In a private network setting, however a single CPU miner instance is more than enough for

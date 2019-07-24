@@ -51,14 +51,14 @@ func NewPublicCcmchainAPI(e *Ccmchain) *PublicCcmchainAPI {
 	return &PublicCcmchainAPI{e}
 }
 
-// Etherbase is the address that mining rewards will be send to
-func (api *PublicCcmchainAPI) Etherbase() (common.Address, error) {
-	return api.e.Etherbase()
+// Ccmchainbase is the address that mining rewards will be send to
+func (api *PublicCcmchainAPI) Ccmchainbase() (common.Address, error) {
+	return api.e.Ccmchainbase()
 }
 
-// Coinbase is the address that mining rewards will be send to (alias for Etherbase)
+// Coinbase is the address that mining rewards will be send to (alias for Ccmchainbase)
 func (api *PublicCcmchainAPI) Coinbase() (common.Address, error) {
-	return api.Etherbase()
+	return api.Ccmchainbase()
 }
 
 // Hashrate returns the POW hashrate
@@ -138,9 +138,9 @@ func (api *PrivateMinerAPI) SetGasPrice(gasPrice hexutil.Big) bool {
 	return true
 }
 
-// SetEtherbase sets the ccmerbase of the miner
-func (api *PrivateMinerAPI) SetEtherbase(ccmerbase common.Address) bool {
-	api.e.SetEtherbase(ccmerbase)
+// SetCcmchainbase sets the ccmerbase of the miner
+func (api *PrivateMinerAPI) SetCcmchainbase(ccmerbase common.Address) bool {
+	api.e.SetCcmchainbase(ccmerbase)
 	return true
 }
 
