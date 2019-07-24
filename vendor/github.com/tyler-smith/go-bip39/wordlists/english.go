@@ -641,7 +641,7 @@ essay
 essence
 estate
 eternal
-ccmics
+ethics
 evidence
 evil
 evoke
@@ -1841,7 +1841,7 @@ tobacco
 today
 toddler
 toe
-togccmer
+together
 toilet
 token
 tomato
