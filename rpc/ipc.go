@@ -35,7 +35,7 @@ func (s *Server) ServeListener(l net.Listener) error {
 			return err
 		}
 		log.Trace("Accepted RPC connection", "conn", conn.RemoteAddr())
-		go s.ServeCodec(NewJSONCodec(conn), OptionMccmodInvocation|OptionSubscriptions)
+		go s.ServeCodec(NewJSONCodec(conn), OptionMethodInvocation|OptionSubscriptions)
 	}
 }
 

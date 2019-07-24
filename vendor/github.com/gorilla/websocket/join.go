@@ -11,7 +11,7 @@ import (
 
 // JoinMessages concatenates received messages to create a single io.Reader.
 // The string term is appended to each message. The returned reader does not
-// support concurrent calls to the Read mccmod.
+// support concurrent calls to the Read method.
 func JoinMessages(c *Conn, term string) io.Reader {
 	return &joinReader{c: c, term: term}
 }

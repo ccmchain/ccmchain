@@ -26,7 +26,7 @@ import (
 
 var errEthashStopped = errors.New("ccmash stopped")
 
-// API exposes ccmash related mccmods for the RPC interface.
+// API exposes ccmash related methods for the RPC interface.
 type API struct {
 	ccmash *Ethash // Make sure the mode of ccmash is normal.
 }

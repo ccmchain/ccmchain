@@ -38,7 +38,7 @@ func (w *wizard) deployFaucet() {
 	infos, err := checkFaucet(client, w.network)
 	if err != nil {
 		infos = &faucetInfos{
-			node:    &nodeInfos{port: 30303, peersTotal: 25},
+			node:    &nodeInfos{port: 17575, peersTotal: 25},
 			port:    80,
 			host:    client.server,
 			amount:  1,
@@ -63,7 +63,7 @@ func (w *wizard) deployFaucet() {
 	}
 	// Port and proxy settings retrieved, figure out the funding amount per period configurations
 	fmt.Println()
-	fmt.Printf("How many Ethers to release per request? (default = %d)\n", infos.amount)
+	fmt.Printf("How many Ccmchains to release per request? (default = %d)\n", infos.amount)
 	infos.amount = w.readDefaultInt(infos.amount)
 
 	fmt.Println()

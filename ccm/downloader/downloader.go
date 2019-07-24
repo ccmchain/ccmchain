@@ -153,10 +153,10 @@ type Downloader struct {
 	quitLock sync.RWMutex  // Lock to prevent double closes
 
 	// Testing hooks
-	syncInitHook     func(uint64, uint64)  // Mccmod to call upon initiating a new sync run
-	bodyFetchHook    func([]*types.Header) // Mccmod to call upon starting a block body fetch
-	receiptFetchHook func([]*types.Header) // Mccmod to call upon starting a receipt fetch
-	chainInsertHook  func([]*fetchResult)  // Mccmod to call upon inserting a chain of blocks (possibly in multiple invocations)
+	syncInitHook     func(uint64, uint64)  // Method to call upon initiating a new sync run
+	bodyFetchHook    func([]*types.Header) // Method to call upon starting a block body fetch
+	receiptFetchHook func([]*types.Header) // Method to call upon starting a receipt fetch
+	chainInsertHook  func([]*fetchResult)  // Method to call upon inserting a chain of blocks (possibly in multiple invocations)
 }
 
 // LightChain encapsulates functions required to synchronise a light chain.
@@ -330,7 +330,7 @@ func (d *Downloader) Synchronise(id string, head common.Hash, td *big.Int, mode 
 		errInvalidAncestor, errInvalidChain:
 		log.Warn("Synchronisation failed, dropping peer", "peer", id, "err", err)
 		if d.dropPeer == nil {
-			// The dropPeer mccmod is nil when `--copydb` is used for a local copy.
+			// The dropPeer method is nil when `--copydb` is used for a local copy.
 			// Timeouts can occur if e.g. compaction hits at the wrong time, and can be ignored
 			log.Warn("Downloader wants to drop peer, but peerdrop-function is not set", "peer", id)
 		} else {
@@ -344,7 +344,7 @@ func (d *Downloader) Synchronise(id string, head common.Hash, td *big.Int, mode 
 
 // synchronise will select the peer and use it for synchronising. If an empty string is given
 // it will use the best peer possible and synchronize if its TD is higher than our own. If any of the
-// checks fail an error will be returned. This mccmod is synchronous
+// checks fail an error will be returned. This method is synchronous
 func (d *Downloader) synchronise(id string, hash common.Hash, td *big.Int, mode SyncMode) error {
 	// Mock out the synchronisation if testing
 	if d.synchroniseMock != nil {
@@ -552,7 +552,7 @@ func (d *Downloader) spawnSync(fetchers []func() error) error {
 }
 
 // cancel aborts all of the operations and resets the queue. However, cancel does
-// not wait for the running download goroutines to finish. This mccmod should be
+// not wait for the running download goroutines to finish. This method should be
 // used when cancelling the downloads from inside the downloader.
 func (d *Downloader) cancel() {
 	// Close the current cancel channel
@@ -1046,7 +1046,7 @@ func (d *Downloader) fetchHeaders(p *peerConnection, from uint64, pivot uint64) 
 
 		case <-timeout.C:
 			if d.dropPeer == nil {
-				// The dropPeer mccmod is nil when `--copydb` is used for a local copy.
+				// The dropPeer method is nil when `--copydb` is used for a local copy.
 				// Timeouts can occur if e.g. compaction hits at the wrong time, and can be ignored
 				p.log.Warn("Downloader wants to drop peer, but peerdrop-function is not set", "peer", p.id)
 				break
@@ -1079,7 +1079,7 @@ func (d *Downloader) fetchHeaders(p *peerConnection, from uint64, pivot uint64) 
 // immediately to the header processor to keep the rest of the pipeline full even
 // in the case of header stalls.
 //
-// The mccmod returns the entire filled skeleton and also the number of headers
+// The method returns the entire filled skeleton and also the number of headers
 // already forwarded for processing.
 func (d *Downloader) fillHeaderSkeleton(from uint64, skeleton []*types.Header) ([]*types.Header, int, error) {
 	log.Debug("Filling up skeleton", "from", from)
@@ -1162,7 +1162,7 @@ func (d *Downloader) fetchReceipts(from uint64) error {
 // also periodically checking for timeouts.
 //
 // As the scheduling/timeout logic mostly is the same for all downloaded data
-// types, this mccmod is used by each for data gathering and is instrumented with
+// types, this method is used by each for data gathering and is instrumented with
 // various callbacks to handle the slight differences between processing them.
 //
 // The instrumentation parameters:
@@ -1170,7 +1170,7 @@ func (d *Downloader) fetchReceipts(from uint64) error {
 //  - deliveryCh:  channel from which to retrieve downloaded data packets (merged from all concurrent peers)
 //  - deliver:     processing callback to deliver data packets into type specific download queues (usually within `queue`)
 //  - wakeCh:      notification channel for waking the fetcher when new tasks are available (or sync completed)
-//  - expire:      task callback mccmod to abort requests that took too long and return the faulty peers (traffic shaping)
+//  - expire:      task callback method to abort requests that took too long and return the faulty peers (traffic shaping)
 //  - pending:     task callback for the number of requests still needing download (detect completion/non-completability)
 //  - inFlight:    task callback for the number of in-progress requests (wait for all active downloads to finish)
 //  - throttle:    task callback to check if the processing queue is full and activate throttling (bound memory use)
@@ -1271,7 +1271,7 @@ func (d *Downloader) fetchParts(deliveryCh chan dataPack, deliver func(dataPack)
 						peer.log.Debug("Stalling delivery, dropping", "type", kind)
 
 						if d.dropPeer == nil {
-							// The dropPeer mccmod is nil when `--copydb` is used for a local copy.
+							// The dropPeer method is nil when `--copydb` is used for a local copy.
 							// Timeouts can occur if e.g. compaction hits at the wrong time, and can be ignored
 							peer.log.Warn("Downloader wants to drop peer, but peerdrop-function is not set", "peer", pid)
 						} else {
@@ -1558,7 +1558,7 @@ func (d *Downloader) importBlockResults(results []*fetchResult) error {
 		if index < len(results) {
 			log.Debug("Downloaded item processing failed", "number", results[index].Header.Number, "hash", results[index].Header.Hash(), "err", err)
 		} else {
-			// The InsertChain mccmod in blockchain.go will sometimes return an out-of-bounds index,
+			// The InsertChain method in blockchain.go will sometimes return an out-of-bounds index,
 			// when it needs to preprocess blocks to import a sidechain.
 			// The importer will put togccmer a new list of blocks to import, which is a superset
 			// of the blocks delivered from the downloader, and the indexing will be off.

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ccmchain library. If not, see <http://www.gnu.org/licenses/>.
 
-// Package les implements the Light Ethereum Subprotocol.
+// Package les implements the Light Ccmchain Subprotocol.
 package les
 
 import (
@@ -47,7 +47,7 @@ import (
 	"github.com/ccmchain/go-ccmchain/rpc"
 )
 
-type LightEthereum struct {
+type LightCcmchain struct {
 	lesCommons
 
 	odr         *LesOdr
@@ -79,7 +79,7 @@ type LightEthereum struct {
 	wg sync.WaitGroup
 }
 
-func New(ctx *node.ServiceContext, config *ccm.Config) (*LightEthereum, error) {
+func New(ctx *node.ServiceContext, config *ccm.Config) (*LightCcmchain, error) {
 	chainDb, err := ctx.OpenDatabase("lightchaindata", config.DatabaseCache, config.DatabaseHandles, "ccm/db/chaindata/")
 	if err != nil {
 		return nil, err
@@ -93,7 +93,7 @@ func New(ctx *node.ServiceContext, config *ccm.Config) (*LightEthereum, error) {
 	peers := newPeerSet()
 	quitSync := make(chan struct{})
 
-	lccm := &LightEthereum{
+	lccm := &LightCcmchain{
 		lesCommons: lesCommons{
 			chainDb: chainDb,
 			config:  config,
@@ -199,7 +199,7 @@ func (s *LightDummyAPI) Mining() bool {
 
 // APIs returns the collection of RPC services the ccmchain package offers.
 // NOTE, some of these services probably need to be moved to somewhere else.
-func (s *LightEthereum) APIs() []rpc.API {
+func (s *LightCcmchain) APIs() []rpc.API {
 	return append(ccmapi.GetAPIs(s.ApiBackend), []rpc.API{
 		{
 			Namespace: "ccm",
@@ -230,26 +230,26 @@ func (s *LightEthereum) APIs() []rpc.API {
 	}...)
 }
 
-func (s *LightEthereum) ResetWithGenesisBlock(gb *types.Block) {
+func (s *LightCcmchain) ResetWithGenesisBlock(gb *types.Block) {
 	s.blockchain.ResetWithGenesisBlock(gb)
 }
 
-func (s *LightEthereum) BlockChain() *light.LightChain      { return s.blockchain }
-func (s *LightEthereum) TxPool() *light.TxPool              { return s.txPool }
-func (s *LightEthereum) Engine() consensus.Engine           { return s.engine }
-func (s *LightEthereum) LesVersion() int                    { return int(ClientProtocolVersions[0]) }
-func (s *LightEthereum) Downloader() *downloader.Downloader { return s.protocolManager.downloader }
-func (s *LightEthereum) EventMux() *event.TypeMux           { return s.eventMux }
+func (s *LightCcmchain) BlockChain() *light.LightChain      { return s.blockchain }
+func (s *LightCcmchain) TxPool() *light.TxPool              { return s.txPool }
+func (s *LightCcmchain) Engine() consensus.Engine           { return s.engine }
+func (s *LightCcmchain) LesVersion() int                    { return int(ClientProtocolVersions[0]) }
+func (s *LightCcmchain) Downloader() *downloader.Downloader { return s.protocolManager.downloader }
+func (s *LightCcmchain) EventMux() *event.TypeMux           { return s.eventMux }
 
 // Protocols implements node.Service, returning all the currently configured
 // network protocols to start.
-func (s *LightEthereum) Protocols() []p2p.Protocol {
+func (s *LightCcmchain) Protocols() []p2p.Protocol {
 	return s.makeProtocols(ClientProtocolVersions)
 }
 
 // Start implements node.Service, starting all internal goroutines needed by the
-// Ethereum protocol implementation.
-func (s *LightEthereum) Start(srvr *p2p.Server) error {
+// Ccmchain protocol implementation.
+func (s *LightCcmchain) Start(srvr *p2p.Server) error {
 	log.Warn("Light client mode is an experimental feature")
 	s.startBloomHandlers(params.BloomBitsBlocksClient)
 	s.netRPCService = ccmapi.NewPublicNetAPI(srvr, s.networkId)
@@ -261,8 +261,8 @@ func (s *LightEthereum) Start(srvr *p2p.Server) error {
 }
 
 // Stop implements node.Service, terminating all internal goroutines used by the
-// Ethereum protocol.
-func (s *LightEthereum) Stop() error {
+// Ccmchain protocol.
+func (s *LightCcmchain) Stop() error {
 	s.odr.Stop()
 	s.relay.Stop()
 	s.bloomIndexer.Close()
@@ -282,7 +282,7 @@ func (s *LightEthereum) Stop() error {
 }
 
 // SetClient sets the rpc client and binds the registrar contract.
-func (s *LightEthereum) SetContractBackend(backend bind.ContractBackend) {
+func (s *LightCcmchain) SetContractBackend(backend bind.ContractBackend) {
 	// Short circuit if registrar is nil
 	if s.protocolManager.reg == nil {
 		return

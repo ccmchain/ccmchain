@@ -33,7 +33,7 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 )
 
-// sshClient is a small wrapper around Go's SSH client with a few utility mccmods
+// sshClient is a small wrapper around Go's SSH client with a few utility methods
 // implemented on top.
 type sshClient struct {
 	server  string // Server name or IP without port number
@@ -79,8 +79,8 @@ func dial(server string, pubkey []byte) (*sshClient, error) {
 	if username == "" {
 		username = user.Username
 	}
-	// Configure the supported authentication mccmods (private key and password)
-	var auths []ssh.AuthMccmod
+	// Configure the supported authentication methods (private key and password)
+	var auths []ssh.AuthMethod
 
 	path := filepath.Join(user.HomeDir, ".ssh", identity)
 	if buf, err := ioutil.ReadFile(path); err != nil {

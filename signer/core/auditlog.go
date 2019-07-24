@@ -42,16 +42,16 @@ func (l *AuditLogger) New(ctx context.Context) (common.Address, error) {
 	return l.api.New(ctx)
 }
 
-func (l *AuditLogger) SignTransaction(ctx context.Context, args SendTxArgs, mccmodSelector *string) (*ccmapi.SignTransactionResult, error) {
+func (l *AuditLogger) SignTransaction(ctx context.Context, args SendTxArgs, methodSelector *string) (*ccmapi.SignTransactionResult, error) {
 	sel := "<nil>"
-	if mccmodSelector != nil {
-		sel = *mccmodSelector
+	if methodSelector != nil {
+		sel = *methodSelector
 	}
 	l.log.Info("SignTransaction", "type", "request", "metadata", MetadataFromContext(ctx).String(),
 		"tx", args.String(),
-		"mccmodSelector", sel)
+		"methodSelector", sel)
 
-	res, e := l.api.SignTransaction(ctx, args, mccmodSelector)
+	res, e := l.api.SignTransaction(ctx, args, methodSelector)
 	if res != nil {
 		l.log.Info("SignTransaction", "type", "response", "data", common.Bytes2Hex(res.Raw), "error", e)
 	} else {

@@ -21,7 +21,7 @@ type ServiceCodeType string
 
 // StorageError identifies a responder-generated network or response parsing error.
 type StorageError interface {
-	// ResponseError implements error's Error(), net.Error's Temporary() and Timeout() mccmods & Response().
+	// ResponseError implements error's Error(), net.Error's Temporary() and Timeout() methods & Response().
 	ResponseError
 
 	// ServiceCode returns a service error code. Your code can use this to make error recovery decisions.
@@ -52,7 +52,7 @@ func (e *storageError) ServiceCode() ServiceCodeType {
 	return e.serviceCode
 }
 
-// Error implements the error interface's Error mccmod to return a string representation of the error.
+// Error implements the error interface's Error method to return a string representation of the error.
 func (e *storageError) Error() string {
 	b := &bytes.Buffer{}
 	fmt.Fprintf(b, "===== RESPONSE ERROR (ServiceCode=%s) =====\n", e.serviceCode)

@@ -131,7 +131,7 @@ func UnmarshalText(text []byte) (f *Filter, err error) {
 	return f, nil
 }
 
-// UnmarshalText mccmod overwrites f with data decoded from text
+// UnmarshalText method overwrites f with data decoded from text
 func (f *Filter) UnmarshalText(text []byte) error {
 	f.lock.Lock()
 	defer f.lock.Unlock()

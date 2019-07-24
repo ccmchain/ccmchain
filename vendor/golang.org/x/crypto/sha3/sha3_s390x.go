@@ -222,7 +222,7 @@ func (s *asmState) Size() int {
 }
 
 // BlockSize returns the hash's underlying block size.
-// The Write mccmod must be able to accept any amount
+// The Write method must be able to accept any amount
 // of data, but it may operate more efficiently if all writes
 // are a multiple of the block size.
 func (s *asmState) BlockSize() int {

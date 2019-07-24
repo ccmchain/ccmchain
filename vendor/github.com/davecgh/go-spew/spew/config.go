@@ -9,7 +9,7 @@
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
  * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHCCMER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
@@ -26,7 +26,7 @@ import (
 // ConfigState houses the configuration options used by spew to format and
 // display values.  There is a global instance, Config, that is used to control
 // all top-level Formatter and Dump functionality.  Each ConfigState instance
-// provides mccmods equivalent to the top-level functions.
+// provides methods equivalent to the top-level functions.
 //
 // The zero value for ConfigState provides no indentation.  You would typically
 // want to set it to a space or a tab.
@@ -49,23 +49,23 @@ type ConfigState struct {
 	// nested data structures.
 	MaxDepth int
 
-	// DisableMccmods specifies whccmer or not error and Stringer interfaces are
+	// DisableMethods specifies whccmer or not error and Stringer interfaces are
 	// invoked for types that implement them.
-	DisableMccmods bool
+	DisableMethods bool
 
-	// DisablePointerMccmods specifies whccmer or not to check for and invoke
+	// DisablePointerMethods specifies whccmer or not to check for and invoke
 	// error and Stringer interfaces on types which only accept a pointer
 	// receiver when the current type is not a pointer.
 	//
-	// NOTE: This might be an unsafe action since calling one of these mccmods
+	// NOTE: This might be an unsafe action since calling one of these methods
 	// with a pointer receiver could technically mutate the value, however,
 	// in practice, types which choose to satisify an error or Stringer
 	// interface with a pointer receiver should not be mutating their state
-	// inside these interface mccmods.  As a result, this option relies on
+	// inside these interface methods.  As a result, this option relies on
 	// access to the unsafe package, so it will not have any effect when
 	// running in environments without access to the unsafe package such as
 	// Google App Engine or with the "safe" build tag specified.
-	DisablePointerMccmods bool
+	DisablePointerMethods bool
 
 	// DisablePointerAddresses specifies whccmer to disable the printing of
 	// pointer addresses. This is useful when diffing data structures in tests.
@@ -76,20 +76,20 @@ type ConfigState struct {
 	// data structures in tests.
 	DisableCapacities bool
 
-	// ContinueOnMccmod specifies whccmer or not recursion should continue once
+	// ContinueOnMethod specifies whccmer or not recursion should continue once
 	// a custom error or Stringer interface is invoked.  The default, false,
 	// means it will print the results of invoking the custom error or Stringer
 	// interface and return immediately instead of continuing to recurse into
 	// the internals of the data type.
 	//
-	// NOTE: This flag does not have any effect if mccmod invocation is disabled
-	// via the DisableMccmods or DisablePointerMccmods options.
-	ContinueOnMccmod bool
+	// NOTE: This flag does not have any effect if method invocation is disabled
+	// via the DisableMethods or DisablePointerMethods options.
+	ContinueOnMethod bool
 
 	// SortKeys specifies map keys should be sorted before being printed. Use
 	// this to have a more deterministic, diffable output.  Note that only
 	// native types (bool, int, uint, floats, uintptr and string) and types
-	// that support the error or Stringer interfaces (if mccmods are
+	// that support the error or Stringer interfaces (if methods are
 	// enabled) are supported, with other types sorted according to the
 	// reflect.Value.String() output which guarantees display stability.
 	SortKeys bool
@@ -297,9 +297,9 @@ func (c *ConfigState) convertArgs(args []interface{}) (formatters []interface{})
 //
 // 	Indent: " "
 // 	MaxDepth: 0
-// 	DisableMccmods: false
-// 	DisablePointerMccmods: false
-// 	ContinueOnMccmod: false
+// 	DisableMethods: false
+// 	DisablePointerMethods: false
+// 	ContinueOnMethod: false
 // 	SortKeys: false
 func NewDefaultConfig() *ConfigState {
 	return &ConfigState{Indent: " "}

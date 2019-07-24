@@ -1153,7 +1153,7 @@
             "name": "LeaseAction",
             "modelAsString": false
           },
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Describes what lease action to take."
         }
       ]
@@ -1262,7 +1262,7 @@
             "name": "LeaseAction",
             "modelAsString": false
           },
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Describes what lease action to take."
         }
       ]
@@ -1376,7 +1376,7 @@
             "name": "LeaseAction",
             "modelAsString": false
           },
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Describes what lease action to take."
         }
       ]
@@ -1490,7 +1490,7 @@
             "name": "LeaseAction",
             "modelAsString": false
           },
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Describes what lease action to take."
         }
       ]
@@ -1607,7 +1607,7 @@
             "name": "LeaseAction",
             "modelAsString": false
           },
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Describes what lease action to take."
         }
       ]
@@ -2824,7 +2824,7 @@
           "x-ms-client-name": "blobType",
           "in": "header",
           "required": true,
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Specifies the type of blob to create: block blob, page blob, or append blob.",
           "type": "string",
           "enum": [
@@ -2958,7 +2958,7 @@
           "x-ms-client-name": "blobType",
           "in": "header",
           "required": true,
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Specifies the type of blob to create: block blob, page blob, or append blob.",
           "type": "string",
           "enum": [
@@ -3095,7 +3095,7 @@
           "x-ms-client-name": "blobType",
           "in": "header",
           "required": true,
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Specifies the type of blob to create: block blob, page blob, or append blob.",
           "type": "string",
           "enum": [
@@ -3494,7 +3494,7 @@
             "name": "LeaseAction",
             "modelAsString": false
           },
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Describes what lease action to take."
         }
       ]
@@ -3600,7 +3600,7 @@
             "name": "LeaseAction",
             "modelAsString": false
           },
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Describes what lease action to take."
         }
       ]
@@ -3711,7 +3711,7 @@
             "name": "LeaseAction",
             "modelAsString": false
           },
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Describes what lease action to take."
         }
       ]
@@ -3825,7 +3825,7 @@
             "name": "LeaseAction",
             "modelAsString": false
           },
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Describes what lease action to take."
         }
       ]
@@ -3936,7 +3936,7 @@
             "name": "LeaseAction",
             "modelAsString": false
           },
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Describes what lease action to take."
         }
       ]
@@ -4360,7 +4360,7 @@
           "enum": [
             "abort"
           ],
-          "x-ms-parameter-location": "mccmod"
+          "x-ms-parameter-location": "method"
         }
       ]
     },
@@ -5087,7 +5087,7 @@
           "x-ms-client-name": "pageWrite",
           "in": "header",
           "required": true,
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Required. You may specify one of the following options:\n  - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.\n  - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size.",
           "type": "string",
           "enum": [
@@ -5222,7 +5222,7 @@
           "x-ms-client-name": "pageWrite",
           "in": "header",
           "required": true,
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Required. You may specify one of the following options:\n  - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.\n  - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size.",
           "type": "string",
           "enum": [
@@ -5383,7 +5383,7 @@
           "x-ms-client-name": "pageWrite",
           "in": "header",
           "required": true,
-          "x-ms-parameter-location": "mccmod",
+          "x-ms-parameter-location": "method",
           "description": "Required. You may specify one of the following options:\n  - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.\n  - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size.",
           "type": "string",
           "enum": [
@@ -6846,7 +6846,7 @@
       "type": "object",
       "required": [
         "AllowedOrigins",
-        "AllowedMccmods",
+        "AllowedMethods",
         "AllowedHeaders",
         "ExposedHeaders",
         "MaxAgeInSeconds"
@@ -6856,8 +6856,8 @@
           "description": "The origin domains that are permitted to make a request against the storage service via CORS. The origin domain is the domain from which the request originates. Note that the origin must be an exact case-sensitive match with the origin that the user age sends to the service. You can also use the wildcard character '*' to allow all origin domains to make requests via CORS.",
           "type": "string"
         },
-        "AllowedMccmods": {
-          "description": "The mccmods (HTTP request verbs) that the origin domain may use for a CORS request. (comma separated)",
+        "AllowedMethods": {
+          "description": "The methods (HTTP request verbs) that the origin domain may use for a CORS request. (comma separated)",
           "type": "string"
         },
         "AllowedHeaders": {
@@ -7292,7 +7292,7 @@
       "pattern": "^[a-zA-Z0-9]+(?:/[a-zA-Z0-9]+)*(?:\\.[a-zA-Z0-9]+){0,1}$",
       "minLength": 1,
       "maxLength": 1024,
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "The blob name."
     },
     "BlobCacheControl": {
@@ -7301,7 +7301,7 @@
       "in": "header",
       "required": false,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "blob-HTTP-headers"
       },
@@ -7314,7 +7314,7 @@
       "required": false,
       "type": "integer",
       "format": "int64",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "append-position-access-conditions"
       },
@@ -7327,7 +7327,7 @@
       "required": false,
       "type": "integer",
       "format": "int64",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "append-position-access-conditions"
       },
@@ -7338,7 +7338,7 @@
       "x-ms-client-name": "access",
       "in": "header",
       "required": false,
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Specifies whccmer data in the container may be accessed publicly and the level of access",
       "type": "string",
       "enum": [
@@ -7372,7 +7372,7 @@
         "name": "AccessTier",
         "modelAsString": true
       },
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Indicates the tier to be set on the blob."
     },
     "BlobContentDisposition": {
@@ -7381,7 +7381,7 @@
       "in": "header",
       "required": false,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "blob-HTTP-headers"
       },
@@ -7393,7 +7393,7 @@
       "in": "header",
       "required": false,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "blob-HTTP-headers"
       },
@@ -7405,7 +7405,7 @@
       "in": "header",
       "required": false,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "blob-HTTP-headers"
       },
@@ -7418,7 +7418,7 @@
       "required": false,
       "type": "integer",
       "format": "int64",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "This header specifies the maximum size for the page blob, up to 1 TB. The page blob size must be aligned to a 512-byte boundary."
     },
     "BlobContentLengthRequired": {
@@ -7428,7 +7428,7 @@
       "required": true,
       "type": "integer",
       "format": "int64",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "This header specifies the maximum size for the page blob, up to 1 TB. The page blob size must be aligned to a 512-byte boundary."
     },
     "BlobContentMD5": {
@@ -7438,7 +7438,7 @@
       "required": false,
       "type": "string",
       "format": "byte",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "blob-HTTP-headers"
       },
@@ -7450,7 +7450,7 @@
       "in": "header",
       "required": false,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "blob-HTTP-headers"
       },
@@ -7464,7 +7464,7 @@
       "type": "integer",
       "format": "int64",
       "default": 0,
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Set for page blobs only. The sequence number is a user-controlled value that you can use to track requests. The value of the sequence number must be between 0 and 2^63 - 1."
     },
     "BlockId": {
@@ -7473,7 +7473,7 @@
       "in": "query",
       "type": "string",
       "required": true,
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "A valid Base64 string value that identifies the block. Prior to encoding, the string must be less than or equal to 64 bytes in size. For a given blob, the length of the value specified for the blockid parameter must be the same size for each block."
     },
     "BlockListType": {
@@ -7482,7 +7482,7 @@
       "in": "query",
       "required": true,
       "default": "committed",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Specifies whccmer to return the list of committed blocks, the list of uncommitted blocks, or both lists togccmer.",
       "type": "string",
       "enum": [
@@ -7503,7 +7503,7 @@
         "type": "object",
         "format": "file"
       },
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Initial data"
     },
     "ContainerAcl": {
@@ -7512,7 +7512,7 @@
       "schema": {
         "$ref": "#/definitions/SignedIdentifiers"
       },
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "the acls for the container"
     },
     "CopyId": {
@@ -7521,7 +7521,7 @@
       "in": "query",
       "required": true,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation."
     },
     "ClientRequestId": {
@@ -7530,7 +7530,7 @@
       "in": "header",
       "required": false,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled."
     },
     "ContainerName": {
@@ -7538,7 +7538,7 @@
       "in": "path",
       "required": true,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "The container name."
     },
 
@@ -7548,7 +7548,7 @@
       "required": true,
       "type": "integer",
       "format": "int64",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "The length of the request."
     },
     "ContentMD5": {
@@ -7558,7 +7558,7 @@
       "required": false,
       "type": "string",
       "format": "byte",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Specify the transactional md5 for the body, to be validated by the service."
     },
     "CopySource": {
@@ -7568,14 +7568,14 @@
       "required": true,
       "type": "string",
       "format": "url",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature."
     },
     "DeleteSnapshots": {
       "name": "x-ms-delete-snapshots",
       "x-ms-client-name": "deleteSnapshots",
       "description": "Required if the blob has associated snapshots. Specify one of the following two options: include: Delete the base blob and all of its snapshots. only: Delete only the blob's snapshots and not the blob itself",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "in": "header",
       "required": false,
       "type": "string",
@@ -7592,7 +7592,7 @@
       "name": "delimiter",
       "description": "When the request includes this parameter, the operation returns a BlobPrefix element in the response body that acts as a placeholder for all blobs whose names begin with the same substring up to the appearance of the delimiter character. The delimiter may be a single character or a string.",
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "in": "query",
       "required": true
     },
@@ -7602,7 +7602,7 @@
       "in": "header",
       "required": false,
       "type": "boolean",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "When set to true and specified togccmer with the Range, the service returns the MD5 hash for the range, as long as the range is less than or equal to 4 MB in size."
     },
     "IfMatch": {
@@ -7612,7 +7612,7 @@
       "required": false,
       "type": "string",
       "format": "etag",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "modified-access-conditions"
       },
@@ -7625,7 +7625,7 @@
       "required": false,
       "type": "string",
       "format": "date-time-rfc1123",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "modified-access-conditions"
       },
@@ -7638,7 +7638,7 @@
       "required": false,
       "type": "string",
       "format": "etag",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "modified-access-conditions"
       },
@@ -7651,7 +7651,7 @@
       "required": false,
       "type": "string",
       "format": "date-time-rfc1123",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "modified-access-conditions"
       },
@@ -7664,7 +7664,7 @@
       "required": false,
       "type": "integer",
       "format": "int64",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "sequence-number-access-conditions"
       },
@@ -7677,7 +7677,7 @@
       "required": false,
       "type": "integer",
       "format": "int64",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "sequence-number-access-conditions"
       },
@@ -7690,7 +7690,7 @@
       "required": false,
       "type": "integer",
       "format": "int64",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "sequence-number-access-conditions"
       },
@@ -7699,7 +7699,7 @@
     "KeyInfo": {
       "name": "KeyInfo",
       "in": "body",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "required": true,
       "schema": {
         "$ref": "#/definitions/KeyInfo"
@@ -7725,7 +7725,7 @@
           "modelAsString": false
         }
       },
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Include this parameter to specify one or more datasets to include in the response."
     },
     "ListContainersInclude": {
@@ -7740,7 +7740,7 @@
         "name": "ListContainersIncludeType",
         "modelAsString": false
       },
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Include this parameter to specify that the container's metadata be returned as part of the response body."
     },
     "LeaseBreakPeriod": {
@@ -7749,7 +7749,7 @@
       "in": "header",
       "required": false,
       "type": "integer",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "For a break operation, proposed duration the lease should continue before it is broken, in seconds, between 0 and 60. This break period is only used if it is shorter than the time remaining on the lease. If longer, the time remaining on the lease is used. A new lease will not be available before the break period has expired, but the lease may be held for longer than the break period. If this header does not appear with a break operation, a fixed-duration lease breaks after the remaining lease period elapses, and an infinite lease breaks immediately."
     },
     "LeaseDuration": {
@@ -7758,7 +7758,7 @@
       "in": "header",
       "required": false,
       "type": "integer",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Specifies the duration of the lease, in seconds, or negative one (-1) for a lease that never expires. A non-infinite lease can be between 15 and 60 seconds. A lease duration cannot be changed using renew or change."
     },
     "LeaseIdOptional": {
@@ -7767,7 +7767,7 @@
       "in": "header",
       "required": false,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "lease-access-conditions"
       },
@@ -7779,7 +7779,7 @@
       "in": "header",
       "required": true,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Specifies the current lease ID on the resource."
     },
     "Marker": {
@@ -7788,7 +7788,7 @@
       "required": false,
       "type": "string",
       "description": "A string value that identifies the portion of the list of containers to be returned with the next listing operation. The operation returns the NextMarker value within the response body if the listing operation did not return all containers remaining to be listed with the current page. The NextMarker value can be used as the value for the marker parameter in a subsequent call to request the next page of list items. The marker value is opaque to the client.",
-      "x-ms-parameter-location": "mccmod"
+      "x-ms-parameter-location": "method"
     },
     "MaxResults": {
       "name": "maxresults",
@@ -7796,7 +7796,7 @@
       "required": false,
       "type": "integer",
       "minimum": 1,
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Specifies the maximum number of containers to return. If the request does not specify maxresults, or specifies a value greater than 5000, the server will return up to 5000 items. Note that if the listing operation crosses a partition boundary, then the service will return a continuation token for retrieving the remainder of the results. For this reason, it is possible that the service will return fewer results than specified by maxresults, or than the default of 5000."
     },
     "Metadata": {
@@ -7805,7 +7805,7 @@
       "in": "header",
       "required": false,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.",
       "x-ms-header-collection-prefix": "x-ms-meta-"
     },
@@ -7815,14 +7815,14 @@
       "required": false,
       "type": "string",
       "description": "Filters the results to return only containers whose name begins with the specified prefix.",
-      "x-ms-parameter-location": "mccmod"
+      "x-ms-parameter-location": "method"
     },
     "PrevSnapshot": {
       "name": "prevsnapshot",
       "in": "query",
       "required": false,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Optional in version 2015-07-08 and newer. The prevsnapshot parameter is a DateTime value that specifies that the response will contain only pages that were changed between target blob and previous snapshot. Changed pages include both updated and cleared pages. The target blob may be a snapshot, as long as the snapshot specified by prevsnapshot is the older of the two. Note that incremental snapshots are currently supported only for blobs created on or after January 1, 2016."
     },
     "ProposedLeaseIdOptional": {
@@ -7831,7 +7831,7 @@
       "in": "header",
       "required": false,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Proposed lease ID, in a GUID string format. The Blob service returns 400 (Invalid request) if the proposed lease ID is not in the correct format. See Guid Constructor (String) for a list of valid GUID string formats."
     },
     "ProposedLeaseIdRequired": {
@@ -7840,7 +7840,7 @@
       "in": "header",
       "required": true,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Proposed lease ID, in a GUID string format. The Blob service returns 400 (Invalid request) if the proposed lease ID is not in the correct format. See Guid Constructor (String) for a list of valid GUID string formats."
     },
     "Range": {
@@ -7849,7 +7849,7 @@
       "in": "header",
       "required": false,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Return only the bytes of the blob in the specified range."
     },
     "RangeRequiredPutPageFromUrl": {
@@ -7858,7 +7858,7 @@
       "in": "header",
       "required": true,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "The range of bytes to which the source range would be written. The range should be 512 aligned and range-end is required."
     },
     "SequenceNumberAction": {
@@ -7866,7 +7866,7 @@
       "x-ms-client-name": "sequenceNumberAction",
       "in": "header",
       "required": true,
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Required if the x-ms-blob-sequence-number header is set for the request. This property applies to page blobs only. This property indicates how the service should modify the blob's sequence number",
       "type": "string",
       "enum": [
@@ -7884,7 +7884,7 @@
       "in": "query",
       "required": false,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see <a href=\"https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob\">Creating a Snapshot of a Blob.</a>"
     },
     "SourceContentMD5": {
@@ -7894,7 +7894,7 @@
       "required": false,
       "type": "string",
       "format": "byte",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Specify the md5 calculated for the range of bytes that must be read from the copy source."
     },
     "SourceRange": {
@@ -7903,7 +7903,7 @@
       "in": "header",
       "required": false,
       "type": "string",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Bytes of source data in the specified range."
       },
       "SourceRangeRequiredPutPageFromUrl": {
@@ -7912,7 +7912,7 @@
         "in": "header",
         "required": true,
         "type": "string",
-        "x-ms-parameter-location": "mccmod",
+        "x-ms-parameter-location": "method",
         "description": "Bytes of source data in the specified range. The length of this range should match the ContentLength header and x-ms-range/Range destination range header."
     },
     "SourceIfMatch": {
@@ -7922,7 +7922,7 @@
       "required": false,
       "type": "string",
       "format": "etag",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "source-modified-access-conditions"
       },
@@ -7935,7 +7935,7 @@
       "required": false,
       "type": "string",
       "format": "date-time-rfc1123",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "source-modified-access-conditions"
       },
@@ -7948,7 +7948,7 @@
       "required": false,
       "type": "string",
       "format": "etag",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "source-modified-access-conditions"
       },
@@ -7961,7 +7961,7 @@
       "required": false,
       "type": "string",
       "format": "date-time-rfc1123",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "x-ms-parameter-grouping": {
         "name": "source-modified-access-conditions"
       },
@@ -7973,7 +7973,7 @@
         "in": "header",
         "required": false,
         "type": "string",
-        "x-ms-parameter-location": "mccmod",
+        "x-ms-parameter-location": "method",
         "description": "A lease ID for the source path. If specified, the source path must have an active lease and the leaase ID must match."
       },
     "SourceUrl": {
@@ -7983,7 +7983,7 @@
       "required": true,
       "type": "string",
       "format": "url",
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "Specify a URL to the copy source."
     },
     "StorageServiceProperties": {
@@ -7993,7 +7993,7 @@
       "schema": {
         "$ref": "#/definitions/StorageServiceProperties"
       },
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "The StorageService properties."
     },
     "Timeout": {
@@ -8002,7 +8002,7 @@
       "required": false,
       "type": "integer",
       "minimum": 0,
-      "x-ms-parameter-location": "mccmod",
+      "x-ms-parameter-location": "method",
       "description": "The timeout parameter is expressed in seconds. For more information, see <a href=\"https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations\">Setting Timeouts for Blob Service Operations.</a>"
       }
   }

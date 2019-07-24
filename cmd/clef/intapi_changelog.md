@@ -68,7 +68,7 @@ Changed the namespace format to adhere to the legacy ccmchain format: `name_mccm
 
 ```go
 type Account struct {
-	Address common.Address `json:"address"` // Ethereum account address derived from the key
+	Address common.Address `json:"address"` // Ccmchain account address derived from the key
 	URL     URL            `json:"url"`     // Optional resource locator within a backend
 }
 ```

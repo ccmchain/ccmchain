@@ -9,7 +9,7 @@
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
  * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHCCMER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
@@ -67,7 +67,7 @@ var (
 // hexDigits is used to map a decimal value to a hex digit.
 var hexDigits = "0123456789abcdef"
 
-// catchPanic handles any panics that might occur during the handleMccmods
+// catchPanic handles any panics that might occur during the handleMethods
 // calls.
 func catchPanic(w io.Writer, v reflect.Value) {
 	if err := recover(); err != nil {
@@ -77,12 +77,12 @@ func catchPanic(w io.Writer, v reflect.Value) {
 	}
 }
 
-// handleMccmods attempts to call the Error and String mccmods on the underlying
+// handleMethods attempts to call the Error and String methods on the underlying
 // type the passed reflect.Value represents and outputes the result to Writer w.
 //
-// It handles panics in any called mccmods by catching and displaying the error
+// It handles panics in any called methods by catching and displaying the error
 // as the formatted value.
-func handleMccmods(cs *ConfigState, w io.Writer, v reflect.Value) (handled bool) {
+func handleMethods(cs *ConfigState, w io.Writer, v reflect.Value) (handled bool) {
 	// We need an interface to check if the type implements the error or
 	// Stringer interface.  However, the reflect package won't give us an
 	// interface on certain things like unexported struct fields in order
@@ -99,11 +99,11 @@ func handleMccmods(cs *ConfigState, w io.Writer, v reflect.Value) (handled bool)
 
 	// Choose whccmer or not to do error and Stringer interface lookups against
 	// the base type or a pointer to the base type depending on settings.
-	// Technically calling one of these mccmods with a pointer receiver can
+	// Technically calling one of these methods with a pointer receiver can
 	// mutate the value, however, types which choose to satisify an error or
 	// Stringer interface with a pointer receiver should not be mutating their
-	// state inside these interface mccmods.
-	if !cs.DisablePointerMccmods && !UnsafeDisabled && !v.CanAddr() {
+	// state inside these interface methods.
+	if !cs.DisablePointerMethods && !UnsafeDisabled && !v.CanAddr() {
 		v = unsafeReflectValue(v)
 	}
 	if v.CanAddr() {
@@ -114,7 +114,7 @@ func handleMccmods(cs *ConfigState, w io.Writer, v reflect.Value) (handled bool)
 	switch iface := v.Interface().(type) {
 	case error:
 		defer catchPanic(w, v)
-		if cs.ContinueOnMccmod {
+		if cs.ContinueOnMethod {
 			w.Write(openParenBytes)
 			w.Write([]byte(iface.Error()))
 			w.Write(closeParenBytes)
@@ -127,7 +127,7 @@ func handleMccmods(cs *ConfigState, w io.Writer, v reflect.Value) (handled bool)
 
 	case fmt.Stringer:
 		defer catchPanic(w, v)
-		if cs.ContinueOnMccmod {
+		if cs.ContinueOnMethod {
 			w.Write(openParenBytes)
 			w.Write([]byte(iface.String()))
 			w.Write(closeParenBytes)
@@ -230,11 +230,11 @@ func newValuesSorter(values []reflect.Value, cs *ConfigState) sort.Interface {
 	if canSortSimply(vs.values[0].Kind()) {
 		return vs
 	}
-	if !cs.DisableMccmods {
+	if !cs.DisableMethods {
 		vs.strings = make([]string, len(values))
 		for i := range vs.values {
 			b := bytes.Buffer{}
-			if !handleMccmods(cs, &b, vs.values[i]) {
+			if !handleMethods(cs, &b, vs.values[i]) {
 				vs.strings = nil
 				break
 			}

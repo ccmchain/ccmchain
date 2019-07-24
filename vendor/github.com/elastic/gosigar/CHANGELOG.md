@@ -21,7 +21,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added support for big endian platform #100 
 
 ### Fixed
-- Add missing mccmod for OpenBSD #99
+- Add missing method for OpenBSD #99
 
 ## [0.8.0]
 
@@ -32,8 +32,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.7.0]
 
 ### Added
-- Added mccmod stubs for process handling for operating system that are not supported
-  by gosigar. All mccmods return `ErrNotImplemented` on such systems. #88
+- Added method stubs for process handling for operating system that are not supported
+  by gosigar. All methods return `ErrNotImplemented` on such systems. #88
 
 ### Fixed
 - Fix freebsd build by using the common version of Get(pid). #91
@@ -45,8 +45,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.6.0]
 
 ### Added
-- Added mccmod stubs to enable compilation for operating systems that are not
-  supported by gosigar. All mccmods return `ErrNotImplemented` on these unsupported
+- Added method stubs to enable compilation for operating systems that are not
+  supported by gosigar. All methods return `ErrNotImplemented` on these unsupported
   operating systems. #83
 - FreeBSD returns `ErrNotImplemented` for `ProcTime.Get`. #83
 
@@ -103,7 +103,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Removed cgo usage from Windows code.
 - Added OS version checks to `ProcArgs.Get` on Windows because the
   `Win32_Process` WMI query is not available prior to Windows vista. On XP and
-  Windows 2003, this mccmod returns `ErrNotImplemented`. #55
+  Windows 2003, this method returns `ErrNotImplemented`. #55
 
 ### Fixed
 - Fixed value of `Mem.ActualFree` and `Mem.ActualUsed` on Windows. #49

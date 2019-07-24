@@ -1524,7 +1524,7 @@ int API_EXPORTED libusb_submit_transfer(struct libusb_transfer *transfer)
 	}
 	/*
 	 * We must release the flying transfers lock here, because with
-	 * some backends the submit_transfer mccmod is synchroneous.
+	 * some backends the submit_transfer method is synchroneous.
 	 */
 	usbi_mutex_unlock(&ctx->flying_transfers_lock);
 

@@ -85,7 +85,7 @@ type LogOptions struct {
 
 	// ShouldLog is called periodically allowing you to return whccmer the specified LogLevel should be logged or not.
 	// An application can return different values over the its lifetime; this allows the application to dynamically
-	// alter what is logged. NOTE: This mccmod can be called by multiple goroutines simultaneously so make sure
+	// alter what is logged. NOTE: This method can be called by multiple goroutines simultaneously so make sure
 	// you implement it in a goroutine-safe way. If nil, nothing is logged (the equivalent of returning LogNone).
 	// Usually, the function will be implemented simply like this: return level <= LogWarning
 	ShouldLog func(level LogLevel) bool
@@ -98,16 +98,16 @@ type pipeline struct {
 
 // The Pipeline interface represents an ordered list of Factory objects and an object implementing the HTTPSender interface.
 // You construct a Pipeline by calling the pipeline.NewPipeline function. To send an HTTP request, call pipeline.NewRequest
-// and then call Pipeline's Do mccmod passing a context, the request, and a mccmod-specific Factory (or nil). Passing a
-// mccmod-specific Factory allows this one call to Do to inject a Policy into the linked-list. The policy is injected where
-// the MccmodFactoryMarker (see the pipeline.MccmodFactoryMarker function) is in the slice of Factory objects.
+// and then call Pipeline's Do method passing a context, the request, and a method-specific Factory (or nil). Passing a
+// method-specific Factory allows this one call to Do to inject a Policy into the linked-list. The policy is injected where
+// the MethodFactoryMarker (see the pipeline.MethodFactoryMarker function) is in the slice of Factory objects.
 //
 // When Do is called, the Pipeline object asks each Factory object to construct its Policy object and adds each Policy to a linked-list.
 // THen, Do sends the Context and Request through all the Policy objects. The final Policy object sends the request over the network
 // (via the HTTPSender object passed to NewPipeline) and the response is returned backwards through all the Policy objects.
 // Since Pipeline and Factory objects are goroutine-safe, you typically create 1 Pipeline object and reuse it to make many HTTP requests.
 type Pipeline interface {
-	Do(ctx context.Context, mccmodFactory Factory, request Request) (Response, error)
+	Do(ctx context.Context, methodFactory Factory, request Request) (Response, error)
 }
 
 // NewPipeline creates a new goroutine-safe Pipeline object from the slice of Factory objects and the specified options.
@@ -122,16 +122,16 @@ func NewPipeline(factories []Factory, o Options) Pipeline {
 }
 
 // Do is called for each and every HTTP request. It tells each Factory to create its own (mutable) Policy object
-// replacing a MccmodFactoryMarker factory (if it exists) with the mccmodFactory passed in. Then, the Context and Request
+// replacing a MethodFactoryMarker factory (if it exists) with the methodFactory passed in. Then, the Context and Request
 // are sent through the pipeline of Policy objects (which can transform the Request's URL/query parameters/headers) and
 // ultimately sends the transformed HTTP request over the network.
-func (p *pipeline) Do(ctx context.Context, mccmodFactory Factory, request Request) (Response, error) {
-	response, err := p.newPolicies(mccmodFactory).Do(ctx, request)
+func (p *pipeline) Do(ctx context.Context, methodFactory Factory, request Request) (Response, error) {
+	response, err := p.newPolicies(methodFactory).Do(ctx, request)
 	request.close()
 	return response, err
 }
 
-func (p *pipeline) newPolicies(mccmodFactory Factory) Policy {
+func (p *pipeline) newPolicies(methodFactory Factory) Policy {
 	// The last Policy is the one that actually sends the request over the wire and gets the response.
 	// It is overridable via the Options' HTTPSender field.
 	po := &PolicyOptions{pipeline: p} // One object shared by all policy objects
@@ -141,14 +141,14 @@ func (p *pipeline) newPolicies(mccmodFactory Factory) Policy {
 	markers := 0
 	for i := len(p.factories) - 1; i >= 0; i-- {
 		factory := p.factories[i]
-		if _, ok := factory.(mccmodFactoryMarker); ok {
+		if _, ok := factory.(methodFactoryMarker); ok {
 			markers++
 			if markers > 1 {
-				panic("MccmodFactoryMarker can only appear once in the pipeline")
+				panic("MethodFactoryMarker can only appear once in the pipeline")
 			}
-			if mccmodFactory != nil {
-				// Replace MccmodFactoryMarker with passed-in mccmodFactory
-				next = mccmodFactory.New(next, po)
+			if methodFactory != nil {
+				// Replace MethodFactoryMarker with passed-in methodFactory
+				next = methodFactory.New(next, po)
 			}
 		} else {
 			// Use the slice's Factory to construct its Policy
@@ -157,14 +157,14 @@ func (p *pipeline) newPolicies(mccmodFactory Factory) Policy {
 	}
 
 	// Each Factory has created its Policy
-	if markers == 0 && mccmodFactory != nil {
-		panic("Non-nil mccmodFactory requires MccmodFactoryMarker in the pipeline")
+	if markers == 0 && methodFactory != nil {
+		panic("Non-nil methodFactory requires MethodFactoryMarker in the pipeline")
 	}
 	return next // Return head of the Policy object linked-list
 }
 
 // A PolicyOptions represents optional information that can be used by a node in the
-// linked-list of Policy objects. A PolicyOptions is passed to the Factory's New mccmod
+// linked-list of Policy objects. A PolicyOptions is passed to the Factory's New method
 // which passes it (if desired) to the Policy object it creates. Today, the Policy object
 // uses the options to perform logging. But, in the future, this could be used for more.
 type PolicyOptions struct {
@@ -239,20 +239,20 @@ func newDefaultHTTPClientFactory() Factory {
 	})
 }
 
-var mfm = mccmodFactoryMarker{} // Singleton
+var mfm = methodFactoryMarker{} // Singleton
 
-// MccmodFactoryMarker returns a special marker Factory object. When Pipeline's Do mccmod is called, any
-// MccmodMarkerFactory object is replaced with the specified mccmodFactory object. If nil is passed fro Do's
-// mccmodFactory parameter, then the MccmodFactoryMarker is ignored as the linked-list of Policy objects is created.
-func MccmodFactoryMarker() Factory {
+// MethodFactoryMarker returns a special marker Factory object. When Pipeline's Do method is called, any
+// MethodMarkerFactory object is replaced with the specified methodFactory object. If nil is passed fro Do's
+// methodFactory parameter, then the MethodFactoryMarker is ignored as the linked-list of Policy objects is created.
+func MethodFactoryMarker() Factory {
 	return mfm
 }
 
-type mccmodFactoryMarker struct {
+type methodFactoryMarker struct {
 }
 
-func (mccmodFactoryMarker) New(next Policy, po *PolicyOptions) Policy {
-	panic("mccmodFactoryMarker policy should have been replaced with a mccmod policy")
+func (methodFactoryMarker) New(next Policy, po *PolicyOptions) Policy {
+	panic("methodFactoryMarker policy should have been replaced with a method policy")
 }
 
 // LogSanitizer can be implemented to clean secrets from lines logged by ForceLog

@@ -340,7 +340,7 @@ func (n *ExecNode) ServeRPC(clientConn net.Conn) error {
 }
 
 // Snapshots creates snapshots of the services by calling the
-// simulation_snapshot RPC mccmod
+// simulation_snapshot RPC method
 func (n *ExecNode) Snapshots() (map[string][]byte, error) {
 	if n.client == nil {
 		return nil, errors.New("RPC not started")
@@ -512,7 +512,7 @@ func (s *snapshotService) Stop() error {
 	return nil
 }
 
-// SnapshotAPI provides an RPC mccmod to create snapshots of services
+// SnapshotAPI provides an RPC method to create snapshots of services
 type SnapshotAPI struct {
 	services map[string]node.Service
 }

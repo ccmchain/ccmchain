@@ -20,12 +20,12 @@ import "fmt"
 
 const defaultErrorCode = -32000
 
-type mccmodNotFoundError struct{ mccmod string }
+type methodNotFoundError struct{ method string }
 
-func (e *mccmodNotFoundError) ErrorCode() int { return -32601 }
+func (e *methodNotFoundError) ErrorCode() int { return -32601 }
 
-func (e *mccmodNotFoundError) Error() string {
-	return fmt.Sprintf("the mccmod %s does not exist/is not available", e.mccmod)
+func (e *methodNotFoundError) Error() string {
+	return fmt.Sprintf("the method %s does not exist/is not available", e.method)
 }
 
 type subscriptionNotFoundError struct{ namespace, subscription string }

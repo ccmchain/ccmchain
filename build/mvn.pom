@@ -9,7 +9,7 @@
   <version>{{.Version}}</version>
   <packaging>aar</packaging>
 
-  <name>Android Ethereum Client</name>
+  <name>Android Ccmchain Client</name>
   <description>Android port of the go-ccmchain libraries and node</description>
   <url>https://github.com/ccmchain/go-ccmchain</url>
   <inceptionYear>2015</inceptionYear>
@@ -23,7 +23,7 @@
   </licenses>
 
   <organization>
-    <name>Ethereum</name>
+    <name>Ccmchain</name>
     <url>https://ccmchain.org</url>
   </organization>
 

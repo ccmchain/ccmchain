@@ -306,7 +306,7 @@ func (t *freezerTable) repair() error {
 	return nil
 }
 
-// preopen opens all files that the freezer will need. This mccmod should be called from an init-context,
+// preopen opens all files that the freezer will need. This method should be called from an init-context,
 // since it assumes that it doesn't have to bother with locking
 // The rationale for doing preopen is to not have to do it from within Retrieve, thus not needing to ever
 // obtain a write-lock within Retrieve.
@@ -452,7 +452,7 @@ func (t *freezerTable) releaseFilesAfter(num uint32, remove bool) {
 // is a precautionary parameter to ensure data correctness, but the table will
 // reject already existing data.
 //
-// Note, this mccmod will *not* flush any data to disk so be sure to explicitly
+// Note, this method will *not* flush any data to disk so be sure to explicitly
 // fsync before irreversibly deleting data from the database.
 func (t *freezerTable) Append(item uint64, blob []byte) error {
 	// Read lock prevents competition with truncate

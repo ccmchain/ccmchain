@@ -219,8 +219,8 @@ func (a *Assertions) Falsef(value bool, msg string, args ...interface{}) bool {
 //  a.HTTPBodyContains(myHandler, "www.google.com", nil, "I'm Feeling Lucky")
 //
 // Returns whccmer the assertion was successful (true) or not (false).
-func (a *Assertions) HTTPBodyContains(handler http.HandlerFunc, mccmod string, url string, values url.Values, str interface{}) bool {
-	return HTTPBodyContains(a.t, handler, mccmod, url, values, str)
+func (a *Assertions) HTTPBodyContains(handler http.HandlerFunc, method string, url string, values url.Values, str interface{}) bool {
+	return HTTPBodyContains(a.t, handler, method, url, values, str)
 }
 
 // HTTPBodyContainsf asserts that a specified handler returns a
@@ -229,8 +229,8 @@ func (a *Assertions) HTTPBodyContains(handler http.HandlerFunc, mccmod string, u
 //  a.HTTPBodyContainsf(myHandler, "www.google.com", nil, "I'm Feeling Lucky", "error message %s", "formatted")
 //
 // Returns whccmer the assertion was successful (true) or not (false).
-func (a *Assertions) HTTPBodyContainsf(handler http.HandlerFunc, mccmod string, url string, values url.Values, str interface{}) bool {
-	return HTTPBodyContainsf(a.t, handler, mccmod, url, values, str)
+func (a *Assertions) HTTPBodyContainsf(handler http.HandlerFunc, method string, url string, values url.Values, str interface{}) bool {
+	return HTTPBodyContainsf(a.t, handler, method, url, values, str)
 }
 
 // HTTPBodyNotContains asserts that a specified handler returns a
@@ -239,8 +239,8 @@ func (a *Assertions) HTTPBodyContainsf(handler http.HandlerFunc, mccmod string, 
 //  a.HTTPBodyNotContains(myHandler, "www.google.com", nil, "I'm Feeling Lucky")
 //
 // Returns whccmer the assertion was successful (true) or not (false).
-func (a *Assertions) HTTPBodyNotContains(handler http.HandlerFunc, mccmod string, url string, values url.Values, str interface{}) bool {
-	return HTTPBodyNotContains(a.t, handler, mccmod, url, values, str)
+func (a *Assertions) HTTPBodyNotContains(handler http.HandlerFunc, method string, url string, values url.Values, str interface{}) bool {
+	return HTTPBodyNotContains(a.t, handler, method, url, values, str)
 }
 
 // HTTPBodyNotContainsf asserts that a specified handler returns a
@@ -249,8 +249,8 @@ func (a *Assertions) HTTPBodyNotContains(handler http.HandlerFunc, mccmod string
 //  a.HTTPBodyNotContainsf(myHandler, "www.google.com", nil, "I'm Feeling Lucky", "error message %s", "formatted")
 //
 // Returns whccmer the assertion was successful (true) or not (false).
-func (a *Assertions) HTTPBodyNotContainsf(handler http.HandlerFunc, mccmod string, url string, values url.Values, str interface{}) bool {
-	return HTTPBodyNotContainsf(a.t, handler, mccmod, url, values, str)
+func (a *Assertions) HTTPBodyNotContainsf(handler http.HandlerFunc, method string, url string, values url.Values, str interface{}) bool {
+	return HTTPBodyNotContainsf(a.t, handler, method, url, values, str)
 }
 
 // HTTPError asserts that a specified handler returns an error status code.
@@ -258,8 +258,8 @@ func (a *Assertions) HTTPBodyNotContainsf(handler http.HandlerFunc, mccmod strin
 //  a.HTTPError(myHandler, "POST", "/a/b/c", url.Values{"a": []string{"b", "c"}}
 //
 // Returns whccmer the assertion was successful (true) or not (false).
-func (a *Assertions) HTTPError(handler http.HandlerFunc, mccmod string, url string, values url.Values) bool {
-	return HTTPError(a.t, handler, mccmod, url, values)
+func (a *Assertions) HTTPError(handler http.HandlerFunc, method string, url string, values url.Values) bool {
+	return HTTPError(a.t, handler, method, url, values)
 }
 
 // HTTPErrorf asserts that a specified handler returns an error status code.
@@ -267,8 +267,8 @@ func (a *Assertions) HTTPError(handler http.HandlerFunc, mccmod string, url stri
 //  a.HTTPErrorf(myHandler, "POST", "/a/b/c", url.Values{"a": []string{"b", "c"}}
 //
 // Returns whccmer the assertion was successful (true, "error message %s", "formatted") or not (false).
-func (a *Assertions) HTTPErrorf(handler http.HandlerFunc, mccmod string, url string, values url.Values) bool {
-	return HTTPErrorf(a.t, handler, mccmod, url, values)
+func (a *Assertions) HTTPErrorf(handler http.HandlerFunc, method string, url string, values url.Values) bool {
+	return HTTPErrorf(a.t, handler, method, url, values)
 }
 
 // HTTPRedirect asserts that a specified handler returns a redirect status code.
@@ -276,8 +276,8 @@ func (a *Assertions) HTTPErrorf(handler http.HandlerFunc, mccmod string, url str
 //  a.HTTPRedirect(myHandler, "GET", "/a/b/c", url.Values{"a": []string{"b", "c"}}
 //
 // Returns whccmer the assertion was successful (true) or not (false).
-func (a *Assertions) HTTPRedirect(handler http.HandlerFunc, mccmod string, url string, values url.Values) bool {
-	return HTTPRedirect(a.t, handler, mccmod, url, values)
+func (a *Assertions) HTTPRedirect(handler http.HandlerFunc, method string, url string, values url.Values) bool {
+	return HTTPRedirect(a.t, handler, method, url, values)
 }
 
 // HTTPRedirectf asserts that a specified handler returns a redirect status code.
@@ -285,8 +285,8 @@ func (a *Assertions) HTTPRedirect(handler http.HandlerFunc, mccmod string, url s
 //  a.HTTPRedirectf(myHandler, "GET", "/a/b/c", url.Values{"a": []string{"b", "c"}}
 //
 // Returns whccmer the assertion was successful (true, "error message %s", "formatted") or not (false).
-func (a *Assertions) HTTPRedirectf(handler http.HandlerFunc, mccmod string, url string, values url.Values) bool {
-	return HTTPRedirectf(a.t, handler, mccmod, url, values)
+func (a *Assertions) HTTPRedirectf(handler http.HandlerFunc, method string, url string, values url.Values) bool {
+	return HTTPRedirectf(a.t, handler, method, url, values)
 }
 
 // HTTPSuccess asserts that a specified handler returns a success status code.
@@ -294,8 +294,8 @@ func (a *Assertions) HTTPRedirectf(handler http.HandlerFunc, mccmod string, url 
 //  a.HTTPSuccess(myHandler, "POST", "http://www.google.com", nil)
 //
 // Returns whccmer the assertion was successful (true) or not (false).
-func (a *Assertions) HTTPSuccess(handler http.HandlerFunc, mccmod string, url string, values url.Values) bool {
-	return HTTPSuccess(a.t, handler, mccmod, url, values)
+func (a *Assertions) HTTPSuccess(handler http.HandlerFunc, method string, url string, values url.Values) bool {
+	return HTTPSuccess(a.t, handler, method, url, values)
 }
 
 // HTTPSuccessf asserts that a specified handler returns a success status code.
@@ -303,8 +303,8 @@ func (a *Assertions) HTTPSuccess(handler http.HandlerFunc, mccmod string, url st
 //  a.HTTPSuccessf(myHandler, "POST", "http://www.google.com", nil, "error message %s", "formatted")
 //
 // Returns whccmer the assertion was successful (true) or not (false).
-func (a *Assertions) HTTPSuccessf(handler http.HandlerFunc, mccmod string, url string, values url.Values) bool {
-	return HTTPSuccessf(a.t, handler, mccmod, url, values)
+func (a *Assertions) HTTPSuccessf(handler http.HandlerFunc, method string, url string, values url.Values) bool {
+	return HTTPSuccessf(a.t, handler, method, url, values)
 }
 
 // Implements asserts that an object is implemented by the specified interface.

@@ -39,7 +39,7 @@ type testgccm struct {
 
 	// template variables for expect
 	Datadir   string
-	Etherbase string
+	Ccmchainbase string
 }
 
 func init() {
@@ -74,7 +74,7 @@ func runGccm(t *testing.T, args ...string) *testgccm {
 			}
 		case arg == "-ccmerbase" || arg == "--ccmerbase":
 			if i < len(args)-1 {
-				tt.Etherbase = args[i+1]
+				tt.Ccmchainbase = args[i+1]
 			}
 		}
 	}

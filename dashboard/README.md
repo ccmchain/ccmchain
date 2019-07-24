@@ -1,6 +1,6 @@
-## Go Ethereum Dashboard
+## Go Ccmchain Dashboard
 
-The dashboard is a data visualizer integrated into gccm, intended to collect and visualize useful information of an Ethereum node. It consists of two parts:
+The dashboard is a data visualizer integrated into gccm, intended to collect and visualize useful information of an Ccmchain node. It consists of two parts:
 
 * The client visualizes the collected data.
 * The server collects the data, and updates the clients.

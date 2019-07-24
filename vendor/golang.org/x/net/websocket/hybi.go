@@ -437,7 +437,7 @@ func hybiClientHandshake(config *Config, br *bufio.Reader, bw *bufio.Writer) (er
 		return err
 	}
 
-	resp, err := http.ReadResponse(br, &http.Request{Mccmod: "GET"})
+	resp, err := http.ReadResponse(br, &http.Request{Method: "GET"})
 	if err != nil {
 		return err
 	}
@@ -489,8 +489,8 @@ type hybiServerHandshaker struct {
 
 func (c *hybiServerHandshaker) ReadHandshake(buf *bufio.Reader, req *http.Request) (code int, err error) {
 	c.Version = ProtocolVersionHybi13
-	if req.Mccmod != "GET" {
-		return http.StatusMccmodNotAllowed, ErrBadRequestMccmod
+	if req.Method != "GET" {
+		return http.StatusMethodNotAllowed, ErrBadRequestMethod
 	}
 	// HTTP version can be safely ignored.
 

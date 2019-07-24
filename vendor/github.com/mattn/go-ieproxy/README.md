@@ -6,11 +6,11 @@ The settings are initially attempted to be read from the [`WinHttpGetIEProxyConf
 
 For more information, take a look at the [documentation](https://godoc.org/github.com/mattn/go-ieproxy)
 
-## Mccmods
+## Methods
 
 You can either obtain a `net/http` compatible proxy function using `ieproxy.GetProxyFunc()`, set environment variables using `ieproxy.OverrideEnvWithStaticProxy()` (though no automatic configuration is available this way), or obtain the proxy settings via `ieproxy.GetConf()`.
 
-| Mccmod                                 | Supported configuration options:              |
+| Method                                 | Supported configuration options:              |
 |----------------------------------------|-----------------------------------------------|
 | `ieproxy.GetProxyFunc()`               | Static, Specified script, and fully automatic |
 | `ieproxy.OverrideEnvWithStaticProxy()` | Static                                        |

@@ -25,7 +25,7 @@
 // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
 // LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
 // DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// THEORY OF LIABILITY, WHCCMER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
@@ -133,8 +133,8 @@ func (p pointer) toInt32() *int32 {
 	return p.v.Convert(int32ptr).Interface().(*int32)
 }
 
-// The toInt32Ptr/Slice mccmods don't work because of enums.
-// Instead, we must use set/get mccmods for the int32ptr/slice case.
+// The toInt32Ptr/Slice methods don't work because of enums.
+// Instead, we must use set/get methods for the int32ptr/slice case.
 /*
 	func (p pointer) toInt32Ptr() **int32 {
 		return p.v.Interface().(**int32)

@@ -23,7 +23,7 @@ import (
 	whisper "github.com/ccmchain/go-ccmchain/whisper/whisperv6"
 )
 
-// WhisperClient provides access to the Ethereum APIs.
+// WhisperClient provides access to the Ccmchain APIs.
 type WhisperClient struct {
 	client *shhclient.Client
 }
@@ -142,7 +142,7 @@ type NewMessageHandler interface {
 	OnError(failure string)
 }
 
-// SubscribeMessages subscribes to messages that match the given criteria. This mccmod
+// SubscribeMessages subscribes to messages that match the given criteria. This method
 // is only supported on bi-directional connections such as websockets and IPC.
 // NewMessageFilter uses polling and is supported over HTTP.
 func (wc *WhisperClient) SubscribeMessages(ctx *Context, criteria *Criteria, handler NewMessageHandler, buffer int) (*Subscription, error) {

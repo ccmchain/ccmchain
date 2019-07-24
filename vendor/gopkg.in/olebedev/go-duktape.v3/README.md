@@ -61,7 +61,7 @@ $
 
 ### Timers
 
-There is a mccmod to inject timers to the global scope:
+There is a method to inject timers to the global scope:
 ```go
 package main
 

@@ -11,7 +11,7 @@ import (
 
 const CountToEnd = 0
 
-// HTTPGetter is a function type that refers to a mccmod that performs an HTTP GET operation.
+// HTTPGetter is a function type that refers to a method that performs an HTTP GET operation.
 type HTTPGetter func(ctx context.Context, i HTTPGetterInfo) (*http.Response, error)
 
 // HTTPGetterInfo is passed to an HTTPGetter function passing it parameters
@@ -57,7 +57,7 @@ type RetryReaderOptions struct {
 	TreatEarlyCloseAsError bool
 }
 
-// retryReader implements io.ReaderCloser mccmods.
+// retryReader implements io.ReaderCloser methods.
 // retryReader tries to read from response, and if there is retriable network error
 // returned during reading, it will retry according to retry reader option through executing
 // user defined action with provided data to get a new response, and continue the overall reading process

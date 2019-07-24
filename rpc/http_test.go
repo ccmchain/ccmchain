@@ -24,29 +24,29 @@ import (
 )
 
 func TestHTTPErrorResponseWithDelete(t *testing.T) {
-	testHTTPErrorResponse(t, http.MccmodDelete, contentType, "", http.StatusMccmodNotAllowed)
+	testHTTPErrorResponse(t, http.MethodDelete, contentType, "", http.StatusMethodNotAllowed)
 }
 
 func TestHTTPErrorResponseWithPut(t *testing.T) {
-	testHTTPErrorResponse(t, http.MccmodPut, contentType, "", http.StatusMccmodNotAllowed)
+	testHTTPErrorResponse(t, http.MethodPut, contentType, "", http.StatusMethodNotAllowed)
 }
 
 func TestHTTPErrorResponseWithMaxContentLength(t *testing.T) {
 	body := make([]rune, maxRequestContentLength+1)
 	testHTTPErrorResponse(t,
-		http.MccmodPost, contentType, string(body), http.StatusRequestEntityTooLarge)
+		http.MethodPost, contentType, string(body), http.StatusRequestEntityTooLarge)
 }
 
 func TestHTTPErrorResponseWithEmptyContentType(t *testing.T) {
-	testHTTPErrorResponse(t, http.MccmodPost, "", "", http.StatusUnsupportedMediaType)
+	testHTTPErrorResponse(t, http.MethodPost, "", "", http.StatusUnsupportedMediaType)
 }
 
 func TestHTTPErrorResponseWithValidRequest(t *testing.T) {
-	testHTTPErrorResponse(t, http.MccmodPost, contentType, "", 0)
+	testHTTPErrorResponse(t, http.MethodPost, contentType, "", 0)
 }
 
-func testHTTPErrorResponse(t *testing.T, mccmod, contentType, body string, expected int) {
-	request := httptest.NewRequest(mccmod, "http://url.com", strings.NewReader(body))
+func testHTTPErrorResponse(t *testing.T, method, contentType, body string, expected int) {
+	request := httptest.NewRequest(method, "http://url.com", strings.NewReader(body))
 	request.Header.Set("content-type", contentType)
 	if code, _ := validateRequest(request); code != expected {
 		t.Fatalf("response code should be %d not %d", expected, code)

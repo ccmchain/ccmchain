@@ -46,14 +46,14 @@ func GetActiveObject(programID string) (unknown *ole.IUnknown, err error) {
 	return
 }
 
-// CallMccmod calls mccmod on IDispatch with parameters.
-func CallMccmod(disp *ole.IDispatch, name string, params ...interface{}) (result *ole.VARIANT, err error) {
-	return disp.InvokeWithOptionalArgs(name, ole.DISPATCH_METHOD, params)
+// CallMethod calls method on IDispatch with parameters.
+func CallMethod(disp *ole.IDispatch, name string, params ...interface{}) (result *ole.VARIANT, err error) {
+	return disp.InvokeWithOptionalArgs(name, ole.DISPATCH_MCCMOD, params)
 }
 
-// MustCallMccmod calls mccmod on IDispatch with parameters or panics.
-func MustCallMccmod(disp *ole.IDispatch, name string, params ...interface{}) (result *ole.VARIANT) {
-	r, err := CallMccmod(disp, name, params...)
+// MustCallMethod calls method on IDispatch with parameters or panics.
+func MustCallMethod(disp *ole.IDispatch, name string, params ...interface{}) (result *ole.VARIANT) {
+	r, err := CallMethod(disp, name, params...)
 	if err != nil {
 		panic(err.Error())
 	}

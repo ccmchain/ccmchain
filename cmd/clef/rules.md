@@ -16,7 +16,7 @@ The section below deals with both of them
 
 ## Rule Implementation
 
-A ruleset file is implemented as a `js` file. Under the hood, the ruleset-engine is a `SignerUI`, implementing the same mccmods as the `json-rpc` mccmods
+A ruleset file is implemented as a `js` file. Under the hood, the ruleset-engine is a `SignerUI`, implementing the same methods as the `json-rpc` methods
 defined in the UI protocol. Example:
 
 ```js
@@ -46,7 +46,7 @@ function ApproveListing(req){
 ```
 
 Whenever the external API is called (and the ruleset is enabled), the `signer` calls the UI, which is an instance of a ruleset-engine. The ruleset-engine
-invokes the corresponding mccmod. In doing so, there are three possible outcomes:
+invokes the corresponding method. In doing so, there are three possible outcomes:
 
 1. JS returns "Approve"
   * Auto-approve request
@@ -188,14 +188,14 @@ function ApproveTx(r) {
 /**
 * OnApprovedTx(str) is called when a transaction has been approved and signed. The parameter
 	* 'response_str' contains the return value that will be sent to the external caller.
-* The return value from this mccmod is ignore - the reason for having this callback is to allow the
+* The return value from this method is ignore - the reason for having this callback is to allow the
 * ruleset to keep track of approved transactions.
 *
 * When implementing rate-limited rules, this callback should be used.
 * If a rule responds with neither 'Approve' nor 'Reject' - the tx goes to manual processing. If the user
-* then accepts the transaction, this mccmod will be called.
+* then accepts the transaction, this method will be called.
 *
-* TLDR; Use this mccmod to keep track of signed transactions, instead of using the data in ApproveTx.
+* TLDR; Use this method to keep track of signed transactions, instead of using the data in ApproveTx.
 */
 function OnApprovedTx(resp) {
 	var value = big(resp.tx.value)

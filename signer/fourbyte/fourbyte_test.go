@@ -43,9 +43,9 @@ func TestEmbeddedDatabase(t *testing.T) {
 			t.Errorf("Failed to parse ABI: %v", err)
 			continue
 		}
-		m, err := abistruct.MccmodById(common.Hex2Bytes(id))
+		m, err := abistruct.MethodById(common.Hex2Bytes(id))
 		if err != nil {
-			t.Errorf("Failed to get mccmod by id (%s): %v", id, err)
+			t.Errorf("Failed to get method by id (%s): %v", id, err)
 			continue
 		}
 		if m.Sig() != selector {

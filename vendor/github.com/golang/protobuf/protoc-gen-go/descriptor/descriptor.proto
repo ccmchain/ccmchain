@@ -24,7 +24,7 @@
 // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
 // LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
 // DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// THEORY OF LIABILITY, WHCCMER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
@@ -259,13 +259,13 @@ message EnumValueDescriptorProto {
 // Describes a service.
 message ServiceDescriptorProto {
   optional string name = 1;
-  repeated MccmodDescriptorProto mccmod = 2;
+  repeated MethodDescriptorProto method = 2;
 
   optional ServiceOptions options = 3;
 }
 
-// Describes a mccmod of a service.
-message MccmodDescriptorProto {
+// Describes a method of a service.
+message MethodDescriptorProto {
   optional string name = 1;
 
   // Input and output type names.  These are resolved in the same way as
@@ -273,7 +273,7 @@ message MccmodDescriptorProto {
   optional string input_type = 2;
   optional string output_type = 3;
 
-  optional MccmodOptions options = 4;
+  optional MethodOptions options = 4;
 
   // Identifies if client streams multiple client messages
   optional bool client_streaming = 5 [default=false];
@@ -335,7 +335,7 @@ message FileOptions {
   // file for each top-level message, enum, and service defined in the .proto
   // file.  Thus, these types will *not* be nested inside the outer class
   // named by java_outer_classname.  However, the outer class will still be
-  // generated to contain the file's getDescriptor() mccmod as well as any
+  // generated to contain the file's getDescriptor() method as well as any
   // top-level extensions defined in the file.
   optional bool java_multiple_files = 10 [default=false];
 
@@ -355,7 +355,7 @@ message FileOptions {
   enum OptimizeMode {
     SPEED = 1;        // Generate complete code for parsing, serialization,
                       // etc.
-    CODE_SIZE = 2;    // Use ReflectionOps to implement these mccmods.
+    CODE_SIZE = 2;    // Use ReflectionOps to implement these methods.
     LITE_RUNTIME = 3; // Generate code using MessageLite and the lite runtime.
   }
   optional OptimizeMode optimize_for = 9 [default=SPEED];
@@ -560,9 +560,9 @@ message FieldOptions {
   // overhead typically needed to implement it.
   //
   // This option does not affect the public interface of any generated code;
-  // all mccmod signatures remain the same.  Furthermore, thread-safety of the
-  // interface is not affected by this option; const mccmods remain safe to
-  // call from multiple threads concurrently, while non-const mccmods continue
+  // all method signatures remain the same.  Furthermore, thread-safety of the
+  // interface is not affected by this option; const methods remain safe to
+  // call from multiple threads concurrently, while non-const methods continue
   // to require exclusive access.
   //
   //
@@ -660,22 +660,22 @@ message ServiceOptions {
   extensions 1000 to max;
 }
 
-message MccmodOptions {
+message MethodOptions {
 
   // Note:  Field numbers 1 through 32 are reserved for Google's internal RPC
   //   framework.  We apologize for hoarding these numbers to ourselves, but
   //   we were already using them long before we decided to release Protocol
   //   Buffers.
 
-  // Is this mccmod deprecated?
+  // Is this method deprecated?
   // Depending on the target platform, this can emit Deprecated annotations
-  // for the mccmod, or it will be completely ignored; in the very least,
-  // this is a formalization for deprecating mccmods.
+  // for the method, or it will be completely ignored; in the very least,
+  // this is a formalization for deprecating methods.
   optional bool deprecated = 33 [default=false];
 
-  // Is this mccmod side-effect-free (or safe in HTTP parlance), or idempotent,
+  // Is this method side-effect-free (or safe in HTTP parlance), or idempotent,
   // or neither? HTTP based RPC implementation may choose GET verb for safe
-  // mccmods, and PUT verb for idempotent mccmods instead of the default POST.
+  // methods, and PUT verb for idempotent methods instead of the default POST.
   enum IdempotencyLevel {
     IDEMPOTENCY_UNKNOWN = 0;
     NO_SIDE_EFFECTS     = 1; // implies idempotent

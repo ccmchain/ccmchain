@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-// containerClient is the client for the Container mccmods of the Azblob service.
+// containerClient is the client for the Container methods of the Azblob service.
 type containerClient struct {
 	managementClient
 }

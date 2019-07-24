@@ -59,7 +59,7 @@ const jsondata2 = `
 func TestReader(t *testing.T) {
 	Uint256, _ := NewType("uint256", nil)
 	exp := ABI{
-		Mccmods: map[string]Mccmod{
+		Methods: map[string]Method{
 			"balance": {
 				"balance", true, nil, nil,
 			},
@@ -77,23 +77,23 @@ func TestReader(t *testing.T) {
 	}
 
 	// deep equal fails for some reason
-	for name, expM := range exp.Mccmods {
-		gotM, exist := abi.Mccmods[name]
+	for name, expM := range exp.Methods {
+		gotM, exist := abi.Methods[name]
 		if !exist {
-			t.Errorf("Missing expected mccmod %v", name)
+			t.Errorf("Missing expected method %v", name)
 		}
 		if !reflect.DeepEqual(gotM, expM) {
-			t.Errorf("\nGot abi mccmod: \n%v\ndoes not match expected mccmod\n%v", gotM, expM)
+			t.Errorf("\nGot abi method: \n%v\ndoes not match expected method\n%v", gotM, expM)
 		}
 	}
 
-	for name, gotM := range abi.Mccmods {
-		expM, exist := exp.Mccmods[name]
+	for name, gotM := range abi.Methods {
+		expM, exist := exp.Methods[name]
 		if !exist {
-			t.Errorf("Found extra mccmod %v", name)
+			t.Errorf("Found extra method %v", name)
 		}
 		if !reflect.DeepEqual(gotM, expM) {
-			t.Errorf("\nGot abi mccmod: \n%v\ndoes not match expected mccmod\n%v", gotM, expM)
+			t.Errorf("\nGot abi method: \n%v\ndoes not match expected method\n%v", gotM, expM)
 		}
 	}
 }
@@ -173,9 +173,9 @@ func TestTestSlice(t *testing.T) {
 	}
 }
 
-func TestMccmodSignature(t *testing.T) {
+func TestMethodSignature(t *testing.T) {
 	String, _ := NewType("string", nil)
-	m := Mccmod{"foo", false, []Argument{{"bar", String, false}, {"baz", String, false}}, nil}
+	m := Method{"foo", false, []Argument{{"bar", String, false}, {"baz", String, false}}, nil}
 	exp := "foo(string,string)"
 	if m.Sig() != exp {
 		t.Error("signature mismatch", exp, "!=", m.Sig())
@@ -187,13 +187,13 @@ func TestMccmodSignature(t *testing.T) {
 	}
 
 	uintt, _ := NewType("uint256", nil)
-	m = Mccmod{"foo", false, []Argument{{"bar", uintt, false}}, nil}
+	m = Method{"foo", false, []Argument{{"bar", uintt, false}}, nil}
 	exp = "foo(uint256)"
 	if m.Sig() != exp {
 		t.Error("signature mismatch", exp, "!=", m.Sig())
 	}
 
-	// Mccmod with tuple arguments
+	// Method with tuple arguments
 	s, _ := NewType("tuple", []ArgumentMarshaling{
 		{Name: "a", Type: "int256"},
 		{Name: "b", Type: "int256[]"},
@@ -206,7 +206,7 @@ func TestMccmodSignature(t *testing.T) {
 			{Name: "y", Type: "int256"},
 		}},
 	})
-	m = Mccmod{"foo", false, []Argument{{"s", s, false}, {"bar", String, false}}, nil}
+	m = Method{"foo", false, []Argument{{"s", s, false}, {"bar", String, false}}, nil}
 	exp = "foo((int256,int256[],(int256,int256)[],(int256,int256)[2]),string)"
 	if m.Sig() != exp {
 		t.Error("signature mismatch", exp, "!=", m.Sig())
@@ -568,7 +568,7 @@ func TestDefaultFunctionParsing(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if _, ok := abi.Mccmods["balance"]; !ok {
+	if _, ok := abi.Methods["balance"]; !ok {
 		t.Error("expected 'balance' to be present")
 	}
 }
@@ -736,7 +736,7 @@ func TestUnpackEventIntoMap(t *testing.T) {
 	}
 }
 
-func TestUnpackMccmodIntoMap(t *testing.T) {
+func TestUnpackMethodIntoMap(t *testing.T) {
 	const abiJSON = `[{"constant":false,"inputs":[{"name":"memo","type":"bytes"}],"name":"receive","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[],"name":"send","outputs":[{"name":"amount","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"addr","type":"address"}],"name":"get","outputs":[{"name":"hash","type":"bytes"}],"payable":true,"stateMutability":"payable","type":"function"}]`
 	abi, err := JSON(strings.NewReader(abiJSON))
 	if err != nil {
@@ -751,7 +751,7 @@ func TestUnpackMccmodIntoMap(t *testing.T) {
 		t.Errorf("len(data) is %d, want a multiple of 32", len(data))
 	}
 
-	// Tests a mccmod with no outputs
+	// Tests a method with no outputs
 	receiveMap := map[string]interface{}{}
 	if err = abi.UnpackIntoMap(receiveMap, "receive", data); err != nil {
 		t.Error(err)
@@ -760,7 +760,7 @@ func TestUnpackMccmodIntoMap(t *testing.T) {
 		t.Error("unpacked `receive` map expected to have length 0")
 	}
 
-	// Tests a mccmod with only outputs
+	// Tests a method with only outputs
 	sendMap := map[string]interface{}{}
 	if err = abi.UnpackIntoMap(sendMap, "send", data); err != nil {
 		t.Error(err)
@@ -772,7 +772,7 @@ func TestUnpackMccmodIntoMap(t *testing.T) {
 		t.Error("unpacked `send` map expected `amount` value of 1")
 	}
 
-	// Tests a mccmod with outputs and inputs
+	// Tests a method with outputs and inputs
 	getMap := map[string]interface{}{}
 	if err = abi.UnpackIntoMap(getMap, "get", data); err != nil {
 		t.Error(err)
@@ -787,7 +787,7 @@ func TestUnpackMccmodIntoMap(t *testing.T) {
 }
 
 func TestUnpackIntoMapNamingConflict(t *testing.T) {
-	// Two mccmods have the same name
+	// Two methods have the same name
 	var abiJSON = `[{"constant":false,"inputs":[{"name":"memo","type":"bytes"}],"name":"get","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[],"name":"send","outputs":[{"name":"amount","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"addr","type":"address"}],"name":"get","outputs":[{"name":"hash","type":"bytes"}],"payable":true,"stateMutability":"payable","type":"function"}]`
 	abi, err := JSON(strings.NewReader(abiJSON))
 	if err != nil {
@@ -803,7 +803,7 @@ func TestUnpackIntoMapNamingConflict(t *testing.T) {
 	}
 	getMap := map[string]interface{}{}
 	if err = abi.UnpackIntoMap(getMap, "get", data); err == nil {
-		t.Error("naming conflict between two mccmods; error expected")
+		t.Error("naming conflict between two methods; error expected")
 	}
 
 	// Two events have the same name
@@ -825,7 +825,7 @@ func TestUnpackIntoMapNamingConflict(t *testing.T) {
 		t.Error("naming conflict between two events; no error expected")
 	}
 
-	// Mccmod and event have the same name
+	// Method and event have the same name
 	abiJSON = `[{"constant":false,"inputs":[{"name":"memo","type":"bytes"}],"name":"received","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"sender","type":"address"},{"indexed":false,"name":"amount","type":"uint256"},{"indexed":false,"name":"memo","type":"bytes"}],"name":"received","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"sender","type":"address"}],"name":"receivedAddr","type":"event"}]`
 	abi, err = JSON(strings.NewReader(abiJSON))
 	if err != nil {
@@ -835,7 +835,7 @@ func TestUnpackIntoMapNamingConflict(t *testing.T) {
 		t.Errorf("len(data) is %d, want a non-multiple of 32", len(data))
 	}
 	if err = abi.UnpackIntoMap(receivedMap, "received", data); err == nil {
-		t.Error("naming conflict between an event and a mccmod; error expected")
+		t.Error("naming conflict between an event and a method; error expected")
 	}
 
 	// Conflict is case sensitive
@@ -869,7 +869,7 @@ func TestUnpackIntoMapNamingConflict(t *testing.T) {
 	}
 }
 
-func TestABI_MccmodById(t *testing.T) {
+func TestABI_MethodById(t *testing.T) {
 	const abiJSON = `[
 		{"type":"function","name":"receive","constant":false,"inputs":[{"name":"memo","type":"bytes"}],"outputs":[],"payable":true,"stateMutability":"payable"},
 		{"type":"event","name":"received","anonymous":false,"inputs":[{"indexed":false,"name":"sender","type":"address"},{"indexed":false,"name":"amount","type":"uint256"},{"indexed":false,"name":"memo","type":"bytes"}]},
@@ -898,25 +898,25 @@ func TestABI_MccmodById(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for name, m := range abi.Mccmods {
+	for name, m := range abi.Methods {
 		a := fmt.Sprintf("%v", m)
-		m2, err := abi.MccmodById(m.Id())
+		m2, err := abi.MethodById(m.Id())
 		if err != nil {
-			t.Fatalf("Failed to look up ABI mccmod: %v", err)
+			t.Fatalf("Failed to look up ABI method: %v", err)
 		}
 		b := fmt.Sprintf("%v", m2)
 		if a != b {
-			t.Errorf("Mccmod %v (id %v) not 'findable' by id in ABI", name, common.ToHex(m.Id()))
+			t.Errorf("Method %v (id %v) not 'findable' by id in ABI", name, common.ToHex(m.Id()))
 		}
 	}
 	// Also test empty
-	if _, err := abi.MccmodById([]byte{0x00}); err == nil {
+	if _, err := abi.MethodById([]byte{0x00}); err == nil {
 		t.Errorf("Expected error, too short to decode data")
 	}
-	if _, err := abi.MccmodById([]byte{}); err == nil {
+	if _, err := abi.MethodById([]byte{}); err == nil {
 		t.Errorf("Expected error, too short to decode data")
 	}
-	if _, err := abi.MccmodById(nil); err == nil {
+	if _, err := abi.MethodById(nil); err == nil {
 		t.Errorf("Expected error, nil is short to decode data")
 	}
 }
@@ -968,7 +968,7 @@ func TestABI_EventById(t *testing.T) {
 
 		event, err := abi.EventByID(topicID)
 		if err != nil {
-			t.Fatalf("Failed to look up ABI mccmod: %v, test #%d", err, testnum)
+			t.Fatalf("Failed to look up ABI method: %v, test #%d", err, testnum)
 		}
 		if event == nil {
 			t.Errorf("We should find a event for topic %s, test #%d", topicID.Hex(), testnum)
@@ -989,44 +989,44 @@ func TestABI_EventById(t *testing.T) {
 	}
 }
 
-func TestDuplicateMccmodNames(t *testing.T) {
+func TestDuplicateMethodNames(t *testing.T) {
 	abiJSON := `[{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transfer","outputs":[{"name":"ok","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"},{"name":"data","type":"bytes"}],"name":"transfer","outputs":[{"name":"ok","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"},{"name":"data","type":"bytes"},{"name":"customFallback","type":"string"}],"name":"transfer","outputs":[{"name":"ok","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]`
 	contractAbi, err := JSON(strings.NewReader(abiJSON))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, ok := contractAbi.Mccmods["transfer"]; !ok {
-		t.Fatalf("Could not find original mccmod")
+	if _, ok := contractAbi.Methods["transfer"]; !ok {
+		t.Fatalf("Could not find original method")
 	}
-	if _, ok := contractAbi.Mccmods["transfer0"]; !ok {
-		t.Fatalf("Could not find duplicate mccmod")
+	if _, ok := contractAbi.Methods["transfer0"]; !ok {
+		t.Fatalf("Could not find duplicate method")
 	}
-	if _, ok := contractAbi.Mccmods["transfer1"]; !ok {
-		t.Fatalf("Could not find duplicate mccmod")
+	if _, ok := contractAbi.Methods["transfer1"]; !ok {
+		t.Fatalf("Could not find duplicate method")
 	}
-	if _, ok := contractAbi.Mccmods["transfer2"]; ok {
-		t.Fatalf("Should not have found extra mccmod")
+	if _, ok := contractAbi.Methods["transfer2"]; ok {
+		t.Fatalf("Should not have found extra method")
 	}
 }
 
-// TestDoubleDuplicateMccmodNames checks that if transfer0 already exists, there won't be a name
-// conflict and that the second transfer mccmod will be renamed transfer1.
-func TestDoubleDuplicateMccmodNames(t *testing.T) {
+// TestDoubleDuplicateMethodNames checks that if transfer0 already exists, there won't be a name
+// conflict and that the second transfer method will be renamed transfer1.
+func TestDoubleDuplicateMethodNames(t *testing.T) {
 	abiJSON := `[{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transfer","outputs":[{"name":"ok","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"},{"name":"data","type":"bytes"}],"name":"transfer0","outputs":[{"name":"ok","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"},{"name":"data","type":"bytes"},{"name":"customFallback","type":"string"}],"name":"transfer","outputs":[{"name":"ok","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]`
 	contractAbi, err := JSON(strings.NewReader(abiJSON))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, ok := contractAbi.Mccmods["transfer"]; !ok {
-		t.Fatalf("Could not find original mccmod")
+	if _, ok := contractAbi.Methods["transfer"]; !ok {
+		t.Fatalf("Could not find original method")
 	}
-	if _, ok := contractAbi.Mccmods["transfer0"]; !ok {
-		t.Fatalf("Could not find duplicate mccmod")
+	if _, ok := contractAbi.Methods["transfer0"]; !ok {
+		t.Fatalf("Could not find duplicate method")
 	}
-	if _, ok := contractAbi.Mccmods["transfer1"]; !ok {
-		t.Fatalf("Could not find duplicate mccmod")
+	if _, ok := contractAbi.Methods["transfer1"]; !ok {
+		t.Fatalf("Could not find duplicate method")
 	}
-	if _, ok := contractAbi.Mccmods["transfer2"]; ok {
-		t.Fatalf("Should not have found extra mccmod")
+	if _, ok := contractAbi.Methods["transfer2"]; ok {
+		t.Fatalf("Should not have found extra method")
 	}
 }

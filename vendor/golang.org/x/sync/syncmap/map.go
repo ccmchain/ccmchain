@@ -15,7 +15,7 @@ import (
 )
 
 // Map is a concurrent map with amortized-constant-time loads, stores, and deletes.
-// It is safe for multiple goroutines to call a Map's mccmods concurrently.
+// It is safe for multiple goroutines to call a Map's methods concurrently.
 //
 // The zero Map is valid and empty.
 //
@@ -245,7 +245,7 @@ func (e *entry) tryLoadOrStore(i interface{}) (actual interface{}, loaded, ok bo
 		return *(*interface{})(p), true, true
 	}
 
-	// Copy the interface after the first load to make this mccmod more amenable
+	// Copy the interface after the first load to make this method more amenable
 	// to escape analysis: if we hit the "load" path or the entry is expunged, we
 	// shouldn't bother heap-allocating.
 	ic := i

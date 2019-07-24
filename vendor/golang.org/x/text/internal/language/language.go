@@ -35,7 +35,7 @@ const (
 type Tag struct {
 	// TODO: the following fields have the form TagTypeID. This name is chosen
 	// to allow refactoring the public package without conflicting with its
-	// Base, Script, and Region mccmods. Once the transition is fully completed
+	// Base, Script, and Region methods. Once the transition is fully completed
 	// the ID can be stripped from the name.
 
 	LangID   Language
@@ -548,10 +548,10 @@ var errNoTLD = errors.New("language: region is not a valid ccTLD")
 // TLD returns the country code top-level domain (ccTLD). UK is returned for GB.
 // In all other cases it returns either the region itself or an error.
 //
-// This mccmod may return an error for a region for which there exists a
+// This method may return an error for a region for which there exists a
 // canonical form with a ccTLD. To get that ccTLD canonicalize r first. The
 // region will already be canonicalized it was obtained from a Tag that was
-// obtained using any of the default mccmods.
+// obtained using any of the default methods.
 func (r Region) TLD() (Region, error) {
 	// See http://en.wikipedia.org/wiki/Country_code_top-level_domain for the
 	// difference between ISO 3166-1 and IANA ccTLD.

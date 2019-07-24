@@ -341,7 +341,7 @@ func (c *Conn) RemoteAddr() net.Addr {
 	return c.conn.RemoteAddr()
 }
 
-// Write mccmods
+// Write methods
 
 func (c *Conn) writeFatal(err error) error {
 	err = hideTempErr(err)
@@ -488,7 +488,7 @@ func (c *Conn) beginMessage(mw *messageWriter, messageType int) error {
 }
 
 // NextWriter returns a writer for the next message to send. The writer's Close
-// mccmod flushes the complete message to the network.
+// method flushes the complete message to the network.
 //
 // There can be at most one open writer on a connection. NextWriter closes the
 // previous writer if the application has not already done so.
@@ -733,7 +733,7 @@ func (c *Conn) WritePreparedMessage(pm *PreparedMessage) error {
 	return err
 }
 
-// WriteMessage is a helper mccmod for getting a writer using NextWriter,
+// WriteMessage is a helper method for getting a writer using NextWriter,
 // writing the message and closing the writer.
 func (c *Conn) WriteMessage(messageType int, data []byte) error {
 
@@ -769,7 +769,7 @@ func (c *Conn) SetWriteDeadline(t time.Time) error {
 	return nil
 }
 
-// Read mccmods
+// Read methods
 
 func (c *Conn) advanceFrame() (int, error) {
 	// 1. Skip remainder of previous frame.
@@ -927,10 +927,10 @@ func (c *Conn) handleProtocolError(message string) error {
 // There can be at most one open reader on a connection. NextReader discards
 // the previous message if the application has not already consumed it.
 //
-// Applications must break out of the application's read loop when this mccmod
-// returns a non-nil error value. Errors returned from this mccmod are
-// permanent. Once this mccmod returns a non-nil error, all subsequent calls to
-// this mccmod return the same error.
+// Applications must break out of the application's read loop when this method
+// returns a non-nil error value. Errors returned from this method are
+// permanent. Once this method returns a non-nil error, all subsequent calls to
+// this method return the same error.
 func (c *Conn) NextReader() (messageType int, r io.Reader, err error) {
 	// Close previous reader, only relevant for decompression.
 	if c.reader != nil {
@@ -957,7 +957,7 @@ func (c *Conn) NextReader() (messageType int, r io.Reader, err error) {
 		}
 	}
 
-	// Applications that do handle the error returned from this mccmod spin in
+	// Applications that do handle the error returned from this method spin in
 	// tight loop on connection failure. To help application developers detect
 	// this error, panic on repeated reads to the failed connection.
 	c.readErrCount++
@@ -1019,7 +1019,7 @@ func (r *messageReader) Close() error {
 	return nil
 }
 
-// ReadMessage is a helper mccmod for getting a reader using NextReader and
+// ReadMessage is a helper method for getting a reader using NextReader and
 // reading from that reader to a buffer.
 func (c *Conn) ReadMessage() (messageType int, p []byte, err error) {
 	var r io.Reader
@@ -1057,10 +1057,10 @@ func (c *Conn) CloseHandler() func(code int, text string) error {
 // message back to the peer.
 //
 // The handler function is called from the NextReader, ReadMessage and message
-// reader Read mccmods. The application must read the connection to process
+// reader Read methods. The application must read the connection to process
 // close messages as described in the section on Control Messages above.
 //
-// The connection read mccmods return a CloseError when a close message is
+// The connection read methods return a CloseError when a close message is
 // received. Most applications should handle close messages as part of their
 // normal error handling. Applications should only set a close handler when the
 // application must perform some action before sending a close message back to
@@ -1086,7 +1086,7 @@ func (c *Conn) PingHandler() func(appData string) error {
 // ping handler sends a pong to the peer.
 //
 // The handler function is called from the NextReader, ReadMessage and message
-// reader Read mccmods. The application must read the connection to process
+// reader Read methods. The application must read the connection to process
 // ping messages as described in the section on Control Messages above.
 func (c *Conn) SetPingHandler(h func(appData string) error) {
 	if h == nil {
@@ -1113,7 +1113,7 @@ func (c *Conn) PongHandler() func(appData string) error {
 // pong handler does nothing.
 //
 // The handler function is called from the NextReader, ReadMessage and message
-// reader Read mccmods. The application must read the connection to process
+// reader Read methods. The application must read the connection to process
 // pong messages as described in the section on Control Messages above.
 func (c *Conn) SetPongHandler(h func(appData string) error) {
 	if h == nil {

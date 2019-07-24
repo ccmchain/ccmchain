@@ -2,7 +2,7 @@
 
 package ole
 
-func reflectQueryInterface(self interface{}, mccmod uintptr, interfaceID *GUID, obj interface{}) (err error) {
+func reflectQueryInterface(self interface{}, method uintptr, interfaceID *GUID, obj interface{}) (err error) {
 	return NewError(E_NOTIMPL)
 }
 

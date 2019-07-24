@@ -21,7 +21,7 @@ import (
 	"testing"
 )
 
-const mccmoddata = `
+const methoddata = `
 [
 	{"type": "function", "name": "balance", "constant": true },
 	{"type": "function", "name": "send", "constant": false, "inputs": [{ "name": "amount", "type": "uint256" }]},
@@ -32,95 +32,95 @@ const mccmoddata = `
 	{"constant":false,"inputs":[{"components":[{"name":"x","type":"uint256"},{"name":"y","type":"uint256"}],"name":"a","type":"tuple[5][]"}],"name":"complexTuple","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}
 ]`
 
-func TestMccmodString(t *testing.T) {
+func TestMethodString(t *testing.T) {
 	var table = []struct {
-		mccmod      string
+		method      string
 		expectation string
 	}{
 		{
-			mccmod:      "balance",
+			method:      "balance",
 			expectation: "function balance() constant returns()",
 		},
 		{
-			mccmod:      "send",
+			method:      "send",
 			expectation: "function send(uint256 amount) returns()",
 		},
 		{
-			mccmod:      "transfer",
+			method:      "transfer",
 			expectation: "function transfer(address from, address to, uint256 value) returns(bool success)",
 		},
 		{
-			mccmod:      "tuple",
+			method:      "tuple",
 			expectation: "function tuple((uint256,uint256) a) returns()",
 		},
 		{
-			mccmod:      "tupleArray",
+			method:      "tupleArray",
 			expectation: "function tupleArray((uint256,uint256)[5] a) returns()",
 		},
 		{
-			mccmod:      "tupleSlice",
+			method:      "tupleSlice",
 			expectation: "function tupleSlice((uint256,uint256)[] a) returns()",
 		},
 		{
-			mccmod:      "complexTuple",
+			method:      "complexTuple",
 			expectation: "function complexTuple((uint256,uint256)[5][] a) returns()",
 		},
 	}
 
-	abi, err := JSON(strings.NewReader(mccmoddata))
+	abi, err := JSON(strings.NewReader(methoddata))
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	for _, test := range table {
-		got := abi.Mccmods[test.mccmod].String()
+		got := abi.Methods[test.method].String()
 		if got != test.expectation {
 			t.Errorf("expected string to be %s, got %s", test.expectation, got)
 		}
 	}
 }
 
-func TestMccmodSig(t *testing.T) {
+func TestMethodSig(t *testing.T) {
 	var cases = []struct {
-		mccmod string
+		method string
 		expect string
 	}{
 		{
-			mccmod: "balance",
+			method: "balance",
 			expect: "balance()",
 		},
 		{
-			mccmod: "send",
+			method: "send",
 			expect: "send(uint256)",
 		},
 		{
-			mccmod: "transfer",
+			method: "transfer",
 			expect: "transfer(address,address,uint256)",
 		},
 		{
-			mccmod: "tuple",
+			method: "tuple",
 			expect: "tuple((uint256,uint256))",
 		},
 		{
-			mccmod: "tupleArray",
+			method: "tupleArray",
 			expect: "tupleArray((uint256,uint256)[5])",
 		},
 		{
-			mccmod: "tupleSlice",
+			method: "tupleSlice",
 			expect: "tupleSlice((uint256,uint256)[])",
 		},
 		{
-			mccmod: "complexTuple",
+			method: "complexTuple",
 			expect: "complexTuple((uint256,uint256)[5][])",
 		},
 	}
-	abi, err := JSON(strings.NewReader(mccmoddata))
+	abi, err := JSON(strings.NewReader(methoddata))
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	for _, test := range cases {
-		got := abi.Mccmods[test.mccmod].Sig()
+		got := abi.Methods[test.method].Sig()
 		if got != test.expect {
 			t.Errorf("expected string to be %s, got %s", test.expect, got)
 		}

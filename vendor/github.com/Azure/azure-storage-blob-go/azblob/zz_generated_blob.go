@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-// blobClient is the client for the Blob mccmods of the Azblob service.
+// blobClient is the client for the Blob methods of the Azblob service.
 type blobClient struct {
 	managementClient
 }

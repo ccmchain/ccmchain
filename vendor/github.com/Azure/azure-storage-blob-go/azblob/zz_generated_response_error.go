@@ -16,7 +16,7 @@ var responseErrorFactory func(cause error, response *http.Response, description 
 
 // ResponseError identifies a responder-generated network or response parsing error.
 type ResponseError interface {
-	// Error exposes the Error(), Temporary() and Timeout() mccmods.
+	// Error exposes the Error(), Temporary() and Timeout() methods.
 	net.Error // Includes the Go error interface
 	// Response returns the HTTP response. You may examine this but you should not modify it.
 	Response() *http.Response
@@ -41,7 +41,7 @@ type responseError struct {
 	description        string
 }
 
-// Error implements the error interface's Error mccmod to return a string representation of the error.
+// Error implements the error interface's Error method to return a string representation of the error.
 func (e *responseError) Error() string {
 	b := &bytes.Buffer{}
 	fmt.Fprintf(b, "===== RESPONSE ERROR (Code=%v) =====\n", e.response.StatusCode)
@@ -50,7 +50,7 @@ func (e *responseError) Error() string {
 	return e.ErrorNode.Error(s)
 }
 
-// Response implements the ResponseError interface's mccmod to return the HTTP response.
+// Response implements the ResponseError interface's method to return the HTTP response.
 func (e *responseError) Response() *http.Response {
 	return e.response
 }

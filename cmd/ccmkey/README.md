@@ -1,7 +1,7 @@
 ccmkey
 ======
 
-ccmkey is a simple command-line tool for working with Ethereum keyfiles.
+ccmkey is a simple command-line tool for working with Ccmchain keyfiles.
 
 
 # Usage

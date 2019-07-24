@@ -117,7 +117,7 @@ func collectFieldsToResolve(sels []selected.Selection, resolver reflect.Value, f
 			*fields = append(*fields, &fieldToExec{field: sf, resolver: resolver})
 
 		case *selected.TypeAssertion:
-			out := resolver.Mccmod(sel.MccmodIndex).Call(nil)
+			out := resolver.Method(sel.MethodIndex).Call(nil)
 			if !out[1].Bool() {
 				continue
 			}
@@ -134,7 +134,7 @@ func typeOf(tf *selected.TypenameField, resolver reflect.Value) string {
 		return tf.Name
 	}
 	for name, a := range tf.TypeAssertions {
-		out := resolver.Mccmod(a.MccmodIndex).Call(nil)
+		out := resolver.Method(a.MethodIndex).Call(nil)
 		if out[1].Bool() {
 			return name
 		}
@@ -180,7 +180,7 @@ func execFieldSelection(ctx context.Context, r *Request, f *fieldToExec, path *p
 		if f.field.ArgsPacker != nil {
 			in = append(in, f.field.PackedArgs)
 		}
-		callOut := f.resolver.Mccmod(f.field.MccmodIndex).Call(in)
+		callOut := f.resolver.Method(f.field.MethodIndex).Call(in)
 		result = callOut[0]
 		if f.field.HasError && !callOut[1].IsNil() {
 			resolverErr := callOut[1].Interface().(error)

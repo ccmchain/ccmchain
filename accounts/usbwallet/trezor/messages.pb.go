@@ -96,17 +96,17 @@ const (
 	MessageType_MessageType_DebugLinkMemory      MessageType = 111
 	MessageType_MessageType_DebugLinkMemoryWrite MessageType = 112
 	MessageType_MessageType_DebugLinkFlashErase  MessageType = 113
-	// Ethereum
-	MessageType_MessageType_EthereumGetPublicKey     MessageType = 450
-	MessageType_MessageType_EthereumPublicKey        MessageType = 451
-	MessageType_MessageType_EthereumGetAddress       MessageType = 56
-	MessageType_MessageType_EthereumAddress          MessageType = 57
-	MessageType_MessageType_EthereumSignTx           MessageType = 58
-	MessageType_MessageType_EthereumTxRequest        MessageType = 59
-	MessageType_MessageType_EthereumTxAck            MessageType = 60
-	MessageType_MessageType_EthereumSignMessage      MessageType = 64
-	MessageType_MessageType_EthereumVerifyMessage    MessageType = 65
-	MessageType_MessageType_EthereumMessageSignature MessageType = 66
+	// Ccmchain
+	MessageType_MessageType_CcmchainGetPublicKey     MessageType = 450
+	MessageType_MessageType_CcmchainPublicKey        MessageType = 451
+	MessageType_MessageType_CcmchainGetAddress       MessageType = 56
+	MessageType_MessageType_CcmchainAddress          MessageType = 57
+	MessageType_MessageType_CcmchainSignTx           MessageType = 58
+	MessageType_MessageType_CcmchainTxRequest        MessageType = 59
+	MessageType_MessageType_CcmchainTxAck            MessageType = 60
+	MessageType_MessageType_CcmchainSignMessage      MessageType = 64
+	MessageType_MessageType_CcmchainVerifyMessage    MessageType = 65
+	MessageType_MessageType_CcmchainMessageSignature MessageType = 66
 	// NEM
 	MessageType_MessageType_NEMGetAddress       MessageType = 67
 	MessageType_MessageType_NEMAddress          MessageType = 68
@@ -306,16 +306,16 @@ var MessageType_name = map[int32]string{
 	111: "MessageType_DebugLinkMemory",
 	112: "MessageType_DebugLinkMemoryWrite",
 	113: "MessageType_DebugLinkFlashErase",
-	450: "MessageType_EthereumGetPublicKey",
-	451: "MessageType_EthereumPublicKey",
-	56:  "MessageType_EthereumGetAddress",
-	57:  "MessageType_EthereumAddress",
-	58:  "MessageType_EthereumSignTx",
-	59:  "MessageType_EthereumTxRequest",
-	60:  "MessageType_EthereumTxAck",
-	64:  "MessageType_EthereumSignMessage",
-	65:  "MessageType_EthereumVerifyMessage",
-	66:  "MessageType_EthereumMessageSignature",
+	450: "MessageType_CcmchainGetPublicKey",
+	451: "MessageType_CcmchainPublicKey",
+	56:  "MessageType_CcmchainGetAddress",
+	57:  "MessageType_CcmchainAddress",
+	58:  "MessageType_CcmchainSignTx",
+	59:  "MessageType_CcmchainTxRequest",
+	60:  "MessageType_CcmchainTxAck",
+	64:  "MessageType_CcmchainSignMessage",
+	65:  "MessageType_CcmchainVerifyMessage",
+	66:  "MessageType_CcmchainMessageSignature",
 	67:  "MessageType_NEMGetAddress",
 	68:  "MessageType_NEMAddress",
 	69:  "MessageType_NEMSignTx",
@@ -502,16 +502,16 @@ var MessageType_value = map[string]int32{
 	"MessageType_DebugLinkMemory":                           111,
 	"MessageType_DebugLinkMemoryWrite":                      112,
 	"MessageType_DebugLinkFlashErase":                       113,
-	"MessageType_EthereumGetPublicKey":                      450,
-	"MessageType_EthereumPublicKey":                         451,
-	"MessageType_EthereumGetAddress":                        56,
-	"MessageType_EthereumAddress":                           57,
-	"MessageType_EthereumSignTx":                            58,
-	"MessageType_EthereumTxRequest":                         59,
-	"MessageType_EthereumTxAck":                             60,
-	"MessageType_EthereumSignMessage":                       64,
-	"MessageType_EthereumVerifyMessage":                     65,
-	"MessageType_EthereumMessageSignature":                  66,
+	"MessageType_CcmchainGetPublicKey":                      450,
+	"MessageType_CcmchainPublicKey":                         451,
+	"MessageType_CcmchainGetAddress":                        56,
+	"MessageType_CcmchainAddress":                           57,
+	"MessageType_CcmchainSignTx":                            58,
+	"MessageType_CcmchainTxRequest":                         59,
+	"MessageType_CcmchainTxAck":                             60,
+	"MessageType_CcmchainSignMessage":                       64,
+	"MessageType_CcmchainVerifyMessage":                     65,
+	"MessageType_CcmchainMessageSignature":                  66,
 	"MessageType_NEMGetAddress":                             67,
 	"MessageType_NEMAddress":                                68,
 	"MessageType_NEMSignTx":                                 69,

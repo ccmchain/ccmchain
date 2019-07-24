@@ -172,7 +172,7 @@ func (s *SecureChannelSession) Open() error {
 	return s.mutuallyAuthenticate()
 }
 
-// mutuallyAuthenticate is an internal mccmod to authenticate both ends of the
+// mutuallyAuthenticate is an internal method to authenticate both ends of the
 // connection.
 func (s *SecureChannelSession) mutuallyAuthenticate() error {
 	data := make([]byte, scSecretLength)
@@ -195,7 +195,7 @@ func (s *SecureChannelSession) mutuallyAuthenticate() error {
 	return nil
 }
 
-// open is an internal mccmod that sends an open APDU.
+// open is an internal method that sends an open APDU.
 func (s *SecureChannelSession) open() (*responseAPDU, error) {
 	return transmit(s.card, &commandAPDU{
 		Cla:  claSCWallet,
@@ -207,7 +207,7 @@ func (s *SecureChannelSession) open() (*responseAPDU, error) {
 	})
 }
 
-// pair is an internal mccmod that sends a pair APDU.
+// pair is an internal method that sends a pair APDU.
 func (s *SecureChannelSession) pair(p1 uint8, data []byte) (*responseAPDU, error) {
 	return transmit(s.card, &commandAPDU{
 		Cla:  claSCWallet,
@@ -274,7 +274,7 @@ func (s *SecureChannelSession) transmitEncrypted(cla, ins, p1, p2 byte, data []b
 	return rapdu, nil
 }
 
-// encryptAPDU is an internal mccmod that serializes and encrypts an APDU.
+// encryptAPDU is an internal method that serializes and encrypts an APDU.
 func (s *SecureChannelSession) encryptAPDU(data []byte) ([]byte, error) {
 	if len(data) > maxPayloadSize {
 		return nil, fmt.Errorf("Payload of %d bytes exceeds maximum of %d", len(data), maxPayloadSize)
@@ -300,7 +300,7 @@ func pad(data []byte, terminator byte) []byte {
 	return padded
 }
 
-// decryptAPDU is an internal mccmod that decrypts and deserializes an APDU.
+// decryptAPDU is an internal method that decrypts and deserializes an APDU.
 func (s *SecureChannelSession) decryptAPDU(data []byte) ([]byte, error) {
 	a, err := aes.NewCipher(s.sessionEncKey)
 	if err != nil {
@@ -329,7 +329,7 @@ func unpad(data []byte, terminator byte) ([]byte, error) {
 	return nil, fmt.Errorf("Expected end of padding, got 0")
 }
 
-// updateIV is an internal mccmod that updates the initialization vector after
+// updateIV is an internal method that updates the initialization vector after
 // each message exchanged.
 func (s *SecureChannelSession) updateIV(meta, data []byte) error {
 	data = pad(data, 0)

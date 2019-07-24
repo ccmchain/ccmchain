@@ -433,7 +433,7 @@ func (b *batch) Replay(w ccmdb.KeyValueWriter) error {
 	return b.b.Replay(&replayer{writer: w})
 }
 
-// replayer is a small wrapper to implement the correct replay mccmods.
+// replayer is a small wrapper to implement the correct replay methods.
 type replayer struct {
 	writer  ccmdb.KeyValueWriter
 	failure error

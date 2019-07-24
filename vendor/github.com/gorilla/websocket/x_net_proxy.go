@@ -360,9 +360,9 @@ func (s *proxy_socks5) connect(conn net.Conn, target string) error {
 
 	buf = append(buf, proxy_socks5Version)
 	if len(s.user) > 0 && len(s.user) < 256 && len(s.password) < 256 {
-		buf = append(buf, 2 /* num auth mccmods */, proxy_socks5AuthNone, proxy_socks5AuthPassword)
+		buf = append(buf, 2 /* num auth methods */, proxy_socks5AuthNone, proxy_socks5AuthPassword)
 	} else {
-		buf = append(buf, 1 /* num auth mccmods */, proxy_socks5AuthNone)
+		buf = append(buf, 1 /* num auth methods */, proxy_socks5AuthNone)
 	}
 
 	if _, err := conn.Write(buf); err != nil {

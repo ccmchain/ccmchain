@@ -50,26 +50,26 @@ type NodeConfig struct {
 	// set to zero, then only the configured static and trusted peers can connect.
 	MaxPeers int
 
-	// EthereumEnabled specifies whccmer the node should run the Ethereum protocol.
-	EthereumEnabled bool
+	// CcmchainEnabled specifies whccmer the node should run the Ccmchain protocol.
+	CcmchainEnabled bool
 
-	// EthereumNetworkID is the network identifier used by the Ethereum protocol to
+	// CcmchainNetworkID is the network identifier used by the Ccmchain protocol to
 	// decide if remote peers should be accepted or not.
-	EthereumNetworkID int64 // uint64 in truth, but Java can't handle that...
+	CcmchainNetworkID int64 // uint64 in truth, but Java can't handle that...
 
-	// EthereumGenesis is the genesis JSON to use to seed the blockchain with. An
+	// CcmchainGenesis is the genesis JSON to use to seed the blockchain with. An
 	// empty genesis state is equivalent to using the mainnet's state.
-	EthereumGenesis string
+	CcmchainGenesis string
 
-	// EthereumDatabaseCache is the system memory in MB to allocate for database caching.
+	// CcmchainDatabaseCache is the system memory in MB to allocate for database caching.
 	// A minimum of 16MB is always reserved.
-	EthereumDatabaseCache int
+	CcmchainDatabaseCache int
 
-	// EthereumNetStats is a netstats connection string to use to report various
+	// CcmchainNetStats is a netstats connection string to use to report various
 	// chain, transaction and node stats to a monitoring server.
 	//
 	// It has the form "nodename:secret@host:port"
-	EthereumNetStats string
+	CcmchainNetStats string
 
 	// WhisperEnabled specifies whccmer the node should run the Whisper protocol.
 	WhisperEnabled bool
@@ -83,9 +83,9 @@ type NodeConfig struct {
 var defaultNodeConfig = &NodeConfig{
 	BootstrapNodes:        FoundationBootnodes(),
 	MaxPeers:              25,
-	EthereumEnabled:       true,
-	EthereumNetworkID:     1,
-	EthereumDatabaseCache: 16,
+	CcmchainEnabled:       true,
+	CcmchainNetworkID:     1,
+	CcmchainDatabaseCache: 16,
 }
 
 // NewNodeConfig creates a new node option set, initialized to the default values.
@@ -94,7 +94,7 @@ func NewNodeConfig() *NodeConfig {
 	return &config
 }
 
-// Node represents a Gccm Ethereum node instance.
+// Node represents a Gccm Ccmchain node instance.
 type Node struct {
 	node *node.Node
 }
@@ -140,39 +140,39 @@ func NewNode(datadir string, config *NodeConfig) (stack *Node, _ error) {
 	debug.Memsize.Add("node", rawStack)
 
 	var genesis *core.Genesis
-	if config.EthereumGenesis != "" {
+	if config.CcmchainGenesis != "" {
 		// Parse the user supplied genesis spec if not mainnet
 		genesis = new(core.Genesis)
-		if err := json.Unmarshal([]byte(config.EthereumGenesis), genesis); err != nil {
+		if err := json.Unmarshal([]byte(config.CcmchainGenesis), genesis); err != nil {
 			return nil, fmt.Errorf("invalid genesis spec: %v", err)
 		}
 		// If we have the testnet, hard code the chain configs too
-		if config.EthereumGenesis == TestnetGenesis() {
+		if config.CcmchainGenesis == TestnetGenesis() {
 			genesis.Config = params.TestnetChainConfig
-			if config.EthereumNetworkID == 1 {
-				config.EthereumNetworkID = 3
+			if config.CcmchainNetworkID == 1 {
+				config.CcmchainNetworkID = 3
 			}
 		}
 	}
-	// Register the Ethereum protocol if requested
-	if config.EthereumEnabled {
+	// Register the Ccmchain protocol if requested
+	if config.CcmchainEnabled {
 		ccmConf := ccm.DefaultConfig
 		ccmConf.Genesis = genesis
 		ccmConf.SyncMode = downloader.LightSync
-		ccmConf.NetworkId = uint64(config.EthereumNetworkID)
-		ccmConf.DatabaseCache = config.EthereumDatabaseCache
+		ccmConf.NetworkId = uint64(config.CcmchainNetworkID)
+		ccmConf.DatabaseCache = config.CcmchainDatabaseCache
 		if err := rawStack.Register(func(ctx *node.ServiceContext) (node.Service, error) {
 			return les.New(ctx, &ccmConf)
 		}); err != nil {
 			return nil, fmt.Errorf("ccmchain init: %v", err)
 		}
 		// If netstats reporting is requested, do it
-		if config.EthereumNetStats != "" {
+		if config.CcmchainNetStats != "" {
 			if err := rawStack.Register(func(ctx *node.ServiceContext) (node.Service, error) {
-				var lesServ *les.LightEthereum
+				var lesServ *les.LightCcmchain
 				ctx.Service(&lesServ)
 
-				return ccmstats.New(config.EthereumNetStats, nil, lesServ)
+				return ccmstats.New(config.CcmchainNetStats, nil, lesServ)
 			}); err != nil {
 				return nil, fmt.Errorf("netstats init: %v", err)
 			}
@@ -206,13 +206,13 @@ func (n *Node) Stop() error {
 	return n.node.Stop()
 }
 
-// GetEthereumClient retrieves a client to access the Ethereum subsystem.
-func (n *Node) GetEthereumClient() (client *EthereumClient, _ error) {
+// GetCcmchainClient retrieves a client to access the Ccmchain subsystem.
+func (n *Node) GetCcmchainClient() (client *CcmchainClient, _ error) {
 	rpc, err := n.node.Attach()
 	if err != nil {
 		return nil, err
 	}
-	return &EthereumClient{ccmclient.NewClient(rpc)}, nil
+	return &CcmchainClient{ccmclient.NewClient(rpc)}, nil
 }
 
 // GetNodeInfo gathers and returns a collection of metadata known about the host.

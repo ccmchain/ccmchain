@@ -67,7 +67,7 @@ func (s signersAscending) Less(i, j int) bool { return bytes.Compare(s[i][:], s[
 func (s signersAscending) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 
 // newSnapshot creates a new snapshot with the specified startup parameters. This
-// mccmod does not initialize the set of recent signers, so only ever use if for
+// method does not initialize the set of recent signers, so only ever use if for
 // the genesis block.
 func newSnapshot(config *params.CliqueConfig, sigcache *lru.ARCCache, number uint64, hash common.Hash, signers []common.Address) *Snapshot {
 	snap := &Snapshot{

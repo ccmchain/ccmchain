@@ -20,7 +20,7 @@ func errorWithPC(msg string, pc uintptr) string {
 }
 
 func getPC(callersToSkip int) uintptr {
-	// Get the PC of Initialize mccmod's caller.
+	// Get the PC of Initialize method's caller.
 	pc := [1]uintptr{}
 	_ = runtime.Callers(callersToSkip, pc[:])
 	return pc[0]
@@ -36,7 +36,7 @@ type ErrorNode struct {
 }
 
 // Error returns a string with the PC's symbols or "" if the PC is invalid.
-// When defining a new error type, have its Error mccmod call this one passing
+// When defining a new error type, have its Error method call this one passing
 // it the string representation of the error.
 func (e *ErrorNode) Error(msg string) string {
 	s := errorWithPC(msg, e.pc)
@@ -120,7 +120,7 @@ type ErrorNodeNoCause struct {
 }
 
 // Error returns a string with the PC's symbols or "" if the PC is invalid.
-// When defining a new error type, have its Error mccmod call this one passing
+// When defining a new error type, have its Error method call this one passing
 // it the string representation of the error.
 func (e *ErrorNodeNoCause) Error(msg string) string {
 	return errorWithPC(msg, e.pc)

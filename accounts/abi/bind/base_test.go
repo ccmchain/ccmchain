@@ -52,7 +52,7 @@ func TestPassingBlockNumber(t *testing.T) {
 	mc := &mockCaller{}
 
 	bc := bind.NewBoundContract(common.HexToAddress("0x0"), abi.ABI{
-		Mccmods: map[string]abi.Mccmod{
+		Methods: map[string]abi.Method{
 			"somccming": {
 				Name:    "somccming",
 				Outputs: abi.Arguments{},

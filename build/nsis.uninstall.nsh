@@ -17,12 +17,12 @@ Section "Uninstall"
   rmDir "$SMPROGRAMS\${APPNAME}"
 
   # Firewall - remove rules if exists
-  SimpleFC::AdvRemoveRule "Gccm incoming peers (TCP:30303)"
-  SimpleFC::AdvRemoveRule "Gccm outgoing peers (TCP:30303)"
-  SimpleFC::AdvRemoveRule "Gccm UDP discovery (UDP:30303)"
+  SimpleFC::AdvRemoveRule "Gccm incoming peers (TCP:17575)"
+  SimpleFC::AdvRemoveRule "Gccm outgoing peers (TCP:17575)"
+  SimpleFC::AdvRemoveRule "Gccm UDP discovery (UDP:17575)"
 
   # Remove IPC endpoint (https://github.com/ccmchain/EIPs/issues/147)
-  ${un.EnvVarUpdate} $0 "ETHEREUM_SOCKET" "R" "HKLM" "\\.\pipe\gccm.ipc"
+  ${un.EnvVarUpdate} $0 "CCMCHAIN_SOCKET" "R" "HKLM" "\\.\pipe\gccm.ipc"
 
   # Remove install directory from PATH
   Push "$INSTDIR"

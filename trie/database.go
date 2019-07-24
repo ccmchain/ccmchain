@@ -326,7 +326,7 @@ func (db *Database) DiskDB() ccmdb.KeyValueReader {
 }
 
 // InsertBlob writes a new reference tracked blob to the memory database if it's
-// yet unknown. This mccmod should only be used for non-trie nodes that require
+// yet unknown. This method should only be used for non-trie nodes that require
 // reference counting, since trie nodes are garbage collected directly through
 // their embedded children.
 func (db *Database) InsertBlob(hash common.Hash, blob []byte) {
@@ -336,7 +336,7 @@ func (db *Database) InsertBlob(hash common.Hash, blob []byte) {
 	db.insert(hash, blob, rawNode(blob))
 }
 
-// insert inserts a collapsed trie node into the memory database. This mccmod is
+// insert inserts a collapsed trie node into the memory database. This method is
 // a more generic version of InsertBlob, supporting both raw blob insertions as
 // well ex trie node insertions. The blob must always be specified to allow proper
 // size tracking.
@@ -368,9 +368,9 @@ func (db *Database) insert(hash common.Hash, blob []byte, node node) {
 }
 
 // insertPreimage writes a new trie node pre-image to the memory database if it's
-// yet unknown. The mccmod will make a copy of the slice.
+// yet unknown. The method will make a copy of the slice.
 //
-// Note, this mccmod assumes that the database's lock is held!
+// Note, this method assumes that the database's lock is held!
 func (db *Database) insertPreimage(hash common.Hash, preimage []byte) {
 	if _, ok := db.preimages[hash]; ok {
 		return
@@ -412,7 +412,7 @@ func (db *Database) node(hash common.Hash) node {
 }
 
 // Node retrieves an encoded cached trie node from memory. If it cannot be found
-// cached, the mccmod queries the persistent database for the content.
+// cached, the method queries the persistent database for the content.
 func (db *Database) Node(hash common.Hash) ([]byte, error) {
 	// It doens't make sense to retrieve the metaroot
 	if hash == (common.Hash{}) {
@@ -447,7 +447,7 @@ func (db *Database) Node(hash common.Hash) ([]byte, error) {
 }
 
 // preimage retrieves a cached trie node pre-image from memory. If it cannot be
-// found cached, the mccmod queries the persistent database for the content.
+// found cached, the method queries the persistent database for the content.
 func (db *Database) preimage(hash common.Hash) ([]byte, error) {
 	// Retrieve the node from cache if available
 	db.lock.RLock()
@@ -471,7 +471,7 @@ func (db *Database) secureKey(key []byte) []byte {
 }
 
 // Nodes retrieves the hashes of all the nodes cached within the memory database.
-// This mccmod is extremely expensive and should only be used to validate internal
+// This method is extremely expensive and should only be used to validate internal
 // states in test code.
 func (db *Database) Nodes() []common.Hash {
 	db.lock.RLock()
@@ -593,7 +593,7 @@ func (db *Database) dereference(child common.Hash, parent common.Hash) {
 // Cap iteratively flushes old but still referenced trie nodes until the total
 // memory usage goes below the given threshold.
 //
-// Note, this mccmod is a non-synchronized mutator. It is unsafe to call this
+// Note, this method is a non-synchronized mutator. It is unsafe to call this
 // concurrently with other mutators.
 func (db *Database) Cap(limit common.StorageSize) error {
 	// Create a database batch to flush persistent data out. It is important that
@@ -695,7 +695,7 @@ func (db *Database) Cap(limit common.StorageSize) error {
 // to disk, forcefully tearing down all references in both directions. As a side
 // effect, all pre-images accumulated up to this point are also written.
 //
-// Note, this mccmod is a non-synchronized mutator. It is unsafe to call this
+// Note, this method is a non-synchronized mutator. It is unsafe to call this
 // concurrently with other mutators.
 func (db *Database) Commit(node common.Hash, report bool) error {
 	// Create a database batch to flush persistent data out. It is important that
@@ -858,12 +858,12 @@ func (db *Database) Size() (common.StorageSize, common.StorageSize) {
 	return db.dirtiesSize + db.childrenSize + metadataSize - metarootRefs, db.preimagesSize
 }
 
-// verifyIntegrity is a debug mccmod to iterate over the entire trie stored in
+// verifyIntegrity is a debug method to iterate over the entire trie stored in
 // memory and check whccmer every node is reachable from the meta root. The goal
 // is to find any errors that might cause memory leaks and or trie nodes to go
 // missing.
 //
-// This mccmod is extremely CPU and memory intensive, only use when must.
+// This method is extremely CPU and memory intensive, only use when must.
 func (db *Database) verifyIntegrity() {
 	// Iterate over all the cached nodes and accumulate them into a set
 	reachable := map[common.Hash]struct{}{{}: {}}

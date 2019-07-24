@@ -63,7 +63,7 @@ func (s *Server) WebsocketHandler(allowedOrigins []string) http.Handler {
 			return
 		}
 		codec := newWebsocketCodec(conn)
-		s.ServeCodec(codec, OptionMccmodInvocation|OptionSubscriptions)
+		s.ServeCodec(codec, OptionMethodInvocation|OptionSubscriptions)
 	})
 }
 

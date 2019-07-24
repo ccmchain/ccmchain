@@ -68,7 +68,7 @@ func TestSubscriptions(t *testing.T) {
 			t.Fatalf("unable to register test service %v", err)
 		}
 	}
-	go server.ServeCodec(NewJSONCodec(serverConn), OptionMccmodInvocation|OptionSubscriptions)
+	go server.ServeCodec(NewJSONCodec(serverConn), OptionMethodInvocation|OptionSubscriptions)
 	defer server.Stop()
 
 	// wait for message and write them to the given channels
@@ -78,7 +78,7 @@ func TestSubscriptions(t *testing.T) {
 	for i, namespace := range namespaces {
 		request := map[string]interface{}{
 			"id":      i,
-			"mccmod":  fmt.Sprintf("%s_subscribe", namespace),
+			"method":  fmt.Sprintf("%s_subscribe", namespace),
 			"version": "2.0",
 			"params":  []interface{}{"someSubscription", notificationCount, i},
 		}
@@ -130,12 +130,12 @@ func TestServerUnsubscribe(t *testing.T) {
 	service := &notificationTestService{unsubscribed: make(chan string)}
 	server.RegisterName("nftest2", service)
 	p1, p2 := net.Pipe()
-	go server.ServeCodec(NewJSONCodec(p1), OptionMccmodInvocation|OptionSubscriptions)
+	go server.ServeCodec(NewJSONCodec(p1), OptionMethodInvocation|OptionSubscriptions)
 
 	p2.SetDeadline(time.Now().Add(10 * time.Second))
 
 	// Subscribe.
-	p2.Write([]byte(`{"jsonrpc":"2.0","id":1,"mccmod":"nftest2_subscribe","params":["someSubscription",0,10]}`))
+	p2.Write([]byte(`{"jsonrpc":"2.0","id":1,"method":"nftest2_subscribe","params":["someSubscription",0,10]}`))
 
 	// Handle received messages.
 	resps := make(chan subConfirmation)
@@ -152,7 +152,7 @@ func TestServerUnsubscribe(t *testing.T) {
 	}
 
 	// Unsubscribe and check that it is handled on the server side.
-	p2.Write([]byte(`{"jsonrpc":"2.0","mccmod":"nftest2_unsubscribe","params":["` + sub.subid + `"]}`))
+	p2.Write([]byte(`{"jsonrpc":"2.0","method":"nftest2_unsubscribe","params":["` + sub.subid + `"]}`))
 	for {
 		select {
 		case id := <-service.unsubscribed:

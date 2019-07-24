@@ -93,17 +93,17 @@ func (s *testService) InvalidRets3() (string, string, error) {
 	return "", "", nil
 }
 
-func (s *testService) CallMeBack(ctx context.Context, mccmod string, args []interface{}) (interface{}, error) {
+func (s *testService) CallMeBack(ctx context.Context, method string, args []interface{}) (interface{}, error) {
 	c, ok := ClientFromContext(ctx)
 	if !ok {
 		return nil, errors.New("no client")
 	}
 	var result interface{}
-	err := c.Call(&result, mccmod, args...)
+	err := c.Call(&result, method, args...)
 	return result, err
 }
 
-func (s *testService) CallMeBackLater(ctx context.Context, mccmod string, args []interface{}) error {
+func (s *testService) CallMeBackLater(ctx context.Context, method string, args []interface{}) error {
 	c, ok := ClientFromContext(ctx)
 	if !ok {
 		return errors.New("no client")
@@ -111,7 +111,7 @@ func (s *testService) CallMeBackLater(ctx context.Context, mccmod string, args [
 	go func() {
 		<-ctx.Done()
 		var result interface{}
-		c.Call(&result, mccmod, args...)
+		c.Call(&result, method, args...)
 	}()
 	return nil
 }
@@ -144,7 +144,7 @@ func (s *notificationTestService) SomeSubscription(ctx context.Context, n, val i
 
 	// By explicitly creating an subscription we make sure that the subscription id is send
 	// back to the client before the first subscription.Notify is called. Otherwise the
-	// events might be send before the response for the *_subscribe mccmod.
+	// events might be send before the response for the *_subscribe method.
 	subscription := notifier.CreateSubscription()
 	go func() {
 		for i := 0; i < n; i++ {

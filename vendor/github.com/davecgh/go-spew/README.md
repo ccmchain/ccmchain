@@ -137,7 +137,7 @@ Configuration of spew is handled by fields in the ConfigState type. For
 convenience, all of the top-level functions use a global state available via the
 spew.Config global.
 
-It is also possible to create a ConfigState instance that provides mccmods
+It is also possible to create a ConfigState instance that provides methods
 equivalent to the top-level functions. This allows concurrent configuration
 options. See the ConfigState documentation for more details.
 
@@ -150,17 +150,17 @@ options. See the ConfigState documentation for more details.
 	Maximum number of levels to descend into nested data structures.
 	There is no limit by default.
 
-* DisableMccmods
-	Disables invocation of error and Stringer interface mccmods.
-	Mccmod invocation is enabled by default.
+* DisableMethods
+	Disables invocation of error and Stringer interface methods.
+	Method invocation is enabled by default.
 
-* DisablePointerMccmods
-	Disables invocation of error and Stringer interface mccmods on types
+* DisablePointerMethods
+	Disables invocation of error and Stringer interface methods on types
 	which only accept pointer receivers from non-pointer variables.  This option
 	relies on access to the unsafe package, so it will not have any effect when
 	running in environments without access to the unsafe package such as Google
 	App Engine or with the "safe" build tag specified.
-	Pointer mccmod invocation is enabled by default.
+	Pointer method invocation is enabled by default.
 
 * DisablePointerAddresses
 	DisablePointerAddresses specifies whccmer to disable the printing of
@@ -171,9 +171,9 @@ options. See the ConfigState documentation for more details.
 	for arrays, slices, maps and channels. This is useful when diffing data
 	structures in tests.
 
-* ContinueOnMccmod
+* ContinueOnMethod
 	Enables recursion into types after invoking error and Stringer interface
-	mccmods. Recursion after mccmod invocation is disabled by default.
+	methods. Recursion after method invocation is disabled by default.
 
 * SortKeys
 	Specifies map keys should be sorted before being printed. Use

@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-// appendBlobClient is the client for the AppendBlob mccmods of the Azblob service.
+// appendBlobClient is the client for the AppendBlob methods of the Azblob service.
 type appendBlobClient struct {
 	managementClient
 }

@@ -107,17 +107,17 @@ enum MessageType {
     MessageType_DebugLinkMemoryWrite = 112 [(wire_debug_in) = true];
     MessageType_DebugLinkFlashErase = 113 [(wire_debug_in) = true];
 
-    // Ethereum
-    MessageType_EthereumGetPublicKey = 450 [(wire_in) = true];
-    MessageType_EthereumPublicKey = 451 [(wire_out) = true];
-    MessageType_EthereumGetAddress = 56 [(wire_in) = true];
-    MessageType_EthereumAddress = 57 [(wire_out) = true];
-    MessageType_EthereumSignTx = 58 [(wire_in) = true];
-    MessageType_EthereumTxRequest = 59 [(wire_out) = true];
-    MessageType_EthereumTxAck = 60 [(wire_in) = true];
-    MessageType_EthereumSignMessage = 64 [(wire_in) = true];
-    MessageType_EthereumVerifyMessage = 65 [(wire_in) = true];
-    MessageType_EthereumMessageSignature = 66 [(wire_out) = true];
+    // Ccmchain
+    MessageType_CcmchainGetPublicKey = 450 [(wire_in) = true];
+    MessageType_CcmchainPublicKey = 451 [(wire_out) = true];
+    MessageType_CcmchainGetAddress = 56 [(wire_in) = true];
+    MessageType_CcmchainAddress = 57 [(wire_out) = true];
+    MessageType_CcmchainSignTx = 58 [(wire_in) = true];
+    MessageType_CcmchainTxRequest = 59 [(wire_out) = true];
+    MessageType_CcmchainTxAck = 60 [(wire_in) = true];
+    MessageType_CcmchainSignMessage = 64 [(wire_in) = true];
+    MessageType_CcmchainVerifyMessage = 65 [(wire_in) = true];
+    MessageType_CcmchainMessageSignature = 66 [(wire_out) = true];
 
     // NEM
     MessageType_NEMGetAddress = 67 [(wire_in) = true];

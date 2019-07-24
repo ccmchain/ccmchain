@@ -75,14 +75,14 @@ type peerConnection struct {
 	lock    sync.RWMutex
 }
 
-// LightPeer encapsulates the mccmods required to synchronise with a remote light peer.
+// LightPeer encapsulates the methods required to synchronise with a remote light peer.
 type LightPeer interface {
 	Head() (common.Hash, *big.Int)
 	RequestHeadersByHash(common.Hash, int, int, bool) error
 	RequestHeadersByNumber(uint64, int, int, bool) error
 }
 
-// Peer encapsulates the mccmods required to synchronise with a remote full peer.
+// Peer encapsulates the methods required to synchronise with a remote full peer.
 type Peer interface {
 	LightPeer
 	RequestBodies([]common.Hash) error
@@ -90,7 +90,7 @@ type Peer interface {
 	RequestNodeData([]common.Hash) error
 }
 
-// lightPeerWrapper wraps a LightPeer struct, stubbing out the Peer-only mccmods.
+// lightPeerWrapper wraps a LightPeer struct, stubbing out the Peer-only methods.
 type lightPeerWrapper struct {
 	peer LightPeer
 }
@@ -379,7 +379,7 @@ func (ps *peerSet) Reset() {
 // Register injects a new peer into the working set, or returns an error if the
 // peer is already known.
 //
-// The mccmod also sets the starting throughput values of the new peer to the
+// The method also sets the starting throughput values of the new peer to the
 // average of all existing peers, to give it a realistic chance of being used
 // for data retrievals.
 func (ps *peerSet) Register(p *peerConnection) error {

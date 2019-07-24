@@ -45,7 +45,7 @@ type Database struct {
 	lock sync.RWMutex
 }
 
-// New returns a wrapped map with all the required database interface mccmods
+// New returns a wrapped map with all the required database interface methods
 // implemented.
 func New() *Database {
 	return &Database{
@@ -54,7 +54,7 @@ func New() *Database {
 }
 
 // NewWithCap returns a wrapped map pre-allocated to the provided capcity with
-// all the required database interface mccmods implemented.
+// all the required database interface methods implemented.
 func NewWithCap(size int) *Database {
 	return &Database{
 		db: make(map[string][]byte, size),
@@ -204,7 +204,7 @@ func (db *Database) Compact(start []byte, limit []byte) error {
 
 // Len returns the number of entries currently present in the memory database.
 //
-// Note, this mccmod is only used for testing (i.e. not public in general) and
+// Note, this method is only used for testing (i.e. not public in general) and
 // does not have explicit checks for closed-ness to allow simpler testing code.
 func (db *Database) Len() int {
 	db.lock.RLock()

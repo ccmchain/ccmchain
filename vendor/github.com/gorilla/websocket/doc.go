@@ -7,7 +7,7 @@
 // Overview
 //
 // The Conn type represents a WebSocket connection. A server application calls
-// the Upgrader.Upgrade mccmod from an HTTP request handler to get a *Conn:
+// the Upgrader.Upgrade method from an HTTP request handler to get a *Conn:
 //
 //  var upgrader = websocket.Upgrader{
 //      ReadBufferSize:  1024,
@@ -23,9 +23,9 @@
 //      ... Use conn to send and receive messages.
 //  }
 //
-// Call the connection's WriteMessage and ReadMessage mccmods to send and
+// Call the connection's WriteMessage and ReadMessage methods to send and
 // receive messages as a slice of bytes. This snippet of code shows how to echo
-// messages using these mccmods:
+// messages using these methods:
 //
 //  for {
 //      messageType, p, err := conn.ReadMessage()
@@ -44,10 +44,10 @@
 //
 // An application can also send and receive messages using the io.WriteCloser
 // and io.Reader interfaces. To send a message, call the connection NextWriter
-// mccmod to get an io.WriteCloser, write the message to the writer and close
+// method to get an io.WriteCloser, write the message to the writer and close
 // the writer when done. To receive a message, call the connection NextReader
-// mccmod to get an io.Reader and read until io.EOF is returned. This snippet
-// shows how to echo messages using the NextWriter and NextReader mccmods:
+// method to get an io.Reader and read until io.EOF is returned. This snippet
+// shows how to echo messages using the NextWriter and NextReader methods:
 //
 //  for {
 //      messageType, r, err := conn.NextReader()
@@ -73,9 +73,9 @@
 // binary messages is left to the application.
 //
 // This package uses the TextMessage and BinaryMessage integer constants to
-// identify the two data message types. The ReadMessage and NextReader mccmods
+// identify the two data message types. The ReadMessage and NextReader methods
 // return the type of the received message. The messageType argument to the
-// WriteMessage and NextWriter mccmods specifies the type of a sent message.
+// WriteMessage and NextWriter methods specifies the type of a sent message.
 //
 // It is the application's responsibility to ensure that text messages are
 // valid UTF-8 encoded text.
@@ -84,25 +84,25 @@
 //
 // The WebSocket protocol defines three types of control messages: close, ping
 // and pong. Call the connection WriteControl, WriteMessage or NextWriter
-// mccmods to send a control message to the peer.
+// methods to send a control message to the peer.
 //
 // Connections handle received close messages by calling the handler function
-// set with the SetCloseHandler mccmod and by returning a *CloseError from the
-// NextReader, ReadMessage or the message Read mccmod. The default close
+// set with the SetCloseHandler method and by returning a *CloseError from the
+// NextReader, ReadMessage or the message Read method. The default close
 // handler sends a close message to the peer.
 //
 // Connections handle received ping messages by calling the handler function
-// set with the SetPingHandler mccmod. The default ping handler sends a pong
+// set with the SetPingHandler method. The default ping handler sends a pong
 // message to the peer.
 //
 // Connections handle received pong messages by calling the handler function
-// set with the SetPongHandler mccmod. The default pong handler does nothing.
+// set with the SetPongHandler method. The default pong handler does nothing.
 // If an application sends ping messages, then the application should set a
 // pong handler to receive the corresponding pong.
 //
 // The control message handler functions are called from the NextReader,
-// ReadMessage and message reader Read mccmods. The default close and ping
-// handlers can block these mccmods for a short time when the handler writes to
+// ReadMessage and message reader Read methods. The default close and ping
+// handlers can block these methods for a short time when the handler writes to
 // the connection.
 //
 // The application must read the connection to process close, ping and pong
@@ -124,14 +124,14 @@
 // Connections support one concurrent reader and one concurrent writer.
 //
 // Applications are responsible for ensuring that no more than one goroutine
-// calls the write mccmods (NextWriter, SetWriteDeadline, WriteMessage,
+// calls the write methods (NextWriter, SetWriteDeadline, WriteMessage,
 // WriteJSON, EnableWriteCompression, SetCompressionLevel) concurrently and
-// that no more than one goroutine calls the read mccmods (NextReader,
+// that no more than one goroutine calls the read methods (NextReader,
 // SetReadDeadline, ReadMessage, ReadJSON, SetPongHandler, SetPingHandler)
 // concurrently.
 //
-// The Close and WriteControl mccmods can be called concurrently with all other
-// mccmods.
+// The Close and WriteControl methods can be called concurrently with all other
+// methods.
 //
 // Origin Considerations
 //
@@ -141,7 +141,7 @@
 //
 // The Upgrader calls the function specified in the CheckOrigin field to check
 // the origin. If the CheckOrigin function returns false, then the Upgrade
-// mccmod fails the WebSocket handshake with HTTP status 403.
+// method fails the WebSocket handshake with HTTP status 403.
 //
 // If the CheckOrigin field is nil, then the Upgrader uses a safe default: fail
 // the handshake if the Origin request header is present and the Origin host is
@@ -211,10 +211,10 @@
 //
 // If compression was successfully negotiated with the connection's peer, any
 // message received in compressed form will be automatically decompressed.
-// All Read mccmods will return uncompressed bytes.
+// All Read methods will return uncompressed bytes.
 //
 // Per message compression of messages written to a connection can be enabled
-// or disabled by calling the corresponding Conn mccmod:
+// or disabled by calling the corresponding Conn method:
 //
 //  conn.EnableWriteCompression(false)
 //

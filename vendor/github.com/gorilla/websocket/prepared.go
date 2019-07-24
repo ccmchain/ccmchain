@@ -37,7 +37,7 @@ type preparedFrame struct {
 }
 
 // NewPreparedMessage returns an initialized PreparedMessage. You can then send
-// it to connection using WritePreparedMessage mccmod. Valid wire
+// it to connection using WritePreparedMessage method. Valid wire
 // representation will be calculated lazily only once for a set of current
 // connection options.
 func NewPreparedMessage(messageType int, data []byte) (*PreparedMessage, error) {

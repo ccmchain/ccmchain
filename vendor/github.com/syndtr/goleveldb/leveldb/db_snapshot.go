@@ -143,10 +143,10 @@ func (snap *Snapshot) Has(key []byte, ro *opt.ReadOptions) (ret bool, err error)
 // the DB.
 //
 // WARNING: Any slice returned by interator (e.g. slice returned by calling
-// Iterator.Key() or Iterator.Value() mccmods), its content should not be
+// Iterator.Key() or Iterator.Value() methods), its content should not be
 // modified unless noted otherwise.
 //
-// The iterator must be released after use, by calling Release mccmod.
+// The iterator must be released after use, by calling Release method.
 // Releasing the snapshot doesn't mean releasing the iterator too, the
 // iterator would be still valid until released.
 //
@@ -169,7 +169,7 @@ func (snap *Snapshot) NewIterator(slice *util.Range, ro *opt.ReadOptions) iterat
 // iterators, the iterators would still be valid until released or the
 // underlying DB is closed.
 //
-// Other mccmods should not be called after the snapshot has been released.
+// Other methods should not be called after the snapshot has been released.
 func (snap *Snapshot) Release() {
 	snap.mu.Lock()
 	defer snap.mu.Unlock()

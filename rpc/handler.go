@@ -233,7 +233,7 @@ func (h *handler) handleImmediate(msg *jsonrpcMessage) bool {
 	start := time.Now()
 	switch {
 	case msg.isNotification():
-		if strings.HasSuffix(msg.Mccmod, notificationMccmodSuffix) {
+		if strings.HasSuffix(msg.Method, notificationMethodSuffix) {
 			h.handleSubscriptionResult(msg)
 			return true
 		}
@@ -259,7 +259,7 @@ func (h *handler) handleSubscriptionResult(msg *jsonrpcMessage) {
 	}
 }
 
-// handleResponse processes mccmod call responses.
+// handleResponse processes method call responses.
 func (h *handler) handleResponse(msg *jsonrpcMessage) {
 	op := h.respWait[string(msg.ID)]
 	if op == nil {
@@ -292,14 +292,14 @@ func (h *handler) handleCallMsg(ctx *callProc, msg *jsonrpcMessage) *jsonrpcMess
 	switch {
 	case msg.isNotification():
 		h.handleCall(ctx, msg)
-		h.log.Debug("Served "+msg.Mccmod, "t", time.Since(start))
+		h.log.Debug("Served "+msg.Method, "t", time.Since(start))
 		return nil
 	case msg.isCall():
 		resp := h.handleCall(ctx, msg)
 		if resp.Error != nil {
-			h.log.Warn("Served "+msg.Mccmod, "reqid", idForLog{msg.ID}, "t", time.Since(start), "err", resp.Error.Message)
+			h.log.Warn("Served "+msg.Method, "reqid", idForLog{msg.ID}, "t", time.Since(start), "err", resp.Error.Message)
 		} else {
-			h.log.Debug("Served "+msg.Mccmod, "reqid", idForLog{msg.ID}, "t", time.Since(start))
+			h.log.Debug("Served "+msg.Method, "reqid", idForLog{msg.ID}, "t", time.Since(start))
 		}
 		return resp
 	case msg.hasValidID():
@@ -309,7 +309,7 @@ func (h *handler) handleCallMsg(ctx *callProc, msg *jsonrpcMessage) *jsonrpcMess
 	}
 }
 
-// handleCall processes mccmod calls.
+// handleCall processes method calls.
 func (h *handler) handleCall(cp *callProc, msg *jsonrpcMessage) *jsonrpcMessage {
 	if msg.isSubscribe() {
 		return h.handleSubscribe(cp, msg)
@@ -318,26 +318,26 @@ func (h *handler) handleCall(cp *callProc, msg *jsonrpcMessage) *jsonrpcMessage 
 	if msg.isUnsubscribe() {
 		callb = h.unsubscribeCb
 	} else {
-		callb = h.reg.callback(msg.Mccmod)
+		callb = h.reg.callback(msg.Method)
 	}
 	if callb == nil {
-		return msg.errorResponse(&mccmodNotFoundError{mccmod: msg.Mccmod})
+		return msg.errorResponse(&methodNotFoundError{method: msg.Method})
 	}
 	args, err := parsePositionalArguments(msg.Params, callb.argTypes)
 	if err != nil {
 		return msg.errorResponse(&invalidParamsError{err.Error()})
 	}
 
-	return h.runMccmod(cp.ctx, msg, callb, args)
+	return h.runMethod(cp.ctx, msg, callb, args)
 }
 
-// handleSubscribe processes *_subscribe mccmod calls.
+// handleSubscribe processes *_subscribe method calls.
 func (h *handler) handleSubscribe(cp *callProc, msg *jsonrpcMessage) *jsonrpcMessage {
 	if !h.allowSubscribe {
 		return msg.errorResponse(ErrNotificationsUnsupported)
 	}
 
-	// Subscription mccmod name is first argument.
+	// Subscription method name is first argument.
 	name, err := parseSubscriptionName(msg.Params)
 	if err != nil {
 		return msg.errorResponse(&invalidParamsError{err.Error()})
@@ -361,12 +361,12 @@ func (h *handler) handleSubscribe(cp *callProc, msg *jsonrpcMessage) *jsonrpcMes
 	cp.notifiers = append(cp.notifiers, n)
 	ctx := context.WithValue(cp.ctx, notifierKey{}, n)
 
-	return h.runMccmod(ctx, msg, callb, args)
+	return h.runMethod(ctx, msg, callb, args)
 }
 
-// runMccmod runs the Go callback for an RPC mccmod.
-func (h *handler) runMccmod(ctx context.Context, msg *jsonrpcMessage, callb *callback, args []reflect.Value) *jsonrpcMessage {
-	result, err := callb.call(ctx, msg.Mccmod, args)
+// runMethod runs the Go callback for an RPC method.
+func (h *handler) runMethod(ctx context.Context, msg *jsonrpcMessage, callb *callback, args []reflect.Value) *jsonrpcMessage {
+	result, err := callb.call(ctx, msg.Method, args)
 	if err != nil {
 		return msg.errorResponse(err)
 	}

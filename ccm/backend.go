@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ccmchain library. If not, see <http://www.gnu.org/licenses/>.
 
-// Package ccm implements the Ethereum protocol.
+// Package ccm implements the Ccmchain protocol.
 package ccm
 
 import (
@@ -62,8 +62,8 @@ type LesServer interface {
 	SetContractBackend(bind.ContractBackend)
 }
 
-// Ethereum implements the Ethereum full node service.
-type Ethereum struct {
+// Ccmchain implements the Ccmchain full node service.
+type Ccmchain struct {
 	config *Config
 
 	// Channel for shutting down the service
@@ -99,25 +99,25 @@ type Ethereum struct {
 	lock sync.RWMutex // Protects the variadic fields (e.g. gas price and ccmerbase)
 }
 
-func (s *Ethereum) AddLesServer(ls LesServer) {
+func (s *Ccmchain) AddLesServer(ls LesServer) {
 	s.lesServer = ls
 	ls.SetBloomBitsIndexer(s.bloomIndexer)
 }
 
 // SetClient sets a rpc client which connecting to our local node.
-func (s *Ethereum) SetContractBackend(backend bind.ContractBackend) {
+func (s *Ccmchain) SetContractBackend(backend bind.ContractBackend) {
 	// Pass the rpc client to les server if it is enabled.
 	if s.lesServer != nil {
 		s.lesServer.SetContractBackend(backend)
 	}
 }
 
-// New creates a new Ethereum object (including the
-// initialisation of the common Ethereum object)
-func New(ctx *node.ServiceContext, config *Config) (*Ethereum, error) {
+// New creates a new Ccmchain object (including the
+// initialisation of the common Ccmchain object)
+func New(ctx *node.ServiceContext, config *Config) (*Ccmchain, error) {
 	// Ensure configuration values are compatible and sane
 	if config.SyncMode == downloader.LightSync {
-		return nil, errors.New("can't run ccm.Ethereum in light sync mode, use les.LightEthereum")
+		return nil, errors.New("can't run ccm.Ccmchain in light sync mode, use les.LightCcmchain")
 	}
 	if !config.SyncMode.IsValid() {
 		return nil, fmt.Errorf("invalid sync mode %d", config.SyncMode)
@@ -132,7 +132,7 @@ func New(ctx *node.ServiceContext, config *Config) (*Ethereum, error) {
 	}
 	log.Info("Allocated trie memory caches", "clean", common.StorageSize(config.TrieCleanCache)*1024*1024, "dirty", common.StorageSize(config.TrieDirtyCache)*1024*1024)
 
-	// Assemble the Ethereum object
+	// Assemble the Ccmchain object
 	chainDb, err := ctx.OpenDatabaseWithFreezer("chaindata", config.DatabaseCache, config.DatabaseHandles, config.DatabaseFreezer, "ccm/db/chaindata/")
 	if err != nil {
 		return nil, err
@@ -143,7 +143,7 @@ func New(ctx *node.ServiceContext, config *Config) (*Ethereum, error) {
 	}
 	log.Info("Initialised chain configuration", "config", chainConfig)
 
-	ccm := &Ethereum{
+	ccm := &Ccmchain{
 		config:         config,
 		chainDb:        chainDb,
 		eventMux:       ctx.EventMux,
@@ -162,7 +162,7 @@ func New(ctx *node.ServiceContext, config *Config) (*Ethereum, error) {
 	if bcVersion != nil {
 		dbVer = fmt.Sprintf("%d", *bcVersion)
 	}
-	log.Info("Initialising Ethereum protocol", "versions", ProtocolVersions, "network", config.NetworkId, "dbversion", dbVer)
+	log.Info("Initialising Ccmchain protocol", "versions", ProtocolVersions, "network", config.NetworkId, "dbversion", dbVer)
 
 	if !config.SkipBcVersionCheck {
 		if bcVersion != nil && *bcVersion > core.BlockChainVersion {
@@ -242,7 +242,7 @@ func makeExtraData(extra []byte) []byte {
 	return extra
 }
 
-// CreateConsensusEngine creates the required type of consensus engine instance for an Ethereum service
+// CreateConsensusEngine creates the required type of consensus engine instance for an Ccmchain service
 func CreateConsensusEngine(ctx *node.ServiceContext, chainConfig *params.ChainConfig, config *ccmash.Config, notify []string, noverify bool, db ccmdb.Database) consensus.Engine {
 	// If proof-of-authority is requested, set it up
 	if chainConfig.Clique != nil {
@@ -275,7 +275,7 @@ func CreateConsensusEngine(ctx *node.ServiceContext, chainConfig *params.ChainCo
 
 // APIs return the collection of RPC services the ccmchain package offers.
 // NOTE, some of these services probably need to be moved to somewhere else.
-func (s *Ethereum) APIs() []rpc.API {
+func (s *Ccmchain) APIs() []rpc.API {
 	apis := ccmapi.GetAPIs(s.APIBackend)
 
 	// Append any APIs exposed explicitly by the les server
@@ -295,7 +295,7 @@ func (s *Ethereum) APIs() []rpc.API {
 		{
 			Namespace: "ccm",
 			Version:   "1.0",
-			Service:   NewPublicEthereumAPI(s),
+			Service:   NewPublicCcmchainAPI(s),
 			Public:    true,
 		}, {
 			Namespace: "ccm",
@@ -339,11 +339,11 @@ func (s *Ethereum) APIs() []rpc.API {
 	}...)
 }
 
-func (s *Ethereum) ResetWithGenesisBlock(gb *types.Block) {
+func (s *Ccmchain) ResetWithGenesisBlock(gb *types.Block) {
 	s.blockchain.ResetWithGenesisBlock(gb)
 }
 
-func (s *Ethereum) Etherbase() (eb common.Address, err error) {
+func (s *Ccmchain) Etherbase() (eb common.Address, err error) {
 	s.lock.RLock()
 	ccmerbase := s.ccmerbase
 	s.lock.RUnlock()
@@ -371,7 +371,7 @@ func (s *Ethereum) Etherbase() (eb common.Address, err error) {
 //
 // We regard two types of accounts as local miner account: ccmerbase
 // and accounts specified via `txpool.locals` flag.
-func (s *Ethereum) isLocalBlock(block *types.Block) bool {
+func (s *Ccmchain) isLocalBlock(block *types.Block) bool {
 	author, err := s.engine.Author(block.Header())
 	if err != nil {
 		log.Warn("Failed to retrieve block author", "number", block.NumberU64(), "hash", block.Hash(), "err", err)
@@ -397,7 +397,7 @@ func (s *Ethereum) isLocalBlock(block *types.Block) bool {
 // shouldPreserve checks whccmer we should preserve the given block
 // during the chain reorg depending on whccmer the author of block
 // is a local account.
-func (s *Ethereum) shouldPreserve(block *types.Block) bool {
+func (s *Ccmchain) shouldPreserve(block *types.Block) bool {
 	// The reason we need to disable the self-reorg preserving for clique
 	// is it can be probable to introduce a deadlock.
 	//
@@ -421,7 +421,7 @@ func (s *Ethereum) shouldPreserve(block *types.Block) bool {
 }
 
 // SetEtherbase sets the mining reward address.
-func (s *Ethereum) SetEtherbase(ccmerbase common.Address) {
+func (s *Ccmchain) SetEtherbase(ccmerbase common.Address) {
 	s.lock.Lock()
 	s.ccmerbase = ccmerbase
 	s.lock.Unlock()
@@ -432,7 +432,7 @@ func (s *Ethereum) SetEtherbase(ccmerbase common.Address) {
 // StartMining starts the miner with the given number of CPU threads. If mining
 // is already running, this mccmod adjust the number of threads allowed to use
 // and updates the minimum price required by the transaction pool.
-func (s *Ethereum) StartMining(threads int) error {
+func (s *Ccmchain) StartMining(threads int) error {
 	// Update the thread count within the consensus engine
 	type threaded interface {
 		SetThreads(threads int)
@@ -477,7 +477,7 @@ func (s *Ethereum) StartMining(threads int) error {
 
 // StopMining terminates the miner, both at the consensus engine level as well as
 // at the block creation level.
-func (s *Ethereum) StopMining() {
+func (s *Ccmchain) StopMining() {
 	// Update the thread count within the consensus engine
 	type threaded interface {
 		SetThreads(threads int)
@@ -489,25 +489,25 @@ func (s *Ethereum) StopMining() {
 	s.miner.Stop()
 }
 
-func (s *Ethereum) IsMining() bool      { return s.miner.Mining() }
-func (s *Ethereum) Miner() *miner.Miner { return s.miner }
+func (s *Ccmchain) IsMining() bool      { return s.miner.Mining() }
+func (s *Ccmchain) Miner() *miner.Miner { return s.miner }
 
-func (s *Ethereum) AccountManager() *accounts.Manager  { return s.accountManager }
-func (s *Ethereum) BlockChain() *core.BlockChain       { return s.blockchain }
-func (s *Ethereum) TxPool() *core.TxPool               { return s.txPool }
-func (s *Ethereum) EventMux() *event.TypeMux           { return s.eventMux }
-func (s *Ethereum) Engine() consensus.Engine           { return s.engine }
-func (s *Ethereum) ChainDb() ccmdb.Database            { return s.chainDb }
-func (s *Ethereum) IsListening() bool                  { return true } // Always listening
-func (s *Ethereum) EthVersion() int                    { return int(ProtocolVersions[0]) }
-func (s *Ethereum) NetVersion() uint64                 { return s.networkID }
-func (s *Ethereum) Downloader() *downloader.Downloader { return s.protocolManager.downloader }
-func (s *Ethereum) Synced() bool                       { return atomic.LoadUint32(&s.protocolManager.acceptTxs) == 1 }
-func (s *Ethereum) ArchiveMode() bool                  { return s.config.NoPruning }
+func (s *Ccmchain) AccountManager() *accounts.Manager  { return s.accountManager }
+func (s *Ccmchain) BlockChain() *core.BlockChain       { return s.blockchain }
+func (s *Ccmchain) TxPool() *core.TxPool               { return s.txPool }
+func (s *Ccmchain) EventMux() *event.TypeMux           { return s.eventMux }
+func (s *Ccmchain) Engine() consensus.Engine           { return s.engine }
+func (s *Ccmchain) ChainDb() ccmdb.Database            { return s.chainDb }
+func (s *Ccmchain) IsListening() bool                  { return true } // Always listening
+func (s *Ccmchain) EthVersion() int                    { return int(ProtocolVersions[0]) }
+func (s *Ccmchain) NetVersion() uint64                 { return s.networkID }
+func (s *Ccmchain) Downloader() *downloader.Downloader { return s.protocolManager.downloader }
+func (s *Ccmchain) Synced() bool                       { return atomic.LoadUint32(&s.protocolManager.acceptTxs) == 1 }
+func (s *Ccmchain) ArchiveMode() bool                  { return s.config.NoPruning }
 
 // Protocols implements node.Service, returning all the currently configured
 // network protocols to start.
-func (s *Ethereum) Protocols() []p2p.Protocol {
+func (s *Ccmchain) Protocols() []p2p.Protocol {
 	protos := make([]p2p.Protocol, len(ProtocolVersions))
 	for i, vsn := range ProtocolVersions {
 		protos[i] = s.protocolManager.makeProtocol(vsn)
@@ -520,8 +520,8 @@ func (s *Ethereum) Protocols() []p2p.Protocol {
 }
 
 // Start implements node.Service, starting all internal goroutines needed by the
-// Ethereum protocol implementation.
-func (s *Ethereum) Start(srvr *p2p.Server) error {
+// Ccmchain protocol implementation.
+func (s *Ccmchain) Start(srvr *p2p.Server) error {
 	s.startEthEntryUpdate(srvr.LocalNode())
 
 	// Start the bloom bits servicing goroutines
@@ -547,8 +547,8 @@ func (s *Ethereum) Start(srvr *p2p.Server) error {
 }
 
 // Stop implements node.Service, terminating all internal goroutines used by the
-// Ethereum protocol.
-func (s *Ethereum) Stop() error {
+// Ccmchain protocol.
+func (s *Ccmchain) Stop() error {
 	s.bloomIndexer.Close()
 	s.blockchain.Stop()
 	s.engine.Close()

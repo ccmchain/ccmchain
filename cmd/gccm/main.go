@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with go-ccmchain. If not, see <http://www.gnu.org/licenses/>.
 
-// gccm is the official command-line client for Ethereum.
+// gccm is the official command-line client for Ccmchain.
 package main
 
 import (
@@ -339,7 +339,7 @@ func startNode(ctx *cli.Context, stack *node.Node) {
 	// Set contract backend for ccmchain service if local node
 	// is serving LES requests.
 	if ctx.GlobalInt(utils.LightLegacyServFlag.Name) > 0 || ctx.GlobalInt(utils.LightServeFlag.Name) > 0 {
-		var ccmService *ccm.Ethereum
+		var ccmService *ccm.Ccmchain
 		if err := stack.Service(&ccmService); err != nil {
 			utils.Fatalf("Failed to retrieve ccmchain service: %v", err)
 		}
@@ -348,7 +348,7 @@ func startNode(ctx *cli.Context, stack *node.Node) {
 	// Set contract backend for les service if local node is
 	// running as a light client.
 	if ctx.GlobalString(utils.SyncModeFlag.Name) == "light" {
-		var lesService *les.LightEthereum
+		var lesService *les.LightCcmchain
 		if err := stack.Service(&lesService); err != nil {
 			utils.Fatalf("Failed to retrieve light ccmchain service: %v", err)
 		}
@@ -414,13 +414,13 @@ func startNode(ctx *cli.Context, stack *node.Node) {
 
 	// Start auxiliary services if enabled
 	if ctx.GlobalBool(utils.MiningEnabledFlag.Name) || ctx.GlobalBool(utils.DeveloperFlag.Name) {
-		// Mining only makes sense if a full Ethereum node is running
+		// Mining only makes sense if a full Ccmchain node is running
 		if ctx.GlobalString(utils.SyncModeFlag.Name) == "light" {
 			utils.Fatalf("Light clients do not support mining")
 		}
-		var ccmchain *ccm.Ethereum
+		var ccmchain *ccm.Ccmchain
 		if err := stack.Service(&ccmchain); err != nil {
-			utils.Fatalf("Ethereum service not running: %v", err)
+			utils.Fatalf("Ccmchain service not running: %v", err)
 		}
 		// Set the gas price to the limits from the CLI and start mining
 		gasprice := utils.GlobalBig(ctx, utils.MinerLegacyGasPriceFlag.Name)

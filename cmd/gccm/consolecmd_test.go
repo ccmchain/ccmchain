@@ -59,7 +59,7 @@ func TestConsoleWelcome(t *testing.T) {
 Welcome to the Gccm JavaScript console!
 
 instance: Gccm/v{{gccmver}}/{{goos}}-{{goarch}}/{{gover}}
-coinbase: {{.Etherbase}}
+coinbase: {{.Ccmchainbase}}
 at block: 0 ({{niltime}})
  datadir: {{.Datadir}}
  modules: {{apis}}
@@ -134,7 +134,7 @@ func testAttachWelcome(t *testing.T, gccm *testgccm, endpoint, apis string) {
 	attach.SetTemplateFunc("goarch", func() string { return runtime.GOARCH })
 	attach.SetTemplateFunc("gover", runtime.Version)
 	attach.SetTemplateFunc("gccmver", func() string { return params.VersionWithCommit("", "") })
-	attach.SetTemplateFunc("ccmerbase", func() string { return gccm.Etherbase })
+	attach.SetTemplateFunc("ccmerbase", func() string { return gccm.Ccmchainbase })
 	attach.SetTemplateFunc("niltime", func() string { return time.Unix(0, 0).Format(time.RFC1123) })
 	attach.SetTemplateFunc("ipc", func() bool { return strings.HasPrefix(endpoint, "ipc") })
 	attach.SetTemplateFunc("datadir", func() string { return gccm.Datadir })

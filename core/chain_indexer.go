@@ -32,7 +32,7 @@ import (
 	"github.com/ccmchain/go-ccmchain/log"
 )
 
-// ChainIndexerBackend defines the mccmods needed to process chain segments in
+// ChainIndexerBackend defines the methods needed to process chain segments in
 // the background and write the segment results into the database. These can be
 // used to create filter blooms or CHTs.
 type ChainIndexerBackend interface {

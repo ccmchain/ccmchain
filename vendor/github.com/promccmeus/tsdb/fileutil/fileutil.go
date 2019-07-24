@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package fileutil provides utility mccmods used when dealing with the filesystem in tsdb.
+// Package fileutil provides utility methods used when dealing with the filesystem in tsdb.
 // It is largely copied from github.com/coreos/etcd/pkg/fileutil to avoid the
 // dependency chain it brings with it.
 // Please check github.com/coreos/etcd for licensing information.

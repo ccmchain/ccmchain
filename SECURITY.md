@@ -20,7 +20,7 @@ Audit reports are published in the `docs` folder: https://github.com/ccmchain/go
 
 **Please do not file a public ticket** mentioning the vulnerability.
 
-To find out how to disclose a vulnerability in Ethereum visit [https://bounty.ccmchain.org](https://bounty.ccmchain.org) or email bounty@ccmchain.org.
+To find out how to disclose a vulnerability in Ccmchain visit [https://bounty.ccmchain.org](https://bounty.ccmchain.org) or email bounty@ccmchain.org.
 
 The following key may be used to communicate sensitive information to developers.
 

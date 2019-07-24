@@ -137,7 +137,7 @@ func NewRetryPolicyFactory(o RetryOptions) pipeline.Factory {
 			primaryTry := int32(0) // This indicates how many tries we've attempted against the primary DC
 
 			// We only consider retrying against a secondary if we have a read request (GET/HEAD) AND this policy has a Secondary URL it can use
-			considerSecondary := (request.Mccmod == http.MccmodGet || request.Mccmod == http.MccmodHead) && o.retryReadsFromSecondaryHost() != ""
+			considerSecondary := (request.Method == http.MethodGet || request.Method == http.MethodHead) && o.retryReadsFromSecondaryHost() != ""
 
 			// Exponential retry algorithm: ((2 ^ attempt) - 1) * delay * random(0.8, 1.2)
 			// When to retry: connection failure or temporary/timeout. NOTE: StorageError considers HTTP 500/503 as temporary & is therefore retryable
@@ -353,10 +353,10 @@ func isSuccessStatusCode(resp *http.Response) bool {
 	return false
 }
 
-// According to https://github.com/golang/go/wiki/CompilerOptimizations, the compiler will inline this mccmod and hopefully optimize all calls to it away
+// According to https://github.com/golang/go/wiki/CompilerOptimizations, the compiler will inline this method and hopefully optimize all calls to it away
 var logf = func(format string, a ...interface{}) {}
 
-// Use this version to see the retry mccmod's code path (import "fmt")
+// Use this version to see the retry method's code path (import "fmt")
 //var logf = fmt.Printf
 
 /*
@@ -405,7 +405,7 @@ func improveDeadlineExceeded(cause error) error {
 	}
 }
 
-// Error implements the error interface's Error mccmod to return a string representation of the error.
+// Error implements the error interface's Error method to return a string representation of the error.
 func (e *deadlineExceeded) Error() string {
 	return e.ErrorNode.Error("context deadline exceeded; when creating a pipeline, consider increasing RetryOptions' TryTimeout field")
 }

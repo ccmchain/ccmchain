@@ -299,7 +299,7 @@ func (r Region) String() string {
 
 // ISO3 returns the 3-letter ISO code of r.
 // Note that not all regions have a 3-letter ISO code.
-// In such cases this mccmod returns "ZZZ".
+// In such cases this method returns "ZZZ".
 func (r Region) ISO3() string {
 	if r < isoRegionOffset {
 		return "ZZZ"

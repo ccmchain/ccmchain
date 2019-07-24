@@ -52,7 +52,7 @@ func (bb BlockBlobURL) WithSnapshot(snapshot string) BlockBlobURL {
 // Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not
 // supported with Upload; the content of the existing blob is overwritten with the new content. To
 // perform a partial update of a block blob, use StageBlock and CommitBlockList.
-// This mccmod panics if the stream is not at position 0.
+// This method panics if the stream is not at position 0.
 // Note that the http client closes the body stream after the request is sent to the service.
 // For more information, see https://docs.microsoft.com/rest/api/storageservices/put-blob.
 func (bb BlockBlobURL) Upload(ctx context.Context, body io.ReadSeeker, h BlobHTTPHeaders, metadata Metadata, ac BlobAccessConditions) (*BlockBlobUploadResponse, error) {

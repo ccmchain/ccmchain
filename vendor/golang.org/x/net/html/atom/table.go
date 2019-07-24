@@ -98,7 +98,7 @@ const (
 	Form                      Atom = 0x26e04
 	Formaction                Atom = 0x26e0a
 	Formenctype               Atom = 0x2890b
-	Formmccmod                Atom = 0x2a40a
+	Formmethod                Atom = 0x2a40a
 	Formnovalidate            Atom = 0x2ae0e
 	Formtarget                Atom = 0x2c00a
 	Frame                     Atom = 0x8b05
@@ -167,7 +167,7 @@ const (
 	Menuitem                  Atom = 0x38708
 	Meta                      Atom = 0x4b804
 	Meter                     Atom = 0x9805
-	Mccmod                    Atom = 0x2a806
+	Method                    Atom = 0x2a806
 	Mglyph                    Atom = 0x30806
 	Mi                        Atom = 0x34702
 	Min                       Atom = 0x34703
@@ -398,7 +398,7 @@ var table = [1 << 9]Atom{
 	0x16:  0x38704, // menu
 	0x17:  0x2cf06, // poster
 	0x19:  0xf606,  // footer
-	0x1a:  0x2a806, // mccmod
+	0x1a:  0x2a806, // method
 	0x1b:  0x2b808, // datetime
 	0x1c:  0x19507, // onabort
 	0x1d:  0x460e,  // updateviacache
@@ -560,7 +560,7 @@ var table = [1 << 9]Atom{
 	0x106: 0x10705, // aside
 	0x107: 0x44907, // oninput
 	0x108: 0x35604, // area
-	0x109: 0x2a40a, // formmccmod
+	0x109: 0x2a40a, // formmethod
 	0x10a: 0x72604, // wrap
 	0x10c: 0x23c02, // rp
 	0x10d: 0x46b0a, // onkeypress
@@ -761,7 +761,7 @@ const atomText = "abbradiogrouparamainavalueaccept-charsetbodyaccesskeygenobrb" 
 	"ntrolshapecoordslotranslatecrossoriginsmallowfullscreenoscri" +
 	"ptfacenterfieldsetfigcaptionafterprintegrityfigurequiredfore" +
 	"ignObjectforeignobjectformactionautocompleteerrorformenctype" +
-	"mustmatchallengeformmccmodformnovalidatetimeformtargccmgroup" +
+	"mustmatchallengeformmethodformnovalidatetimeformtargccmgroup" +
 	"osterhiddenhigh2hreflanghttp-equivideonclickiframeimageimgly" +
 	"ph3isindexismappletitemtypemarqueematheadersortedmaxlength4m" +
 	"inlength5mtextareadonlymultiplemutedoncloseamlessourceoncont" +

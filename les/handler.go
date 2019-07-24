@@ -131,7 +131,7 @@ type ProtocolManager struct {
 	addTxsSync bool
 }
 
-// NewProtocolManager returns a new ccmchain sub protocol manager. The Ethereum sub protocol manages peers capable
+// NewProtocolManager returns a new ccmchain sub protocol manager. The Ccmchain sub protocol manages peers capable
 // with the ccmchain network.
 func NewProtocolManager(chainConfig *params.ChainConfig, checkpoint *params.TrustedCheckpoint, indexerConfig *light.IndexerConfig, ulcServers []string, ulcFraction int, client bool, networkId uint64, mux *event.TypeMux, peers *peerSet, blockchain BlockChain, txpool txPool, chainDb ccmdb.Database, odr *LesOdr, serverPool *serverPool, registrar *checkpointOracle, quitSync chan struct{}, wg *sync.WaitGroup, synced func() bool) (*ProtocolManager, error) {
 	// Create the protocol manager with the base fields
@@ -204,7 +204,7 @@ func (pm *ProtocolManager) Start(maxPeers int) {
 func (pm *ProtocolManager) Stop() {
 	// Showing a log message. During download / process this could actually
 	// take between 5 to 10 seconds and therefor feedback is required.
-	log.Info("Stopping light Ethereum protocol")
+	log.Info("Stopping light Ccmchain protocol")
 
 	// Quit the sync loop.
 	// After this send has completed, no new peers will be accepted.
@@ -225,7 +225,7 @@ func (pm *ProtocolManager) Stop() {
 	// Wait for any process action
 	pm.wg.Wait()
 
-	log.Info("Light Ethereum protocol stopped")
+	log.Info("Light Ccmchain protocol stopped")
 }
 
 // runPeer is the p2p protocol run function for the given version.
@@ -275,7 +275,7 @@ func (pm *ProtocolManager) handle(p *peer) error {
 		clientRejectedMeter.Mark(1)
 		return p2p.DiscRequested
 	}
-	p.Log().Debug("Light Ethereum peer connected", "name", p.Name())
+	p.Log().Debug("Light Ccmchain peer connected", "name", p.Name())
 
 	// Execute the LES handshake
 	var (
@@ -286,7 +286,7 @@ func (pm *ProtocolManager) handle(p *peer) error {
 		td      = pm.blockchain.GetTd(hash, number)
 	)
 	if err := p.Handshake(td, hash, number, genesis.Hash(), pm.server); err != nil {
-		p.Log().Debug("Light Ethereum handshake failed", "err", err)
+		p.Log().Debug("Light Ccmchain handshake failed", "err", err)
 		clientErrorMeter.Mark(1)
 		return err
 	}
@@ -301,7 +301,7 @@ func (pm *ProtocolManager) handle(p *peer) error {
 	// Register the peer locally
 	if err := pm.peers.Register(p); err != nil {
 		clientErrorMeter.Mark(1)
-		p.Log().Error("Light Ethereum peer registration failed", "err", err)
+		p.Log().Error("Light Ccmchain peer registration failed", "err", err)
 		return err
 	}
 	connectedAt := time.Now()
@@ -326,7 +326,7 @@ func (pm *ProtocolManager) handle(p *peer) error {
 	// main loop. handle incoming messages.
 	for {
 		if err := pm.handleMsg(p); err != nil {
-			p.Log().Debug("Light Ethereum message handling failed", "err", err)
+			p.Log().Debug("Light Ccmchain message handling failed", "err", err)
 			if p.fcServer != nil {
 				p.fcServer.DumpLogs()
 			}
@@ -348,7 +348,7 @@ func (pm *ProtocolManager) handleMsg(p *peer) error {
 	if err != nil {
 		return err
 	}
-	p.Log().Trace("Light Ethereum message arrived", "code", msg.Code, "bytes", msg.Size)
+	p.Log().Trace("Light Ccmchain message arrived", "code", msg.Code, "bytes", msg.Size)
 
 	p.responseCount++
 	responseCount := p.responseCount

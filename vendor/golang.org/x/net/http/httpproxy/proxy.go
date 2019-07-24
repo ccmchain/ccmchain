@@ -53,7 +53,7 @@ type Config struct {
 
 	// CGI holds whccmer the current process is running
 	// as a CGI handler (FromEnvironment infers this from the
-	// presence of a REQUEST_METHOD environment variable).
+	// presence of a REQUEST_MCCMOD environment variable).
 	// When this is set, ProxyForURL will return an error
 	// when HTTPProxy applies, because a client could be
 	// setting HTTP_PROXY maliciously. See https://golang.org/s/cgihttpproxy.
@@ -93,7 +93,7 @@ func FromEnvironment() *Config {
 		HTTPProxy:  getEnvAny("HTTP_PROXY", "http_proxy"),
 		HTTPSProxy: getEnvAny("HTTPS_PROXY", "https_proxy"),
 		NoProxy:    getEnvAny("NO_PROXY", "no_proxy"),
-		CGI:        os.Getenv("REQUEST_METHOD") != "",
+		CGI:        os.Getenv("REQUEST_MCCMOD") != "",
 	}
 }
 

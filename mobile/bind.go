@@ -32,7 +32,7 @@ import (
 )
 
 // Signer is an interface defining the callback when a contract requires a
-// mccmod to sign the transaction before submission.
+// method to sign the transaction before submission.
 type Signer interface {
 	Sign(*Address, *Transaction) (tx *Transaction, _ error)
 }
@@ -71,7 +71,7 @@ func (opts *CallOpts) SetGasLimit(limit int64)     { /* TODO(karalabe) */ }
 func (opts *CallOpts) SetContext(context *Context) { opts.opts.Context = context.context }
 
 // TransactOpts is the collection of authorization data required to create a
-// valid Ethereum transaction.
+// valid Ccmchain transaction.
 type TransactOpts struct {
 	opts bind.TransactOpts
 }
@@ -81,7 +81,7 @@ func NewTransactOpts() *TransactOpts {
 	return new(TransactOpts)
 }
 
-// NewKeyedTransactor is a utility mccmod to easily create a transaction signer
+// NewKeyedTransactor is a utility method to easily create a transaction signer
 // from a single private key.
 func NewKeyedTransactOpts(keyJson []byte, passphrase string) (*TransactOpts, error) {
 	key, err := keystore.DecryptKey(keyJson, passphrase)
@@ -135,7 +135,7 @@ func (opts *TransactOpts) SetGasLimit(limit int64)     { opts.opts.GasLimit = ui
 func (opts *TransactOpts) SetContext(context *Context) { opts.opts.Context = context.context }
 
 // BoundContract is the base wrapper object that reflects a contract on the
-// Ethereum network. It contains a collection of mccmods that are used by the
+// Ccmchain network. It contains a collection of methods that are used by the
 // higher level contract bindings to operate.
 type BoundContract struct {
 	contract *bind.BoundContract
@@ -143,9 +143,9 @@ type BoundContract struct {
 	deployer *types.Transaction
 }
 
-// DeployContract deploys a contract onto the Ethereum blockchain and binds the
+// DeployContract deploys a contract onto the Ccmchain blockchain and binds the
 // deployment address with a wrapper.
-func DeployContract(opts *TransactOpts, abiJSON string, bytecode []byte, client *EthereumClient, args *Interfaces) (contract *BoundContract, _ error) {
+func DeployContract(opts *TransactOpts, abiJSON string, bytecode []byte, client *CcmchainClient, args *Interfaces) (contract *BoundContract, _ error) {
 	// Deploy the contract to the network
 	parsed, err := abi.JSON(strings.NewReader(abiJSON))
 	if err != nil {
@@ -164,7 +164,7 @@ func DeployContract(opts *TransactOpts, abiJSON string, bytecode []byte, client 
 
 // BindContract creates a low level contract interface through which calls and
 // transactions may be made through.
-func BindContract(address *Address, abiJSON string, client *EthereumClient) (contract *BoundContract, _ error) {
+func BindContract(address *Address, abiJSON string, client *CcmchainClient) (contract *BoundContract, _ error) {
 	parsed, err := abi.JSON(strings.NewReader(abiJSON))
 	if err != nil {
 		return nil, err
@@ -183,19 +183,19 @@ func (c *BoundContract) GetDeployer() *Transaction {
 	return &Transaction{c.deployer}
 }
 
-// Call invokes the (constant) contract mccmod with params as input values and
+// Call invokes the (constant) contract method with params as input values and
 // sets the output to result.
-func (c *BoundContract) Call(opts *CallOpts, out *Interfaces, mccmod string, args *Interfaces) error {
+func (c *BoundContract) Call(opts *CallOpts, out *Interfaces, method string, args *Interfaces) error {
 	if len(out.objects) == 1 {
 		result := out.objects[0]
-		if err := c.contract.Call(&opts.opts, result, mccmod, args.objects...); err != nil {
+		if err := c.contract.Call(&opts.opts, result, method, args.objects...); err != nil {
 			return err
 		}
 		out.objects[0] = result
 	} else {
 		results := make([]interface{}, len(out.objects))
 		copy(results, out.objects)
-		if err := c.contract.Call(&opts.opts, &results, mccmod, args.objects...); err != nil {
+		if err := c.contract.Call(&opts.opts, &results, method, args.objects...); err != nil {
 			return err
 		}
 		copy(out.objects, results)
@@ -203,9 +203,9 @@ func (c *BoundContract) Call(opts *CallOpts, out *Interfaces, mccmod string, arg
 	return nil
 }
 
-// Transact invokes the (paid) contract mccmod with params as input values.
-func (c *BoundContract) Transact(opts *TransactOpts, mccmod string, args *Interfaces) (tx *Transaction, _ error) {
-	rawTx, err := c.contract.Transact(&opts.opts, mccmod, args.objects...)
+// Transact invokes the (paid) contract method with params as input values.
+func (c *BoundContract) Transact(opts *TransactOpts, method string, args *Interfaces) (tx *Transaction, _ error) {
+	rawTx, err := c.contract.Transact(&opts.opts, method, args.objects...)
 	if err != nil {
 		return nil, err
 	}
@@ -213,7 +213,7 @@ func (c *BoundContract) Transact(opts *TransactOpts, mccmod string, args *Interf
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
-// its default mccmod if one is available.
+// its default method if one is available.
 func (c *BoundContract) Transfer(opts *TransactOpts) (tx *Transaction, _ error) {
 	rawTx, err := c.contract.Transfer(&opts.opts)
 	if err != nil {

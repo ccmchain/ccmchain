@@ -176,7 +176,7 @@ func (d *Dialer) DialContext(ctx context.Context, urlStr string, requestHeader h
 	}
 
 	req := &http.Request{
-		Mccmod:     "GET",
+		Method:     "GET",
 		URL:        u,
 		Proto:      "HTTP/1.1",
 		ProtoMajor: 1,
@@ -195,8 +195,8 @@ func (d *Dialer) DialContext(ctx context.Context, urlStr string, requestHeader h
 
 	// Set the request headers using the capitalization for names and values in
 	// RFC examples. Although the capitalization shouldn't matter, there are
-	// servers that depend on it. The Header.Set mccmod is not used because the
-	// mccmod canonicalizes the header names.
+	// servers that depend on it. The Header.Set method is not used because the
+	// method canonicalizes the header names.
 	req.Header["Upgrade"] = []string{"websocket"}
 	req.Header["Connection"] = []string{"Upgrade"}
 	req.Header["Sec-WebSocket-Key"] = []string{challengeKey}

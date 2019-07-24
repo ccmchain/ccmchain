@@ -208,7 +208,7 @@ var svgAttributeAdjustments = map[string]string{
 	"requiredfeatures":          "requiredFeatures",
 	"specularconstant":          "specularConstant",
 	"specularexponent":          "specularExponent",
-	"spreadmccmod":              "spreadMccmod",
+	"spreadmethod":              "spreadMethod",
 	"startoffset":               "startOffset",
 	"stddeviation":              "stdDeviation",
 	"stitchtiles":               "stitchTiles",

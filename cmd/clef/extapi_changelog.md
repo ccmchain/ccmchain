@@ -18,22 +18,22 @@ Additional labels for pre-release and build metadata are available as extensions
 
 #### 5.0.0
 
-* The external `account_EcRecover`-mccmod was reimplemented.
-* The external mccmod `account_sign(address, data)` was replaced with `account_signData(contentType, address, data)`.
-The addition of `contentType` makes it possible to use the mccmod for different types of objects, such as:
+* The external `account_EcRecover`-method was reimplemented.
+* The external method `account_sign(address, data)` was replaced with `account_signData(contentType, address, data)`.
+The addition of `contentType` makes it possible to use the method for different types of objects, such as:
   * signing data with an intended validator (not yet implemented)
   * signing clique headers,
   * signing plain personal messages,
-* The external mccmod `account_signTypedData` implements [EIP-712](https://github.com/ccmchain/EIPs/blob/master/EIPS/eip-712.md) and makes it possible to sign typed data.
+* The external method `account_signTypedData` implements [EIP-712](https://github.com/ccmchain/EIPs/blob/master/EIPS/eip-712.md) and makes it possible to sign typed data.
 
 #### 4.0.0
 
-* The external `account_Ecrecover`-mccmod was removed.
-* The external `account_Import`-mccmod was removed.
+* The external `account_Ecrecover`-method was removed.
+* The external `account_Import`-method was removed.
 
 #### 3.0.0
 
-* The external `account_List`-mccmod was changed to not expose `url`, which contained info about the local filesystem. It now returns only a list of addresses.
+* The external `account_List`-method was changed to not expose `url`, which contained info about the local filesystem. It now returns only a list of addresses.
 
 #### 2.0.0
 

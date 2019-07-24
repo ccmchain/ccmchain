@@ -18,7 +18,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+LIABILITY, WHCCMER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
@@ -65,7 +65,7 @@ type Set interface {
 	//
 	// Note that the argument to Difference
 	// must be of the same type as the receiver
-	// of the mccmod. Otherwise, Difference will
+	// of the method. Otherwise, Difference will
 	// panic.
 	Difference(other Set) Set
 
@@ -77,7 +77,7 @@ type Set interface {
 	//
 	// Note that the argument to Equal must be
 	// of the same type as the receiver of the
-	// mccmod. Otherwise, Equal will panic.
+	// method. Otherwise, Equal will panic.
 	Equal(other Set) bool
 
 	// Returns a new set containing only the elements
@@ -85,7 +85,7 @@ type Set interface {
 	//
 	// Note that the argument to Intersect
 	// must be of the same type as the receiver
-	// of the mccmod. Otherwise, Intersect will
+	// of the method. Otherwise, Intersect will
 	// panic.
 	Intersect(other Set) Set
 
@@ -94,7 +94,7 @@ type Set interface {
 	//
 	// Note that the argument to IsProperSubset
 	// must be of the same type as the receiver
-	// of the mccmod. Otherwise, IsProperSubset
+	// of the method. Otherwise, IsProperSubset
 	// will panic.
 	IsProperSubset(other Set) bool
 
@@ -104,7 +104,7 @@ type Set interface {
 	//
 	// Note that the argument to IsSuperset
 	// must be of the same type as the receiver
-	// of the mccmod. Otherwise, IsSuperset will
+	// of the method. Otherwise, IsSuperset will
 	// panic.
 	IsProperSuperset(other Set) bool
 
@@ -113,7 +113,7 @@ type Set interface {
 	//
 	// Note that the argument to IsSubset
 	// must be of the same type as the receiver
-	// of the mccmod. Otherwise, IsSubset will
+	// of the method. Otherwise, IsSubset will
 	// panic.
 	IsSubset(other Set) bool
 
@@ -122,7 +122,7 @@ type Set interface {
 	//
 	// Note that the argument to IsSuperset
 	// must be of the same type as the receiver
-	// of the mccmod. Otherwise, IsSuperset will
+	// of the method. Otherwise, IsSuperset will
 	// panic.
 	IsSuperset(other Set) bool
 
@@ -150,7 +150,7 @@ type Set interface {
 	//
 	// Note that the argument to SymmetricDifference
 	// must be of the same type as the receiver
-	// of the mccmod. Otherwise, SymmetricDifference
+	// of the method. Otherwise, SymmetricDifference
 	// will panic.
 	SymmetricDifference(other Set) Set
 
@@ -158,7 +158,7 @@ type Set interface {
 	//
 	// Note that the argument to Union must be of the
 
-	// same type as the receiver of the mccmod.
+	// same type as the receiver of the method.
 	// Otherwise, IsSuperset will panic.
 	Union(other Set) Set
 

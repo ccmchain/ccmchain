@@ -34,7 +34,7 @@ type Storage interface {
 	// or unknown.
 	Get(key string) (string, error)
 
-	// Del removes a key-value pair. If the key doesn't exist, the mccmod is a noop.
+	// Del removes a key-value pair. If the key doesn't exist, the method is a noop.
 	Del(key string)
 }
 
@@ -65,7 +65,7 @@ func (s *EphemeralStorage) Get(key string) (string, error) {
 	return "", ErrNotFound
 }
 
-// Del removes a key-value pair. If the key doesn't exist, the mccmod is a noop.
+// Del removes a key-value pair. If the key doesn't exist, the method is a noop.
 func (s *EphemeralStorage) Del(key string) {
 	delete(s.data, key)
 }

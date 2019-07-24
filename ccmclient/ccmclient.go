@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ccmchain library. If not, see <http://www.gnu.org/licenses/>.
 
-// Package ccmclient provides a client for the Ethereum RPC API.
+// Package ccmclient provides a client for the Ccmchain RPC API.
 package ccmclient
 
 import (
@@ -32,7 +32,7 @@ import (
 	"github.com/ccmchain/go-ccmchain/rpc"
 )
 
-// Client defines typed wrappers for the Ethereum RPC API.
+// Client defines typed wrappers for the Ccmchain RPC API.
 type Client struct {
 	c *rpc.Client
 }

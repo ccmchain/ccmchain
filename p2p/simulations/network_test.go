@@ -413,7 +413,7 @@ func triggerChecks(ctx context.Context, ids []enode.ID, trigger chan enode.ID, i
 }
 
 // \todo: refactor to implement shapshots
-// and connect configuration mccmods once these are moved from
+// and connect configuration methods once these are moved from
 // swarm/network/simulations/connect.go
 func BenchmarkMinimalService(b *testing.B) {
 	b.Run("ring/32", benchmarkMinimalServiceTmp)

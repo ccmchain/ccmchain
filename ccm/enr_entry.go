@@ -37,7 +37,7 @@ func (e ccmEntry) ENRKey() string {
 	return "ccm"
 }
 
-func (ccm *Ethereum) startEthEntryUpdate(ln *enode.LocalNode) {
+func (ccm *Ccmchain) startEthEntryUpdate(ln *enode.LocalNode) {
 	var newHead = make(chan core.ChainHeadEvent, 10)
 	sub := ccm.blockchain.SubscribeChainHeadEvent(newHead)
 
@@ -56,6 +56,6 @@ func (ccm *Ethereum) startEthEntryUpdate(ln *enode.LocalNode) {
 	}()
 }
 
-func (ccm *Ethereum) currentEthEntry() *ccmEntry {
+func (ccm *Ccmchain) currentEthEntry() *ccmEntry {
 	return &ccmEntry{ForkID: forkid.NewID(ccm.blockchain)}
 }

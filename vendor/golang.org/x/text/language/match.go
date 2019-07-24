@@ -23,7 +23,7 @@ func PreferSameScript(preferSame bool) MatchOption {
 
 // TODO(v1.0.0): consider making Matcher a concrete type, instead of interface.
 // There doesn't seem to be too much need for multiple types.
-// Making it a concrete type allows MatchStrings to be a mccmod, which will
+// Making it a concrete type allows MatchStrings to be a method, which will
 // improve its discoverability.
 
 // MatchStrings parses and matches the given strings until one of them matches
@@ -44,7 +44,7 @@ func MatchStrings(m Matcher, lang ...string) (tag Tag, index int) {
 	return
 }
 
-// Matcher is the interface that wraps the Match mccmod.
+// Matcher is the interface that wraps the Match method.
 //
 // Match returns the best match for any of the given tags, along with
 // a unique index associated with the returned tag and a confidence
@@ -66,11 +66,11 @@ func Comprehends(speaker, alternative Tag) Confidence {
 // with the list of supported tags. The first element is used as the default
 // value in case no match is found.
 //
-// Its Match mccmod matches the first of the given Tags to reach a certain
+// Its Match method matches the first of the given Tags to reach a certain
 // confidence threshold. The tags passed to Match should therefore be specified
 // in order of preference. Extensions are ignored for matching.
 //
-// The index returned by the Match mccmod corresponds to the index of the
+// The index returned by the Match method corresponds to the index of the
 // matched tag in t, but is augmented with the Unicode extension ('u')of the
 // corresponding preferred tag. This allows user locale options to be passed
 // transparently.

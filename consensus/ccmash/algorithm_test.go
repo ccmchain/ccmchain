@@ -32,7 +32,7 @@ import (
 )
 
 // prepare converts an ccmash cache or dataset from a byte stream into the internal
-// int representation. All ccmash mccmods work with ints to avoid constant byte to
+// int representation. All ccmash methods work with ints to avoid constant byte to
 // int conversions as well as to handle both little and big endian systems.
 func prepare(dest []uint32, src []byte) {
 	for i := 0; i < len(dest); i++ {

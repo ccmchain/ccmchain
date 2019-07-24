@@ -295,7 +295,7 @@ func (net *Network) Stop(id enode.ID) error {
 }
 
 // Connect connects two nodes togccmer by calling the "admin_addPeer" RPC
-// mccmod on the "one" node so that it connects to the "other" node
+// method on the "one" node so that it connects to the "other" node
 func (net *Network) Connect(oneID, otherID enode.ID) error {
 	net.lock.Lock()
 	defer net.lock.Unlock()
@@ -317,7 +317,7 @@ func (net *Network) connect(oneID, otherID enode.ID) error {
 }
 
 // Disconnect disconnects two nodes by calling the "admin_removePeer" RPC
-// mccmod on the "one" node so that it disconnects from the "other" node
+// method on the "one" node so that it disconnects from the "other" node
 func (net *Network) Disconnect(oneID, otherID enode.ID) error {
 	conn := net.GetConn(oneID, otherID)
 	if conn == nil {
@@ -597,7 +597,7 @@ func (net *Network) Shutdown() {
 		if err := node.Stop(); err != nil {
 			log.Warn("Can't stop node", "id", node.ID(), "err", err)
 		}
-		// If the node has the close mccmod, call it.
+		// If the node has the close method, call it.
 		if closer, ok := node.Node.(io.Closer); ok {
 			if err := closer.Close(); err != nil {
 				log.Warn("Can't close node", "id", node.ID(), "err", err)

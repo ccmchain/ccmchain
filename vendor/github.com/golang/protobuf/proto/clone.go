@@ -25,7 +25,7 @@
 // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
 // LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
 // DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// THEORY OF LIABILITY, WHCCMER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
@@ -63,8 +63,8 @@ type Merger interface {
 	Merge(src Message)
 }
 
-// generatedMerger is the custom merge mccmod that generated protos will have.
-// We must add this mccmod since a generate Merge mccmod will conflict with
+// generatedMerger is the custom merge method that generated protos will have.
+// We must add this method since a generate Merge method will conflict with
 // many existing protos that have a Merge data field already defined.
 type generatedMerger interface {
 	XXX_Merge(src Message)

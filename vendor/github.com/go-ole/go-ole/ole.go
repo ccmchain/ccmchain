@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// DISPPARAMS are the arguments that passed to mccmods or property.
+// DISPPARAMS are the arguments that passed to methods or property.
 type DISPPARAMS struct {
 	rgvarg            uintptr
 	rgdispidNamedArgs uintptr
@@ -88,8 +88,8 @@ type PARAMDATA struct {
 	Vt   uint16
 }
 
-// METHODDATA defines mccmod info.
-type METHODDATA struct {
+// MCCMODDATA defines method info.
+type MCCMODDATA struct {
 	Name     *uint16
 	Data     *PARAMDATA
 	Dispid   int32
@@ -102,7 +102,7 @@ type METHODDATA struct {
 
 // INTERFACEDATA defines interface info.
 type INTERFACEDATA struct {
-	MccmodData *METHODDATA
+	MethodData *MCCMODDATA
 	CMembers   uint32
 }
 

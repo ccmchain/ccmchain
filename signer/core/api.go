@@ -53,7 +53,7 @@ type ExternalAPI interface {
 	// New request to create a new account
 	New(ctx context.Context) (common.Address, error)
 	// SignTransaction request to sign the specified transaction
-	SignTransaction(ctx context.Context, args SendTxArgs, mccmodSelector *string) (*ccmapi.SignTransactionResult, error)
+	SignTransaction(ctx context.Context, args SendTxArgs, methodSelector *string) (*ccmapi.SignTransactionResult, error)
 	// SignData - request to sign the given data (plus prefix)
 	SignData(ctx context.Context, contentType string, addr common.MixedcaseAddress, data interface{}) (hexutil.Bytes, error)
 	// SignTypedData - request to sign the given structured data (plus prefix)
@@ -64,7 +64,7 @@ type ExternalAPI interface {
 	Version(ctx context.Context) (string, error)
 }
 
-// UIClientAPI specifies what mccmod a UI needs to implement to be able to be used as a
+// UIClientAPI specifies what method a UI needs to implement to be able to be used as a
 // UI for the signer
 type UIClientAPI interface {
 	// ApproveTx prompt the user for confirmation to request to sign Transaction
@@ -81,7 +81,7 @@ type UIClientAPI interface {
 	// ShowInfo displays info message to user
 	ShowInfo(message string)
 	// OnApprovedTx notifies the UI about a transaction having been successfully signed.
-	// This mccmod can be used by a UI to keep track of e.g. how much has been sent to a particular recipient.
+	// This method can be used by a UI to keep track of e.g. how much has been sent to a particular recipient.
 	OnApprovedTx(tx ccmapi.SignTransactionResult)
 	// OnSignerStartup is invoked when the signer boots, and tells the UI info about external API location and version
 	// information
@@ -93,8 +93,8 @@ type UIClientAPI interface {
 	RegisterUIServer(api *UIServerAPI)
 }
 
-// Validator defines the mccmods required to validate a transaction against some
-// sanity defaults as well as any underlying 4byte mccmod database.
+// Validator defines the methods required to validate a transaction against some
+// sanity defaults as well as any underlying 4byte method database.
 //
 // Use fourbyte.Database as an implementation. It is separated out of this package
 // to allow pieces of the signer package to be used without having to load the
@@ -497,12 +497,12 @@ func (api *SignerAPI) lookupOrQueryPassword(address common.Address, title, promp
 }
 
 // SignTransaction signs the given Transaction and returns it both as json and rlp-encoded form
-func (api *SignerAPI) SignTransaction(ctx context.Context, args SendTxArgs, mccmodSelector *string) (*ccmapi.SignTransactionResult, error) {
+func (api *SignerAPI) SignTransaction(ctx context.Context, args SendTxArgs, methodSelector *string) (*ccmapi.SignTransactionResult, error) {
 	var (
 		err    error
 		result SignTxResponse
 	)
-	msgs, err := api.validator.ValidateTransaction(mccmodSelector, &args)
+	msgs, err := api.validator.ValidateTransaction(methodSelector, &args)
 	if err != nil {
 		return nil, err
 	}
@@ -561,7 +561,7 @@ func (api *SignerAPI) SignTransaction(ctx context.Context, args SendTxArgs, mccm
 
 }
 
-// Returns the external api version. This mccmod does not require user acceptance. Available mccmods are
+// Returns the external api version. This method does not require user acceptance. Available methods are
 // available via enumeration anyway, and this info does not contain user-specific data
 func (api *SignerAPI) Version(ctx context.Context) (string, error) {
 	return ExternalAPIVersion, nil

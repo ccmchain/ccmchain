@@ -26,7 +26,7 @@ import (
 )
 
 // In this example, our client wishes to track the latest 'block number'
-// known to the server. The server supports two mccmods:
+// known to the server. The server supports two methods:
 //
 // ccm_getBlockByNumber("latest", {})
 //    returns the latest block object.

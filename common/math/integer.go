@@ -78,7 +78,7 @@ func MustParseUint64(s string) uint64 {
 	return v
 }
 
-// NOTE: The following mccmods need to be optimised using either bit checking or asm
+// NOTE: The following methods need to be optimised using either bit checking or asm
 
 // SafeSub returns subtraction result and whccmer overflow occurred.
 func SafeSub(x, y uint64) (uint64, bool) {

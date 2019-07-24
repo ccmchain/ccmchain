@@ -192,8 +192,8 @@ func TestSnapshotRandom(t *testing.T) {
 // A new state is created and all actions are applied to it. Several snapshots are taken
 // in between actions. The test then reverts each snapshot. For each snapshot the actions
 // leading up to it are replayed on a fresh, empty state. The behaviour of all public
-// accessor mccmods on the reverted state must match the return value of the equivalent
-// mccmods on the replayed state.
+// accessor methods on the reverted state must match the return value of the equivalent
+// methods on the replayed state.
 type snapshotTest struct {
 	addrs     []common.Address // all account addresses
 	actions   []testAction     // modifications to the state
@@ -374,7 +374,7 @@ func (test *snapshotTest) run() bool {
 	return true
 }
 
-// checkEqual checks that mccmods of state and checkstate return the same values.
+// checkEqual checks that methods of state and checkstate return the same values.
 func (test *snapshotTest) checkEqual(state, checkstate *StateDB) error {
 	for _, addr := range test.addrs {
 		var err error
@@ -385,7 +385,7 @@ func (test *snapshotTest) checkEqual(state, checkstate *StateDB) error {
 			}
 			return true
 		}
-		// Check basic accessor mccmods.
+		// Check basic accessor methods.
 		checkeq("Exist", state.Exist(addr), checkstate.Exist(addr))
 		checkeq("HasSuicided", state.HasSuicided(addr), checkstate.HasSuicided(addr))
 		checkeq("GetBalance", state.GetBalance(addr), checkstate.GetBalance(addr))

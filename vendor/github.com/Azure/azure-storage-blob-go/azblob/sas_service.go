@@ -153,13 +153,13 @@ func getCanonicalName(account string, containerName string, blobName string) str
 }
 
 // The ContainerSASPermissions type simplifies creating the permissions string for an Azure Storage container SAS.
-// Initialize an instance of this type and then call its String mccmod to set BlobSASSignatureValues's Permissions field.
+// Initialize an instance of this type and then call its String method to set BlobSASSignatureValues's Permissions field.
 type ContainerSASPermissions struct {
 	Read, Add, Create, Write, Delete, List bool
 }
 
 // String produces the SAS permissions string for an Azure Storage container.
-// Call this mccmod to set BlobSASSignatureValues's Permissions field.
+// Call this method to set BlobSASSignatureValues's Permissions field.
 func (p ContainerSASPermissions) String() string {
 	var b bytes.Buffer
 	if p.Read {
@@ -208,11 +208,11 @@ func (p *ContainerSASPermissions) Parse(s string) error {
 }
 
 // The BlobSASPermissions type simplifies creating the permissions string for an Azure Storage blob SAS.
-// Initialize an instance of this type and then call its String mccmod to set BlobSASSignatureValues's Permissions field.
+// Initialize an instance of this type and then call its String method to set BlobSASSignatureValues's Permissions field.
 type BlobSASPermissions struct{ Read, Add, Create, Write, Delete bool }
 
 // String produces the SAS permissions string for an Azure Storage blob.
-// Call this mccmod to set BlobSASSignatureValues's Permissions field.
+// Call this method to set BlobSASSignatureValues's Permissions field.
 func (p BlobSASPermissions) String() string {
 	var b bytes.Buffer
 	if p.Read {

@@ -118,7 +118,7 @@ func (mw *memoryWrapper) getUint(addr int64) *big.Int {
 func (mw *memoryWrapper) pushObject(vm *duktape.Context) {
 	obj := vm.PushObject()
 
-	// Generate the `slice` mccmod which takes two ints and returns a buffer
+	// Generate the `slice` method which takes two ints and returns a buffer
 	vm.PushGoFunction(func(ctx *duktape.Context) int {
 		blob := mw.slice(int64(ctx.GetInt(-2)), int64(ctx.GetInt(-1)))
 		ctx.Pop2()
@@ -129,7 +129,7 @@ func (mw *memoryWrapper) pushObject(vm *duktape.Context) {
 	})
 	vm.PutPropString(obj, "slice")
 
-	// Generate the `getUint` mccmod which takes an int and returns a bigint
+	// Generate the `getUint` method which takes an int and returns a bigint
 	vm.PushGoFunction(func(ctx *duktape.Context) int {
 		offset := int64(ctx.GetInt(-1))
 		ctx.Pop()
@@ -164,7 +164,7 @@ func (sw *stackWrapper) pushObject(vm *duktape.Context) {
 	vm.PushGoFunction(func(ctx *duktape.Context) int { ctx.PushInt(len(sw.stack.Data())); return 1 })
 	vm.PutPropString(obj, "length")
 
-	// Generate the `peek` mccmod which takes an int and returns a bigint
+	// Generate the `peek` method which takes an int and returns a bigint
 	vm.PushGoFunction(func(ctx *duktape.Context) int {
 		offset := ctx.GetInt(-1)
 		ctx.Pop()
@@ -493,11 +493,11 @@ func (jst *Tracer) Stop(err error) {
 	atomic.StoreUint32(&jst.interrupt, 1)
 }
 
-// call executes a mccmod on a JS object, catching any errors, formatting and
+// call executes a method on a JS object, catching any errors, formatting and
 // returning them as error objects.
-func (jst *Tracer) call(mccmod string, args ...string) (json.RawMessage, error) {
+func (jst *Tracer) call(method string, args ...string) (json.RawMessage, error) {
 	// Execute the JavaScript call and return any error
-	jst.vm.PushString(mccmod)
+	jst.vm.PushString(method)
 	for _, arg := range args {
 		jst.vm.GetPropString(jst.stateObject, arg)
 	}

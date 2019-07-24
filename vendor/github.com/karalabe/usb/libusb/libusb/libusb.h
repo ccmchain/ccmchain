@@ -1666,7 +1666,7 @@ static inline void libusb_set_iso_packet_lengths(
  * This is a thorough function which loops through all preceding packets,
  * accumulating their lengths to find the position of the specified packet.
  * Typically you will assign equal lengths to each packet in the transfer,
- * and hence the above mccmod is sub-optimal. You may wish to use
+ * and hence the above method is sub-optimal. You may wish to use
  * libusb_get_iso_packet_buffer_simple() instead.
  *
  * \param transfer a transfer

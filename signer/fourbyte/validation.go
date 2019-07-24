@@ -60,9 +60,9 @@ func (db *Database) ValidateTransaction(selector *string, tx *core.SendTxArgs) (
 		} else if len(data) < 40 { // arbitrary heuristic limit
 			messages.Warn(fmt.Sprintf("Transaction will create a contract, but the payload is suspiciously small (%d bytes)", len(data)))
 		}
-		// Mccmod selector should be nil for contract creation
+		// Method selector should be nil for contract creation
 		if selector != nil {
-			messages.Warn("Transaction will create a contract, but mccmod selector supplied, indicating an intent to call a mccmod")
+			messages.Warn("Transaction will create a contract, but method selector supplied, indicating an intent to call a method")
 		}
 		return messages, nil
 	}
@@ -78,7 +78,7 @@ func (db *Database) ValidateTransaction(selector *string, tx *core.SendTxArgs) (
 	return messages, nil
 }
 
-// validateCallData checks if the ABI call-data + mccmod selector (if given) can
+// validateCallData checks if the ABI call-data + method selector (if given) can
 // be parsed and seems to match.
 func (db *Database) validateCallData(selector *string, data []byte, messages *core.ValidationMessages) {
 	// If the data is empty, we have a plain value transfer, nothing more to do
@@ -93,7 +93,7 @@ func (db *Database) validateCallData(selector *string, data []byte, messages *co
 	if n := len(data) - 4; n%32 != 0 {
 		messages.Warn(fmt.Sprintf("Transaction data is not valid ABI (length should be a multiple of 32 (was %d))", n))
 	}
-	// If a custom mccmod selector was provided, validate with that
+	// If a custom method selector was provided, validate with that
 	if selector != nil {
 		if info, err := verifySelector(*selector, data); err != nil {
 			messages.Warn(fmt.Sprintf("Transaction contains data, but provided ABI signature could not be matched: %v", err))
@@ -103,7 +103,7 @@ func (db *Database) validateCallData(selector *string, data []byte, messages *co
 		}
 		return
 	}
-	// No mccmod selector was provided, check the database for embedded ones
+	// No method selector was provided, check the database for embedded ones
 	embedded, err := db.Selector(data[:4])
 	if err != nil {
 		messages.Warn(fmt.Sprintf("Transaction contains data, but the ABI signature could not be found: %v", err))

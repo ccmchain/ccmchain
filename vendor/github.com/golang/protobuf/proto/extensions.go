@@ -25,7 +25,7 @@
 // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
 // LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
 // DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// THEORY OF LIABILITY, WHCCMER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
@@ -83,7 +83,7 @@ func (e extensionAdapter) extensionsRead() (map[int32]Extension, sync.Locker) {
 	return e.ExtensionMap(), notLocker{}
 }
 
-// notLocker is a sync.Locker whose Lock and Unlock mccmods are nops.
+// notLocker is a sync.Locker whose Lock and Unlock methods are nops.
 type notLocker struct{}
 
 func (n notLocker) Lock()   {}
@@ -120,10 +120,10 @@ func isNilPtr(x interface{}) bool {
 // XXX_InternalExtensions is an internal representation of proto extensions.
 //
 // Each generated message struct type embeds an anonymous XXX_InternalExtensions field,
-// thus gaining the unexported 'extensions' mccmod, which can be called only from the proto package.
+// thus gaining the unexported 'extensions' method, which can be called only from the proto package.
 //
-// The mccmods of XXX_InternalExtensions are not concurrency safe in general,
-// but calls to logically read-only mccmods such as has and get may be executed concurrently.
+// The methods of XXX_InternalExtensions are not concurrency safe in general,
+// but calls to logically read-only methods such as has and get may be executed concurrently.
 type XXX_InternalExtensions struct {
 	// The struct must be indirect so that if a user inadvertently copies a
 	// generated message and its embedded XXX_InternalExtensions, they

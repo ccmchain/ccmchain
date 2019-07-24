@@ -60,7 +60,7 @@ type LesServer struct {
 	freeClientPool             *freeClientPool
 }
 
-func NewLesServer(e *ccm.Ethereum, config *ccm.Config) (*LesServer, error) {
+func NewLesServer(e *ccm.Ccmchain, config *ccm.Config) (*LesServer, error) {
 	lesTopics := make([]discv5.Topic, len(AdvertiseProtocolVersions))
 	for i, pv := range AdvertiseProtocolVersions {
 		lesTopics[i] = lesTopic(e.BlockChain().Genesis().Hash(), pv)

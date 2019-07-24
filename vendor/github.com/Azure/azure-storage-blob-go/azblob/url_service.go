@@ -56,9 +56,9 @@ func (s ServiceURL) WithPipeline(p pipeline.Pipeline) ServiceURL {
 
 // NewContainerURL creates a new ContainerURL object by concatenating containerName to the end of
 // ServiceURL's URL. The new ContainerURL uses the same request policy pipeline as the ServiceURL.
-// To change the pipeline, create the ContainerURL and then call its WithPipeline mccmod passing in the
+// To change the pipeline, create the ContainerURL and then call its WithPipeline method passing in the
 // desired pipeline object. Or, call this package's NewContainerURL instead of calling this object's
-// NewContainerURL mccmod.
+// NewContainerURL method.
 func (s ServiceURL) NewContainerURL(containerName string) ContainerURL {
 	containerURL := appendToURLPath(s.URL(), containerName)
 	return NewContainerURL(containerURL, s.client.Pipeline())

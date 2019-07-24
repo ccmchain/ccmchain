@@ -86,17 +86,17 @@ type NodeIterator interface {
 	// Leaf returns true iff the current node is a leaf node.
 	Leaf() bool
 
-	// LeafKey returns the key of the leaf. The mccmod panics if the iterator is not
+	// LeafKey returns the key of the leaf. The method panics if the iterator is not
 	// positioned at a leaf. Callers must not retain references to the value after
 	// calling Next.
 	LeafKey() []byte
 
-	// LeafBlob returns the content of the leaf. The mccmod panics if the iterator
+	// LeafBlob returns the content of the leaf. The method panics if the iterator
 	// is not positioned at a leaf. Callers must not retain references to the value
 	// after calling Next.
 	LeafBlob() []byte
 
-	// LeafProof returns the Merkle proof of the leaf. The mccmod panics if the
+	// LeafProof returns the Merkle proof of the leaf. The method panics if the
 	// iterator is not positioned at a leaf. Callers must not retain references
 	// to the value after calling Next.
 	LeafProof() [][]byte
@@ -215,7 +215,7 @@ func (it *nodeIterator) Error() error {
 }
 
 // Next moves the iterator to the next node, returning whccmer there are any
-// further nodes. In case of an internal error this mccmod returns false and
+// further nodes. In case of an internal error this method returns false and
 // sets the Error field to the encountered failure. If `descend` is false,
 // skips iterating over any subnodes of the current node.
 func (it *nodeIterator) Next(descend bool) bool {

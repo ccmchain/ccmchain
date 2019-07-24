@@ -75,25 +75,25 @@ type Dispatch struct {
 	Object *IDispatch // Dispatch object.
 }
 
-// Call mccmod on IDispatch with parameters.
-func (d *Dispatch) Call(mccmod string, params ...interface{}) (result *VARIANT, err error) {
-	id, err := d.GetId(mccmod)
+// Call method on IDispatch with parameters.
+func (d *Dispatch) Call(method string, params ...interface{}) (result *VARIANT, err error) {
+	id, err := d.GetId(method)
 	if err != nil {
 		return
 	}
 
-	result, err = d.Invoke(id, DISPATCH_METHOD, params)
+	result, err = d.Invoke(id, DISPATCH_MCCMOD, params)
 	return
 }
 
-// MustCall mccmod on IDispatch with parameters.
-func (d *Dispatch) MustCall(mccmod string, params ...interface{}) (result *VARIANT) {
-	id, err := d.GetId(mccmod)
+// MustCall method on IDispatch with parameters.
+func (d *Dispatch) MustCall(method string, params ...interface{}) (result *VARIANT) {
+	id, err := d.GetId(method)
 	if err != nil {
 		panic(err)
 	}
 
-	result, err = d.Invoke(id, DISPATCH_METHOD, params)
+	result, err = d.Invoke(id, DISPATCH_MCCMOD, params)
 	if err != nil {
 		panic(err)
 	}

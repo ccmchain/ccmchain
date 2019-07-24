@@ -141,7 +141,7 @@ func newTestWorker(t *testing.T, chainConfig *params.ChainConfig, engine consens
 	backend := newTestWorkerBackend(t, chainConfig, engine, blocks)
 	backend.txPool.AddLocals(pendingTxs)
 	w := newWorker(testConfig, chainConfig, engine, backend, new(event.TypeMux), nil)
-	w.setEtherbase(testBankAddress)
+	w.setCcmchainbase(testBankAddress)
 	return w, backend
 }
 

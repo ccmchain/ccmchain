@@ -23,55 +23,55 @@ import (
 	"github.com/ccmchain/go-ccmchain/crypto"
 )
 
-// Mccmod represents a callable given a `Name` and whccmer the mccmod is a constant.
-// If the mccmod is `Const` no transaction needs to be created for this
-// particular Mccmod call. It can easily be simulated using a local VM.
-// For example a `Balance()` mccmod only needs to retrieve somccming
+// Method represents a callable given a `Name` and whccmer the method is a constant.
+// If the method is `Const` no transaction needs to be created for this
+// particular Method call. It can easily be simulated using a local VM.
+// For example a `Balance()` method only needs to retrieve somccming
 // from the storage and therefore requires no Tx to be send to the
-// network. A mccmod such as `Transact` does require a Tx and thus will
+// network. A method such as `Transact` does require a Tx and thus will
 // be flagged `false`.
-// Input specifies the required input parameters for this gives mccmod.
-type Mccmod struct {
+// Input specifies the required input parameters for this gives method.
+type Method struct {
 	Name    string
 	Const   bool
 	Inputs  Arguments
 	Outputs Arguments
 }
 
-// Sig returns the mccmods string signature according to the ABI spec.
+// Sig returns the methods string signature according to the ABI spec.
 //
 // Example
 //
 //     function foo(uint32 a, int b)    =    "foo(uint32,int256)"
 //
 // Please note that "int" is substitute for its canonical representation "int256"
-func (mccmod Mccmod) Sig() string {
-	types := make([]string, len(mccmod.Inputs))
-	for i, input := range mccmod.Inputs {
+func (method Method) Sig() string {
+	types := make([]string, len(method.Inputs))
+	for i, input := range method.Inputs {
 		types[i] = input.Type.String()
 	}
-	return fmt.Sprintf("%v(%v)", mccmod.Name, strings.Join(types, ","))
+	return fmt.Sprintf("%v(%v)", method.Name, strings.Join(types, ","))
 }
 
-func (mccmod Mccmod) String() string {
-	inputs := make([]string, len(mccmod.Inputs))
-	for i, input := range mccmod.Inputs {
+func (method Method) String() string {
+	inputs := make([]string, len(method.Inputs))
+	for i, input := range method.Inputs {
 		inputs[i] = fmt.Sprintf("%v %v", input.Type, input.Name)
 	}
-	outputs := make([]string, len(mccmod.Outputs))
-	for i, output := range mccmod.Outputs {
+	outputs := make([]string, len(method.Outputs))
+	for i, output := range method.Outputs {
 		outputs[i] = output.Type.String()
 		if len(output.Name) > 0 {
 			outputs[i] += fmt.Sprintf(" %v", output.Name)
 		}
 	}
 	constant := ""
-	if mccmod.Const {
+	if method.Const {
 		constant = "constant "
 	}
-	return fmt.Sprintf("function %v(%v) %sreturns(%v)", mccmod.Name, strings.Join(inputs, ", "), constant, strings.Join(outputs, ", "))
+	return fmt.Sprintf("function %v(%v) %sreturns(%v)", method.Name, strings.Join(inputs, ", "), constant, strings.Join(outputs, ", "))
 }
 
-func (mccmod Mccmod) Id() []byte {
-	return crypto.Keccak256([]byte(mccmod.Sig()))[:4]
+func (method Method) Id() []byte {
+	return crypto.Keccak256([]byte(method.Sig()))[:4]
 }

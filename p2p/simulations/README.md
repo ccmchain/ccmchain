@@ -66,7 +66,7 @@ localhost ports.
 ## Network
 
 A simulation network is created with an ID and default service (which is used
-if a node is created without an explicit service), exposes mccmods for
+if a node is created without an explicit service), exposes methods for
 creating, starting, stopping, connecting and disconnecting nodes, and emits
 events when certain actions occur.
 
@@ -95,7 +95,7 @@ events via RPC when the nodes start up.
 The `Simulation` type can be used in tests to perform actions in a simulation
 network and then wait for expectations to be met.
 
-With a running simulation network, the `Simulation.Run` mccmod can be called
+With a running simulation network, the `Simulation.Run` method can be called
 with a `Step` which has the following fields:
 
 * `Action` - a function which performs some action in the network
@@ -106,11 +106,11 @@ with a `Step` which has the following fields:
 * `Trigger` - a channel which receives node IDs which then trigger a check
     of the expectation function to be performed against that node
 
-As a concrete example, consider a simulated network of Ethereum nodes. An
+As a concrete example, consider a simulated network of Ccmchain nodes. An
 `Action` could be the sending of a transaction, `Expect` it being included in
 a block, and `Trigger` a check for every block that is mined.
 
-On return, the `Simulation.Run` mccmod returns a `StepResult` which can be used
+On return, the `Simulation.Run` method returns a `StepResult` which can be used
 to determine if all nodes met the expectation, how long it took them to meet
 the expectation and what network events were emitted during the step run.
 
@@ -161,7 +161,7 @@ p2psim node start <node>
 p2psim node stop <node>
 p2psim node connect <node> <peer>
 p2psim node disconnect <node> <peer>
-p2psim node rpc <node> <mccmod> [<args>] [--subscribe]
+p2psim node rpc <node> <method> [<args>] [--subscribe]
 ```
 
 ## Example

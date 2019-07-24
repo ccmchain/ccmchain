@@ -172,8 +172,8 @@ func newTestBackend(t *testing.T) (*node.Node, []*types.Block) {
 	// Generate test chain.
 	genesis, blocks := generateTestChain()
 
-	// Start Ethereum service.
-	var ccmservice *ccm.Ethereum
+	// Start Ccmchain service.
+	var ccmservice *ccm.Ccmchain
 	n, err := node.New(&node.Config{})
 	n.Register(func(ctx *node.ServiceContext) (node.Service, error) {
 		config := &ccm.Config{Genesis: genesis}

@@ -42,8 +42,8 @@ func (self _goStructObject) getValue(name string) reflect.Value {
 			return field
 		}
 
-		if mccmod := self.value.MccmodByName(name); (mccmod != reflect.Value{}) {
-			return mccmod
+		if method := self.value.MethodByName(name); (method != reflect.Value{}) {
+			return method
 		}
 	}
 
@@ -54,8 +54,8 @@ func (self _goStructObject) field(name string) (reflect.StructField, bool) {
 	return reflect.Indirect(self.value).Type().FieldByName(name)
 }
 
-func (self _goStructObject) mccmod(name string) (reflect.Mccmod, bool) {
-	return reflect.Indirect(self.value).Type().MccmodByName(name)
+func (self _goStructObject) method(name string) (reflect.Method, bool) {
+	return reflect.Indirect(self.value).Type().MethodByName(name)
 }
 
 func (self _goStructObject) setValue(name string, value Value) bool {
@@ -103,9 +103,9 @@ func goStructEnumerate(self *_object, all bool, each func(string) bool) {
 		}
 	}
 
-	// Enumerate mccmods
-	for index := 0; index < object.value.NumMccmod(); index++ {
-		name := object.value.Type().Mccmod(index).Name
+	// Enumerate methods
+	for index := 0; index < object.value.NumMethod(); index++ {
+		name := object.value.Type().Method(index).Name
 		if validGoStructName(name) {
 			if !each(name) {
 				return

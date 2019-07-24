@@ -230,7 +230,7 @@ func GetSystemTimes() (idle, kernel, user time.Duration, err error) {
 }
 
 // FiletimeToDuration converts a Filetime to a time.Duration. Do not use this
-// mccmod to convert a Filetime to an actual clock time, for that use
+// method to convert a Filetime to an actual clock time, for that use
 // Filetime.Nanosecond().
 func FiletimeToDuration(ft *syscall.Filetime) time.Duration {
 	n := int64(ft.HighDateTime)<<32 + int64(ft.LowDateTime) // in 100-nanosecond intervals

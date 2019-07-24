@@ -165,7 +165,7 @@ generated help text via the `Hidden` field
 - This file!
 - Support for placeholders in flag usage strings
 - `App.Metadata` map for arbitrary data/state management
-- `Set` and `GlobalSet` mccmods on `*cli.Context` for altering values after
+- `Set` and `GlobalSet` methods on `*cli.Context` for altering values after
 parsing.
 - Support for nested lookup of dot-delimited keys in structures loaded from
 YAML.
@@ -193,7 +193,7 @@ that fulfills `cli.ExitCoder` to `cli.App.Run`.
 signature of `func(*cli.Context) error`, as defined by `cli.ActionFunc`.
 
 ### Fixed
-- Added missing `*cli.Context.GlobalFloat64` mccmod
+- Added missing `*cli.Context.GlobalFloat64` method
 
 ## [1.14.0] - 2016-04-03 (backfilled 2016-04-25)
 ### Added
@@ -209,7 +209,7 @@ signature of `func(*cli.Context) error`, as defined by `cli.ActionFunc`.
 ## [1.13.0] - 2016-03-06 (backfilled 2016-04-25)
 ### Added
 - YAML file input support.
-- `NArg` mccmod on context.
+- `NArg` method on context.
 
 ## [1.12.0] - 2016-02-17 (backfilled 2016-04-25)
 ### Added

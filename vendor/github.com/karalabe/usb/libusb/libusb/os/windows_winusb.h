@@ -157,15 +157,15 @@ struct libusb_hid_descriptor {
 #define LIBUSB_REQ_OUT(request_type)		(!LIBUSB_REQ_IN(request_type))
 
 #ifndef CTL_CODE
-#define CTL_CODE(DeviceType, Function, Mccmod, Access) \
-	(((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Mccmod))
+#define CTL_CODE(DeviceType, Function, Method, Access) \
+	(((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method))
 #endif
 
 // The following are used for HID reports IOCTLs
 #define HID_IN_CTL_CODE(id) \
-	CTL_CODE(FILE_DEVICE_KEYBOARD, (id), METHOD_IN_DIRECT, FILE_ANY_ACCESS)
+	CTL_CODE(FILE_DEVICE_KEYBOARD, (id), MCCMOD_IN_DIRECT, FILE_ANY_ACCESS)
 #define HID_OUT_CTL_CODE(id) \
-	CTL_CODE(FILE_DEVICE_KEYBOARD, (id), METHOD_OUT_DIRECT, FILE_ANY_ACCESS)
+	CTL_CODE(FILE_DEVICE_KEYBOARD, (id), MCCMOD_OUT_DIRECT, FILE_ANY_ACCESS)
 
 #define IOCTL_HID_GET_FEATURE		HID_OUT_CTL_CODE(100)
 #define IOCTL_HID_GET_INPUT_REPORT	HID_OUT_CTL_CODE(104)
@@ -310,7 +310,7 @@ DLL_DECLARE_FUNC_PREFIXED(WINAPI, HKEY, p, SetupDiOpenDeviceInterfaceRegKey, (HD
 #endif
 
 #define USB_CTL_CODE(id) \
-	CTL_CODE(FILE_DEVICE_USB, (id), METHOD_BUFFERED, FILE_ANY_ACCESS)
+	CTL_CODE(FILE_DEVICE_USB, (id), MCCMOD_BUFFERED, FILE_ANY_ACCESS)
 
 #define IOCTL_USB_GET_DESCRIPTOR_FROM_NODE_CONNECTION \
 	USB_CTL_CODE(USB_GET_DESCRIPTOR_FROM_NODE_CONNECTION)

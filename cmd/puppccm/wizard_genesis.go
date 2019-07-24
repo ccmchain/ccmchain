@@ -256,7 +256,7 @@ func (w *wizard) manageGenesis() {
 		}
 		log.Info("Saved native genesis chain spec", "path", gccmJson)
 
-		// Export the genesis spec used by Alccm (formerly C++ Ethereum)
+		// Export the genesis spec used by Alccm (formerly C++ Ccmchain)
 		if spec, err := newAlccmGenesisSpec(w.network, w.conf.Genesis); err != nil {
 			log.Error("Failed to create Alccm chain spec", "err", err)
 		} else {
@@ -268,7 +268,7 @@ func (w *wizard) manageGenesis() {
 		} else {
 			saveGenesis(folder, w.network, "parity", spec)
 		}
-		// Export the genesis spec used by Harmony (formerly EthereumJ
+		// Export the genesis spec used by Harmony (formerly CcmchainJ
 		saveGenesis(folder, w.network, "harmony", w.conf.Genesis)
 
 	case "3":

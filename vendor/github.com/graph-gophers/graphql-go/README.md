@@ -13,7 +13,7 @@ safe for production use.
 - support for `context.Context`
 - support for the `OpenTracing` standard
 - schema type-checking against resolvers
-- resolvers are matched to the schema based on mccmod sets (can resolve a GraphQL schema with a Go interface or Go struct).
+- resolvers are matched to the schema based on method sets (can resolve a GraphQL schema with a Go interface or Go struct).
 - handles panics in resolvers
 - parallel execution of resolvers
 
@@ -63,19 +63,19 @@ $ curl -XPOST -d '{"query": "{ hello }"}' localhost:8080/query
 
 ### Resolvers
 
-A resolver must have one mccmod for each field of the GraphQL type it resolves. The mccmod name has to be [exported](https://golang.org/ref/spec#Exported_identifiers) and match the field's name in a non-case-sensitive way.
+A resolver must have one method for each field of the GraphQL type it resolves. The method name has to be [exported](https://golang.org/ref/spec#Exported_identifiers) and match the field's name in a non-case-sensitive way.
 
-The mccmod has up to two arguments:
+The method has up to two arguments:
 
 - Optional `context.Context` argument.
 - Mandatory `*struct { ... }` argument if the corresponding GraphQL field has arguments. The names of the struct fields have to be [exported](https://golang.org/ref/spec#Exported_identifiers) and have to match the names of the GraphQL arguments in a non-case-sensitive way.
 
-The mccmod has up to two results:
+The method has up to two results:
 
 - The GraphQL field's value as determined by the resolver.
 - Optional `error` result.
 
-Example for a simple resolver mccmod:
+Example for a simple resolver method:
 
 ```go
 func (r *helloWorldResolver) Hello() string {

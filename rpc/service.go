@@ -49,13 +49,13 @@ type service struct {
 	subscriptions map[string]*callback // available subscriptions/notifications
 }
 
-// callback is a mccmod callback which was registered in the server
+// callback is a method callback which was registered in the server
 type callback struct {
 	fn          reflect.Value  // the function
-	rcvr        reflect.Value  // receiver object of mccmod, set if fn is mccmod
+	rcvr        reflect.Value  // receiver object of method, set if fn is method
 	argTypes    []reflect.Type // input argument types
-	hasCtx      bool           // mccmod's first argument is a context (not included in argTypes)
-	errPos      int            // err return idx, of -1 when mccmod cannot return error
+	hasCtx      bool           // method's first argument is a context (not included in argTypes)
+	errPos      int            // err return idx, of -1 when method cannot return error
 	isSubscribe bool           // true if this is a subscription callback
 }
 
@@ -66,7 +66,7 @@ func (r *serviceRegistry) registerName(name string, rcvr interface{}) error {
 	}
 	callbacks := suitableCallbacks(rcvrVal)
 	if len(callbacks) == 0 {
-		return fmt.Errorf("service %T doesn't have any suitable mccmods/subscriptions to expose", rcvr)
+		return fmt.Errorf("service %T doesn't have any suitable methods/subscriptions to expose", rcvr)
 	}
 
 	r.mu.Lock()
@@ -93,9 +93,9 @@ func (r *serviceRegistry) registerName(name string, rcvr interface{}) error {
 	return nil
 }
 
-// callback returns the callback corresponding to the given RPC mccmod name.
-func (r *serviceRegistry) callback(mccmod string) *callback {
-	elem := strings.SplitN(mccmod, serviceMccmodSeparator, 2)
+// callback returns the callback corresponding to the given RPC method name.
+func (r *serviceRegistry) callback(method string) *callback {
+	elem := strings.SplitN(method, serviceMethodSeparator, 2)
 	if len(elem) != 2 {
 		return nil
 	}
@@ -111,22 +111,22 @@ func (r *serviceRegistry) subscription(service, name string) *callback {
 	return r.services[service].subscriptions[name]
 }
 
-// suitableCallbacks iterates over the mccmods of the given type. It determines if a mccmod
+// suitableCallbacks iterates over the methods of the given type. It determines if a method
 // satisfies the criteria for a RPC callback or a subscription callback and adds it to the
 // collection of callbacks. See server documentation for a summary of these criteria.
 func suitableCallbacks(receiver reflect.Value) map[string]*callback {
 	typ := receiver.Type()
 	callbacks := make(map[string]*callback)
-	for m := 0; m < typ.NumMccmod(); m++ {
-		mccmod := typ.Mccmod(m)
-		if mccmod.PkgPath != "" {
-			continue // mccmod not exported
+	for m := 0; m < typ.NumMethod(); m++ {
+		method := typ.Method(m)
+		if method.PkgPath != "" {
+			continue // method not exported
 		}
-		cb := newCallback(receiver, mccmod.Func)
+		cb := newCallback(receiver, method.Func)
 		if cb == nil {
 			continue // function invalid
 		}
-		name := formatName(mccmod.Name)
+		name := formatName(method.Name)
 		callbacks[name] = cb
 	}
 	return callbacks
@@ -184,7 +184,7 @@ func (c *callback) makeArgTypes() {
 }
 
 // call invokes the callback.
-func (c *callback) call(ctx context.Context, mccmod string, args []reflect.Value) (res interface{}, errRes error) {
+func (c *callback) call(ctx context.Context, method string, args []reflect.Value) (res interface{}, errRes error) {
 	// Create the argument slice.
 	fullargs := make([]reflect.Value, 0, 2+len(args))
 	if c.rcvr.IsValid() {
@@ -201,8 +201,8 @@ func (c *callback) call(ctx context.Context, mccmod string, args []reflect.Value
 			const size = 64 << 10
 			buf := make([]byte, size)
 			buf = buf[:runtime.Stack(buf, false)]
-			log.Error("RPC mccmod " + mccmod + " crashed: " + fmt.Sprintf("%v\n%s", err, buf))
-			errRes = errors.New("mccmod handler crashed")
+			log.Error("RPC method " + method + " crashed: " + fmt.Sprintf("%v\n%s", err, buf))
+			errRes = errors.New("method handler crashed")
 		}
 	}()
 	// Run the callback.
@@ -211,7 +211,7 @@ func (c *callback) call(ctx context.Context, mccmod string, args []reflect.Value
 		return nil, nil
 	}
 	if c.errPos >= 0 && !results[c.errPos].IsNil() {
-		// Mccmod has returned non-nil error value.
+		// Method has returned non-nil error value.
 		err := results[c.errPos].Interface().(error)
 		return reflect.Value{}, err
 	}
@@ -263,16 +263,16 @@ func isSubscriptionType(t reflect.Type) bool {
 	return t == subscriptionType
 }
 
-// isPubSub tests whccmer the given mccmod has as as first argument a context.Context and
+// isPubSub tests whccmer the given method has as as first argument a context.Context and
 // returns the pair (Subscription, error).
-func isPubSub(mccmodType reflect.Type) bool {
+func isPubSub(methodType reflect.Type) bool {
 	// numIn(0) is the receiver type
-	if mccmodType.NumIn() < 2 || mccmodType.NumOut() != 2 {
+	if methodType.NumIn() < 2 || methodType.NumOut() != 2 {
 		return false
 	}
-	return isContextType(mccmodType.In(1)) &&
-		isSubscriptionType(mccmodType.Out(0)) &&
-		isErrorType(mccmodType.Out(1))
+	return isContextType(methodType.In(1)) &&
+		isSubscriptionType(methodType.Out(0)) &&
+		isErrorType(methodType.Out(1))
 }
 
 // formatName converts to first character of name to lowercase.

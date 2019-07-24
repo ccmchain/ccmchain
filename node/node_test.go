@@ -531,8 +531,8 @@ func TestAPIGather(t *testing.T) {
 
 	// Register a batch of services with some configured APIs
 	calls := make(chan string, 1)
-	makeAPI := func(result string) *OneMccmodAPI {
-		return &OneMccmodAPI{fun: func() { calls <- result }}
+	makeAPI := func(result string) *OneMethodAPI {
+		return &OneMethodAPI{fun: func() { calls <- result }}
 	}
 	services := map[string]struct {
 		APIs  []rpc.API
@@ -575,16 +575,16 @@ func TestAPIGather(t *testing.T) {
 	defer client.Close()
 
 	tests := []struct {
-		Mccmod string
+		Method string
 		Result string
 	}{
-		{"single_theOneMccmod", "single.v1"},
-		{"multi_theOneMccmod", "multi.v1"},
-		{"multi.v2_theOneMccmod", "multi.v2"},
-		{"multi.v2.nested_theOneMccmod", "multi.v2.nested"},
+		{"single_theOneMethod", "single.v1"},
+		{"multi_theOneMethod", "multi.v1"},
+		{"multi.v2_theOneMethod", "multi.v2"},
+		{"multi.v2.nested_theOneMethod", "multi.v2.nested"},
 	}
 	for i, test := range tests {
-		if err := client.Call(nil, test.Mccmod); err != nil {
+		if err := client.Call(nil, test.Method); err != nil {
 			t.Errorf("test %d: API request failed: %v", i, err)
 		}
 		select {

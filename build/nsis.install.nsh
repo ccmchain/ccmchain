@@ -24,18 +24,18 @@ Section "Gccm" GETH_IDX
   createShortCut "$SMPROGRAMS\${APPNAME}\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "" ""
 
   # Firewall - remove rules (if exists)
-  SimpleFC::AdvRemoveRule "Gccm incoming peers (TCP:30303)"
-  SimpleFC::AdvRemoveRule "Gccm outgoing peers (TCP:30303)"
-  SimpleFC::AdvRemoveRule "Gccm UDP discovery (UDP:30303)"
+  SimpleFC::AdvRemoveRule "Gccm incoming peers (TCP:17575)"
+  SimpleFC::AdvRemoveRule "Gccm outgoing peers (TCP:17575)"
+  SimpleFC::AdvRemoveRule "Gccm UDP discovery (UDP:17575)"
 
   # Firewall - add rules
-  SimpleFC::AdvAddRule "Gccm incoming peers (TCP:30303)" ""  6 1 1 2147483647 1 "$INSTDIR\gccm.exe" "" "" "Ethereum" 30303 "" "" ""
-  SimpleFC::AdvAddRule "Gccm outgoing peers (TCP:30303)" ""  6 2 1 2147483647 1 "$INSTDIR\gccm.exe" "" "" "Ethereum" "" 30303 "" ""
-  SimpleFC::AdvAddRule "Gccm UDP discovery (UDP:30303)" "" 17 2 1 2147483647 1 "$INSTDIR\gccm.exe" "" "" "Ethereum" "" 30303 "" ""
+  SimpleFC::AdvAddRule "Gccm incoming peers (TCP:17575)" ""  6 1 1 2147483647 1 "$INSTDIR\gccm.exe" "" "" "Ccmchain" 17575 "" "" ""
+  SimpleFC::AdvAddRule "Gccm outgoing peers (TCP:17575)" ""  6 2 1 2147483647 1 "$INSTDIR\gccm.exe" "" "" "Ccmchain" "" 17575 "" ""
+  SimpleFC::AdvAddRule "Gccm UDP discovery (UDP:17575)" "" 17 2 1 2147483647 1 "$INSTDIR\gccm.exe" "" "" "Ccmchain" "" 17575 "" ""
 
   # Set default IPC endpoint (https://github.com/ccmchain/EIPs/issues/147)
-  ${EnvVarUpdate} $0 "ETHEREUM_SOCKET" "R" "HKLM" "\\.\pipe\gccm.ipc"
-  ${EnvVarUpdate} $0 "ETHEREUM_SOCKET" "A" "HKLM" "\\.\pipe\gccm.ipc"
+  ${EnvVarUpdate} $0 "CCMCHAIN_SOCKET" "R" "HKLM" "\\.\pipe\gccm.ipc"
+  ${EnvVarUpdate} $0 "CCMCHAIN_SOCKET" "A" "HKLM" "\\.\pipe\gccm.ipc"
 
   # Add instdir to PATH
   Push "$INSTDIR"

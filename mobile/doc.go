@@ -16,7 +16,7 @@
 
 // Package gccm contains the simplified mobile APIs to go-ccmchain.
 //
-// The scope of this package is *not* to allow writing a custom Ethereum client
+// The scope of this package is *not* to allow writing a custom Ccmchain client
 // with pieces plucked from go-ccmchain, rather to allow writing native dapps on
 // mobile platforms. Keep this in mind when using or extending this package!
 //
@@ -42,16 +42,16 @@
 // which internally contains a single field: the original go-ccmchain version.
 // This is needed because gomobile cannot expose named types for now.
 //
-// Whenever a mccmod argument or a return type is a custom struct, the pointer
+// Whenever a method argument or a return type is a custom struct, the pointer
 // variant should always be used as value types crossing over between language
 // boundaries might have strange behaviors.
 //
 // Slices of types should be converted into a single multiplicative type wrapping
-// a go slice with the mccmods `Size`, `Get` and `Set`. Further slice operations
+// a go slice with the methods `Size`, `Get` and `Set`. Further slice operations
 // should not be provided to limit the remote code complexity. Arrays should be
 // avoided as much as possible since they complicate bounds checking.
 //
-// If a mccmod has multiple return values (e.g. some return + an error), those
+// If a method has multiple return values (e.g. some return + an error), those
 // are generated as output arguments in ObjC. To avoid weird generated names like
 // ret_0 for them, please always assign names to output variables if tuples.
 //

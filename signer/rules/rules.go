@@ -34,7 +34,7 @@ var (
 	BigNumber_JS = deps.MustAsset("bignumber.js")
 )
 
-// consoleOutput is an override for the console.log and console.error mccmods to
+// consoleOutput is an override for the console.log and console.error methods to
 // stream the output into the configured output stream instead of stdout.
 func consoleOutput(call otto.FunctionCall) otto.Value {
 	output := []string{"JS:> "}
@@ -46,7 +46,7 @@ func consoleOutput(call otto.FunctionCall) otto.Value {
 }
 
 // rulesetUI provides an implementation of UIClientAPI that evaluates a javascript
-// file for each defined UI-mccmod
+// file for each defined UI-method
 type rulesetUI struct {
 	next    core.UIClientAPI // The next handler, for manual processing
 	storage storage.Storage

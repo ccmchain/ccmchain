@@ -90,8 +90,8 @@ var (
 	// of the trace, in standard URI format. The protocol is optional.
 	HTTPUrl = stringTagName("http.url")
 
-	// HTTPMccmod is the HTTP mccmod of the request, and is case-insensitive.
-	HTTPMccmod = stringTagName("http.mccmod")
+	// HTTPMethod is the HTTP method of the request, and is case-insensitive.
+	HTTPMethod = stringTagName("http.method")
 
 	// HTTPStatusCode is the numeric HTTP status code (200, 404, etc) of the
 	// HTTP response.

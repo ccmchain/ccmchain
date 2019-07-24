@@ -42,7 +42,7 @@ const (
 	ALTWERASE                     = 0x400000
 	ARPHRD_802_3                  = 0x6
 	ARPHRD_802_5                  = 0x6
-	ARPHRD_ETHER                  = 0x1
+	ARPHRD_CCMER                  = 0x1
 	ARPHRD_FDDI                   = 0x1
 	B0                            = 0x0
 	B110                          = 0x3
@@ -111,7 +111,7 @@ const (
 	ECHONL                        = 0x40
 	ECHOPRT                       = 0x40000
 	ECH_ICMPID                    = 0x2
-	ETHERNET_CSMACD               = 0x6
+	CCMERNET_CSMACD               = 0x6
 	EVENP                         = 0x80
 	EXCONTINUE                    = 0x0
 	EXDLOK                        = 0x3
@@ -220,7 +220,7 @@ const (
 	IFT_CLUSTER                   = 0x3e
 	IFT_DS3                       = 0x1e
 	IFT_EON                       = 0x19
-	IFT_ETHER                     = 0x6
+	IFT_CCMER                     = 0x6
 	IFT_FCS                       = 0x3a
 	IFT_FDDI                      = 0xf
 	IFT_FRELAY                    = 0x20
@@ -273,7 +273,7 @@ const (
 	IFT_X25                       = 0x5
 	IFT_X25DDN                    = 0x4
 	IFT_X25PLE                    = 0x28
-	IFT_XETHER                    = 0x1a
+	IFT_XCCMER                    = 0x1a
 	IGNBRK                        = 0x1
 	IGNCR                         = 0x80
 	IGNPAR                        = 0x4

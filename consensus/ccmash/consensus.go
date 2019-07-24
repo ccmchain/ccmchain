@@ -80,7 +80,7 @@ func (ccmash *Ethash) Author(header *types.Header) (common.Address, error) {
 }
 
 // VerifyHeader checks whccmer a header conforms to the consensus rules of the
-// stock Ethereum ccmash engine.
+// stock Ccmchain ccmash engine.
 func (ccmash *Ethash) VerifyHeader(chain consensus.ChainReader, header *types.Header, seal bool) error {
 	// If we're running a full engine faking, accept any input as valid
 	if ccmash.config.PowMode == ModeFullFake {
@@ -181,7 +181,7 @@ func (ccmash *Ethash) verifyHeaderWorker(chain consensus.ChainReader, headers []
 }
 
 // VerifyUncles verifies that the given block's uncles conform to the consensus
-// rules of the stock Ethereum ccmash engine.
+// rules of the stock Ccmchain ccmash engine.
 func (ccmash *Ethash) VerifyUncles(chain consensus.ChainReader, block *types.Block) error {
 	// If we're running a full engine faking, accept any input as valid
 	if ccmash.config.PowMode == ModeFullFake {
@@ -236,7 +236,7 @@ func (ccmash *Ethash) VerifyUncles(chain consensus.ChainReader, block *types.Blo
 }
 
 // verifyHeader checks whccmer a header conforms to the consensus rules of the
-// stock Ethereum ccmash engine.
+// stock Ccmchain ccmash engine.
 // See YP section 4.3.4. "Block Header Validity"
 func (ccmash *Ethash) verifyHeader(chain consensus.ChainReader, header, parent *types.Header, uncle bool, seal bool) error {
 	// Ensure that the header's extra-data section is of a reasonable size

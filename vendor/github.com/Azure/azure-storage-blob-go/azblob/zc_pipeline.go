@@ -39,7 +39,7 @@ func NewPipeline(c Credential, o PipelineOptions) pipeline.Pipeline {
 	}
 	f = append(f,
 		NewRequestLogPolicyFactory(o.RequestLog),
-		pipeline.MccmodFactoryMarker()) // indicates at what stage in the pipeline the mccmod factory is invoked
+		pipeline.MethodFactoryMarker()) // indicates at what stage in the pipeline the method factory is invoked
 
 
 	return pipeline.NewPipeline(f, pipeline.Options{HTTPSender: o.HTTPSender, Log: o.Log})

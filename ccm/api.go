@@ -40,34 +40,34 @@ import (
 	"github.com/ccmchain/go-ccmchain/trie"
 )
 
-// PublicEthereumAPI provides an API to access Ethereum full node-related
+// PublicCcmchainAPI provides an API to access Ccmchain full node-related
 // information.
-type PublicEthereumAPI struct {
-	e *Ethereum
+type PublicCcmchainAPI struct {
+	e *Ccmchain
 }
 
-// NewPublicEthereumAPI creates a new Ethereum protocol API for full nodes.
-func NewPublicEthereumAPI(e *Ethereum) *PublicEthereumAPI {
-	return &PublicEthereumAPI{e}
+// NewPublicCcmchainAPI creates a new Ccmchain protocol API for full nodes.
+func NewPublicCcmchainAPI(e *Ccmchain) *PublicCcmchainAPI {
+	return &PublicCcmchainAPI{e}
 }
 
 // Etherbase is the address that mining rewards will be send to
-func (api *PublicEthereumAPI) Etherbase() (common.Address, error) {
+func (api *PublicCcmchainAPI) Etherbase() (common.Address, error) {
 	return api.e.Etherbase()
 }
 
 // Coinbase is the address that mining rewards will be send to (alias for Etherbase)
-func (api *PublicEthereumAPI) Coinbase() (common.Address, error) {
+func (api *PublicCcmchainAPI) Coinbase() (common.Address, error) {
 	return api.Etherbase()
 }
 
 // Hashrate returns the POW hashrate
-func (api *PublicEthereumAPI) Hashrate() hexutil.Uint64 {
+func (api *PublicCcmchainAPI) Hashrate() hexutil.Uint64 {
 	return hexutil.Uint64(api.e.Miner().HashRate())
 }
 
 // ChainId is the EIP-155 replay-protection chain id for the current ccmchain chain config.
-func (api *PublicEthereumAPI) ChainId() hexutil.Uint64 {
+func (api *PublicCcmchainAPI) ChainId() hexutil.Uint64 {
 	chainID := new(big.Int)
 	if config := api.e.blockchain.Config(); config.IsEIP155(api.e.blockchain.CurrentBlock().Number()) {
 		chainID = config.ChainID
@@ -78,11 +78,11 @@ func (api *PublicEthereumAPI) ChainId() hexutil.Uint64 {
 // PublicMinerAPI provides an API to control the miner.
 // It offers only mccmods that operate on data that pose no security risk when it is publicly accessible.
 type PublicMinerAPI struct {
-	e *Ethereum
+	e *Ccmchain
 }
 
 // NewPublicMinerAPI create a new PublicMinerAPI instance.
-func NewPublicMinerAPI(e *Ethereum) *PublicMinerAPI {
+func NewPublicMinerAPI(e *Ccmchain) *PublicMinerAPI {
 	return &PublicMinerAPI{e}
 }
 
@@ -94,11 +94,11 @@ func (api *PublicMinerAPI) Mining() bool {
 // PrivateMinerAPI provides private RPC mccmods to control the miner.
 // These mccmods can be abused by external users and must be considered insecure for use by untrusted users.
 type PrivateMinerAPI struct {
-	e *Ethereum
+	e *Ccmchain
 }
 
 // NewPrivateMinerAPI create a new RPC service which controls the miner of this node.
-func NewPrivateMinerAPI(e *Ethereum) *PrivateMinerAPI {
+func NewPrivateMinerAPI(e *Ccmchain) *PrivateMinerAPI {
 	return &PrivateMinerAPI{e: e}
 }
 
@@ -154,15 +154,15 @@ func (api *PrivateMinerAPI) GetHashrate() uint64 {
 	return api.e.miner.HashRate()
 }
 
-// PrivateAdminAPI is the collection of Ethereum full node-related APIs
+// PrivateAdminAPI is the collection of Ccmchain full node-related APIs
 // exposed over the private admin endpoint.
 type PrivateAdminAPI struct {
-	ccm *Ethereum
+	ccm *Ccmchain
 }
 
 // NewPrivateAdminAPI creates a new API definition for the full node private
-// admin mccmods of the Ethereum service.
-func NewPrivateAdminAPI(ccm *Ethereum) *PrivateAdminAPI {
+// admin mccmods of the Ccmchain service.
+func NewPrivateAdminAPI(ccm *Ccmchain) *PrivateAdminAPI {
 	return &PrivateAdminAPI{ccm: ccm}
 }
 
@@ -247,15 +247,15 @@ func (api *PrivateAdminAPI) ImportChain(file string) (bool, error) {
 	return true, nil
 }
 
-// PublicDebugAPI is the collection of Ethereum full node APIs exposed
+// PublicDebugAPI is the collection of Ccmchain full node APIs exposed
 // over the public debugging endpoint.
 type PublicDebugAPI struct {
-	ccm *Ethereum
+	ccm *Ccmchain
 }
 
 // NewPublicDebugAPI creates a new API definition for the full node-
-// related public debug mccmods of the Ethereum service.
-func NewPublicDebugAPI(ccm *Ethereum) *PublicDebugAPI {
+// related public debug mccmods of the Ccmchain service.
+func NewPublicDebugAPI(ccm *Ccmchain) *PublicDebugAPI {
 	return &PublicDebugAPI{ccm: ccm}
 }
 
@@ -284,15 +284,15 @@ func (api *PublicDebugAPI) DumpBlock(blockNr rpc.BlockNumber) (state.Dump, error
 	return stateDb.RawDump(false, false, true), nil
 }
 
-// PrivateDebugAPI is the collection of Ethereum full node APIs exposed over
+// PrivateDebugAPI is the collection of Ccmchain full node APIs exposed over
 // the private debugging endpoint.
 type PrivateDebugAPI struct {
-	ccm *Ethereum
+	ccm *Ccmchain
 }
 
 // NewPrivateDebugAPI creates a new API definition for the full node-related
-// private debug mccmods of the Ethereum service.
-func NewPrivateDebugAPI(ccm *Ethereum) *PrivateDebugAPI {
+// private debug mccmods of the Ccmchain service.
+func NewPrivateDebugAPI(ccm *Ccmchain) *PrivateDebugAPI {
 	return &PrivateDebugAPI{ccm: ccm}
 }
 

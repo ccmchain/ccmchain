@@ -168,7 +168,7 @@ func (d *decoder) unmarshalBool(size uint, offset uint, result reflect.Value) (u
 		result.SetBool(value)
 		return newOffset, nil
 	case reflect.Interface:
-		if result.NumMccmod() == 0 {
+		if result.NumMethod() == 0 {
 			result.Set(reflect.ValueOf(value))
 			return newOffset, nil
 		}
@@ -178,7 +178,7 @@ func (d *decoder) unmarshalBool(size uint, offset uint, result reflect.Value) (u
 
 // indirect follows pointers and create values as necessary. This is
 // heavily based on encoding/json as my original version had a subtle
-// bug. This mccmod should be considered to be licensed under
+// bug. This method should be considered to be licensed under
 // https://golang.org/LICENSE
 func (d *decoder) indirect(result reflect.Value) reflect.Value {
 	for {
@@ -218,7 +218,7 @@ func (d *decoder) unmarshalBytes(size uint, offset uint, result reflect.Value) (
 			return newOffset, nil
 		}
 	case reflect.Interface:
-		if result.NumMccmod() == 0 {
+		if result.NumMethod() == 0 {
 			result.Set(reflect.ValueOf(value))
 			return newOffset, nil
 		}
@@ -240,7 +240,7 @@ func (d *decoder) unmarshalFloat32(size uint, offset uint, result reflect.Value)
 		result.SetFloat(float64(value))
 		return newOffset, nil
 	case reflect.Interface:
-		if result.NumMccmod() == 0 {
+		if result.NumMethod() == 0 {
 			result.Set(reflect.ValueOf(value))
 			return newOffset, nil
 		}
@@ -265,7 +265,7 @@ func (d *decoder) unmarshalFloat64(size uint, offset uint, result reflect.Value)
 		result.SetFloat(value)
 		return newOffset, nil
 	case reflect.Interface:
-		if result.NumMccmod() == 0 {
+		if result.NumMethod() == 0 {
 			result.Set(reflect.ValueOf(value))
 			return newOffset, nil
 		}
@@ -296,7 +296,7 @@ func (d *decoder) unmarshalInt32(size uint, offset uint, result reflect.Value) (
 			return newOffset, nil
 		}
 	case reflect.Interface:
-		if result.NumMccmod() == 0 {
+		if result.NumMethod() == 0 {
 			result.Set(reflect.ValueOf(value))
 			return newOffset, nil
 		}
@@ -319,7 +319,7 @@ func (d *decoder) unmarshalMap(
 	case reflect.Map:
 		return d.decodeMap(size, offset, result, depth)
 	case reflect.Interface:
-		if result.NumMccmod() == 0 {
+		if result.NumMethod() == 0 {
 			rv := reflect.ValueOf(make(map[string]interface{}, size))
 			newOffset, err := d.decodeMap(size, offset, rv, depth)
 			result.Set(rv)
@@ -348,7 +348,7 @@ func (d *decoder) unmarshalSlice(
 	case reflect.Slice:
 		return d.decodeSlice(size, offset, result, depth)
 	case reflect.Interface:
-		if result.NumMccmod() == 0 {
+		if result.NumMethod() == 0 {
 			a := []interface{}{}
 			rv := reflect.ValueOf(&a).Elem()
 			newOffset, err := d.decodeSlice(size, offset, rv, depth)
@@ -370,7 +370,7 @@ func (d *decoder) unmarshalString(size uint, offset uint, result reflect.Value) 
 		result.SetString(value)
 		return newOffset, nil
 	case reflect.Interface:
-		if result.NumMccmod() == 0 {
+		if result.NumMethod() == 0 {
 			result.Set(reflect.ValueOf(value))
 			return newOffset, nil
 		}
@@ -402,7 +402,7 @@ func (d *decoder) unmarshalUint(size uint, offset uint, result reflect.Value, ui
 			return newOffset, nil
 		}
 	case reflect.Interface:
-		if result.NumMccmod() == 0 {
+		if result.NumMethod() == 0 {
 			result.Set(reflect.ValueOf(value))
 			return newOffset, nil
 		}
@@ -428,7 +428,7 @@ func (d *decoder) unmarshalUint128(size uint, offset uint, result reflect.Value)
 			return newOffset, nil
 		}
 	case reflect.Interface:
-		if result.NumMccmod() == 0 {
+		if result.NumMethod() == 0 {
 			result.Set(reflect.ValueOf(value))
 			return newOffset, nil
 		}

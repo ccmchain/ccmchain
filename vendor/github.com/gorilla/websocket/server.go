@@ -45,7 +45,7 @@ type Upgrader struct {
 	WriteBufferPool BufferPool
 
 	// Subprotocols specifies the server's supported protocols in order of
-	// preference. If this field is not nil, then the Upgrade mccmod negotiates a
+	// preference. If this field is not nil, then the Upgrade method negotiates a
 	// subprotocol by selecting the first match in this list with a protocol
 	// requested by the client. If there's no match, then no protocol is
 	// negotiated (the Sec-Websocket-Protocol header is not included in the
@@ -131,8 +131,8 @@ func (u *Upgrader) Upgrade(w http.ResponseWriter, r *http.Request, responseHeade
 		return u.returnError(w, r, http.StatusBadRequest, badHandshake+"'websocket' token not found in 'Upgrade' header")
 	}
 
-	if r.Mccmod != "GET" {
-		return u.returnError(w, r, http.StatusMccmodNotAllowed, badHandshake+"request mccmod is not GET")
+	if r.Method != "GET" {
+		return u.returnError(w, r, http.StatusMethodNotAllowed, badHandshake+"request method is not GET")
 	}
 
 	if !tokenListContainsValue(r.Header, "Sec-Websocket-Version", "13") {

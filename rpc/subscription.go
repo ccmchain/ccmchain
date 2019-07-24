@@ -174,7 +174,7 @@ func (n *Notifier) send(sub *Subscription, data json.RawMessage) error {
 	ctx := context.Background()
 	return n.h.conn.Write(ctx, &jsonrpcMessage{
 		Version: vsn,
-		Mccmod:  n.namespace + notificationMccmodSuffix,
+		Method:  n.namespace + notificationMethodSuffix,
 		Params:  params,
 	})
 }
@@ -198,7 +198,7 @@ func (s *Subscription) MarshalJSON() ([]byte, error) {
 }
 
 // ClientSubscription is a subscription established through the Client's Subscribe or
-// EthSubscribe mccmods.
+// EthSubscribe methods.
 type ClientSubscription struct {
 	client    *Client
 	etype     reflect.Type
@@ -323,5 +323,5 @@ func (sub *ClientSubscription) unmarshal(result json.RawMessage) (interface{}, e
 
 func (sub *ClientSubscription) requestUnsubscribe() error {
 	var result interface{}
-	return sub.client.Call(&result, sub.namespace+unsubscribeMccmodSuffix, sub.subid)
+	return sub.client.Call(&result, sub.namespace+unsubscribeMethodSuffix, sub.subid)
 }

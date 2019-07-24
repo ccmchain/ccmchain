@@ -41,7 +41,7 @@ import (
 // EthAPIBackend implements ccmapi.Backend for full nodes
 type EthAPIBackend struct {
 	extRPCEnabled bool
-	ccm           *Ethereum
+	ccm           *Ccmchain
 	gpo           *gasprice.Oracle
 }
 

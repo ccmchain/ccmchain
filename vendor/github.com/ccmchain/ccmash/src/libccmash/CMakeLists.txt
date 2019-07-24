@@ -1,6 +1,6 @@
 set(LIBRARY ccmash)
 
-if (CPPETHEREUM)
+if (CPPCCMCHAIN)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 endif ()
 

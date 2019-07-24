@@ -3510,8 +3510,8 @@ func (csmr ContainerSetMetadataResponse) Version() string {
 type CorsRule struct {
 	// AllowedOrigins - The origin domains that are permitted to make a request against the storage service via CORS. The origin domain is the domain from which the request originates. Note that the origin must be an exact case-sensitive match with the origin that the user age sends to the service. You can also use the wildcard character '*' to allow all origin domains to make requests via CORS.
 	AllowedOrigins string `xml:"AllowedOrigins"`
-	// AllowedMccmods - The mccmods (HTTP request verbs) that the origin domain may use for a CORS request. (comma separated)
-	AllowedMccmods string `xml:"AllowedMccmods"`
+	// AllowedMethods - The methods (HTTP request verbs) that the origin domain may use for a CORS request. (comma separated)
+	AllowedMethods string `xml:"AllowedMethods"`
 	// AllowedHeaders - the request headers that the origin domain may specify on the CORS request.
 	AllowedHeaders string `xml:"AllowedHeaders"`
 	// ExposedHeaders - The response headers that may be sent in the response to the CORS request and exposed by the browser to the request issuer
@@ -3520,7 +3520,7 @@ type CorsRule struct {
 	MaxAgeInSeconds int32 `xml:"MaxAgeInSeconds"`
 }
 
-// downloadResponse - Wraps the response from the blobClient.Download mccmod.
+// downloadResponse - Wraps the response from the blobClient.Download method.
 type downloadResponse struct {
 	rawResponse *http.Response
 }
@@ -4795,7 +4795,7 @@ type SignedIdentifier struct {
 	AccessPolicy AccessPolicy `xml:"AccessPolicy"`
 }
 
-// SignedIdentifiers - Wraps the response from the containerClient.GetAccessPolicy mccmod.
+// SignedIdentifiers - Wraps the response from the containerClient.GetAccessPolicy method.
 type SignedIdentifiers struct {
 	rawResponse *http.Response
 	Items       []SignedIdentifier `xml:"SignedIdentifier"`

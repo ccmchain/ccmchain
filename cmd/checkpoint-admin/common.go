@@ -35,7 +35,7 @@ import (
 func newClient(ctx *cli.Context) *ccmclient.Client {
 	client, err := ccmclient.Dial(ctx.GlobalString(nodeURLFlag.Name))
 	if err != nil {
-		utils.Fatalf("Failed to connect to Ethereum node: %v", err)
+		utils.Fatalf("Failed to connect to Ccmchain node: %v", err)
 	}
 	return client
 }
@@ -44,7 +44,7 @@ func newClient(ctx *cli.Context) *ccmclient.Client {
 func newRPCClient(url string) *rpc.Client {
 	client, err := rpc.Dial(url)
 	if err != nil {
-		utils.Fatalf("Failed to connect to Ethereum node: %v", err)
+		utils.Fatalf("Failed to connect to Ccmchain node: %v", err)
 	}
 	return client
 }

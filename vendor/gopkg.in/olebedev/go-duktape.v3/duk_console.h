@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-/* Use a proxy wrapper to make undefined mccmods (console.foo()) no-ops. */
+/* Use a proxy wrapper to make undefined methods (console.foo()) no-ops. */
 #define DUK_CONSOLE_PROXY_WRAPPER  (1U << 0)
 
 /* Flush output after every call. */

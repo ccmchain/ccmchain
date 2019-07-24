@@ -40,7 +40,7 @@ import (
 	"github.com/ccmchain/go-ccmchain/tests"
 )
 
-// To generate a new callTracer test, copy paste the makeTest mccmod below into
+// To generate a new callTracer test, copy paste the makeTest method below into
 // a Gccm console and call it with a transaction hash you which to export.
 
 /*

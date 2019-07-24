@@ -25,7 +25,7 @@
 // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
 // LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
 // DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// THEORY OF LIABILITY, WHCCMER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
@@ -140,7 +140,7 @@ func skipVarint(buf []byte) []byte {
 }
 
 // unmarshalMessageSet decodes the extension map encoded in buf in the message set wire format.
-// It is called by Unmarshal mccmods on protocol buffer messages with the message_set_wire_format option.
+// It is called by Unmarshal methods on protocol buffer messages with the message_set_wire_format option.
 func unmarshalMessageSet(buf []byte, exts interface{}) error {
 	var m map[int32]Extension
 	switch exts := exts.(type) {

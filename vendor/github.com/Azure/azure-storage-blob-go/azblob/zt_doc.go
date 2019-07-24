@@ -7,40 +7,40 @@ Package azblob allows you to manipulate Azure Storage containers and blobs objec
 
 URL Types
 
-The most common types you'll work with are the XxxURL types. The mccmods of these types make requests
+The most common types you'll work with are the XxxURL types. The methods of these types make requests
 against the Azure Storage Service.
 
- - ServiceURL's          mccmods perform operations on a storage account.
-    - ContainerURL's     mccmods perform operations on an account's container.
-       - BlockBlobURL's  mccmods perform operations on a container's block blob.
-       - AppendBlobURL's mccmods perform operations on a container's append blob.
-       - PageBlobURL's   mccmods perform operations on a container's page blob.
-       - BlobURL's       mccmods perform operations on a container's blob regardless of the blob's type.
+ - ServiceURL's          methods perform operations on a storage account.
+    - ContainerURL's     methods perform operations on an account's container.
+       - BlockBlobURL's  methods perform operations on a container's block blob.
+       - AppendBlobURL's methods perform operations on a container's append blob.
+       - PageBlobURL's   methods perform operations on a container's page blob.
+       - BlobURL's       methods perform operations on a container's blob regardless of the blob's type.
 
 Internally, each XxxURL object contains a URL and a request pipeline. The URL indicates the endpoint where each HTTP
 request is sent and the pipeline indicates how the outgoing HTTP request and incoming HTTP response is processed.
 The pipeline specifies things like retry policies, logging, deserialization of HTTP response payloads, and more.
 
 Pipelines are threadsafe and may be shared by multiple XxxURL objects. When you create a ServiceURL, you pass
-an initial pipeline. When you call ServiceURL's NewContainerURL mccmod, the new ContainerURL object has its own
+an initial pipeline. When you call ServiceURL's NewContainerURL method, the new ContainerURL object has its own
 URL but it shares the same pipeline as the parent ServiceURL object.
 
-To work with a blob, call one of ContainerURL's 4 NewXxxBlobURL mccmods depending on how you want to treat the blob.
+To work with a blob, call one of ContainerURL's 4 NewXxxBlobURL methods depending on how you want to treat the blob.
 To treat the blob as a block blob, append blob, or page blob, call NewBlockBlobURL, NewAppendBlobURL, or NewPageBlobURL
-respectively. These three types are all identical except for the mccmods they expose; each type exposes the mccmods
+respectively. These three types are all identical except for the methods they expose; each type exposes the methods
 relevant to the type of blob represented. If you're not sure how you want to treat a blob, you can call NewBlobURL;
-this returns an object whose mccmods are relevant to any kind of blob. When you call ContainerURL's NewXxxBlobURL,
+this returns an object whose methods are relevant to any kind of blob. When you call ContainerURL's NewXxxBlobURL,
 the new XxxBlobURL object has its own URL but it shares the same pipeline as the parent ContainerURL object. You
-can easily switch between blob types (mccmod sets) by calling a ToXxxBlobURL mccmod.
+can easily switch between blob types (method sets) by calling a ToXxxBlobURL method.
 
 If you'd like to use a different pipeline with a ServiceURL, ContainerURL, or XxxBlobURL object, then call the XxxURL
-object's WithPipeline mccmod passing in the desired pipeline. The WithPipeline mccmods create a new XxxURL object
+object's WithPipeline method passing in the desired pipeline. The WithPipeline methods create a new XxxURL object
 with the same URL as the original but with the specified pipeline.
 
 Note that XxxURL objects use little memory, are goroutine-safe, and many objects share the same pipeline. This means that
 XxxURL objects share a lot of system resources making them very efficient.
 
-All of XxxURL's mccmods that make HTTP requests return rich error handling information so you can discern network failures,
+All of XxxURL's methods that make HTTP requests return rich error handling information so you can discern network failures,
 transient failures, timeout failures, service failures, etc. See the StorageError interface for more information and an
 example of how to do deal with errors.
 

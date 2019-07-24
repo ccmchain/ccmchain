@@ -403,7 +403,7 @@ func (dlp *downloadTesterPeer) RequestHeadersByNumber(origin uint64, amount int,
 	return nil
 }
 
-// RequestBodies constructs a getBlockBodies mccmod associated with a particular
+// RequestBodies constructs a getBlockBodies method associated with a particular
 // peer in the download tester. The returned function can be used to retrieve
 // batches of block bodies from the particularly requested peer.
 func (dlp *downloadTesterPeer) RequestBodies(hashes []common.Hash) error {
@@ -412,7 +412,7 @@ func (dlp *downloadTesterPeer) RequestBodies(hashes []common.Hash) error {
 	return nil
 }
 
-// RequestReceipts constructs a getReceipts mccmod associated with a particular
+// RequestReceipts constructs a getReceipts method associated with a particular
 // peer in the download tester. The returned function can be used to retrieve
 // batches of block receipts from the particularly requested peer.
 func (dlp *downloadTesterPeer) RequestReceipts(hashes []common.Hash) error {
@@ -421,7 +421,7 @@ func (dlp *downloadTesterPeer) RequestReceipts(hashes []common.Hash) error {
 	return nil
 }
 
-// RequestNodeData constructs a getNodeData mccmod associated with a particular
+// RequestNodeData constructs a getNodeData method associated with a particular
 // peer in the download tester. The returned function can be used to retrieve
 // batches of node state data from the particularly requested peer.
 func (dlp *downloadTesterPeer) RequestNodeData(hashes []common.Hash) error {
@@ -443,7 +443,7 @@ func (dlp *downloadTesterPeer) RequestNodeData(hashes []common.Hash) error {
 // assertOwnChain checks if the local chain contains the correct number of items
 // of the various chain components.
 func assertOwnChain(t *testing.T, tester *downloadTester, length int) {
-	// Mark this mccmod as a helper to report errors at callsite, not in here
+	// Mark this method as a helper to report errors at callsite, not in here
 	t.Helper()
 
 	assertOwnForkedChain(t, tester, 1, []int{length})
@@ -452,7 +452,7 @@ func assertOwnChain(t *testing.T, tester *downloadTester, length int) {
 // assertOwnForkedChain checks if the local forked chain contains the correct
 // number of items of the various chain components.
 func assertOwnForkedChain(t *testing.T, tester *downloadTester, common int, lengths []int) {
-	// Mark this mccmod as a helper to report errors at callsite, not in here
+	// Mark this method as a helper to report errors at callsite, not in here
 	t.Helper()
 
 	// Initialize the counters for the first fork
@@ -1213,7 +1213,7 @@ func testSyncProgress(t *testing.T, protocol int, mode SyncMode) {
 }
 
 func checkProgress(t *testing.T, d *Downloader, stage string, want ccmchain.SyncProgress) {
-	// Mark this mccmod as a helper to report errors at callsite, not in here
+	// Mark this method as a helper to report errors at callsite, not in here
 	t.Helper()
 
 	p := d.Progress()

@@ -74,9 +74,9 @@ func (v *IDispatch) InvokeWithOptionalArgs(name string, dispatch int16, params [
 	return
 }
 
-// CallMccmod invokes named function with arguments on object.
-func (v *IDispatch) CallMccmod(name string, params ...interface{}) (*VARIANT, error) {
-	return v.InvokeWithOptionalArgs(name, DISPATCH_METHOD, params)
+// CallMethod invokes named function with arguments on object.
+func (v *IDispatch) CallMethod(name string, params ...interface{}) (*VARIANT, error) {
+	return v.InvokeWithOptionalArgs(name, DISPATCH_MCCMOD, params)
 }
 
 // GetProperty retrieves the property with the name with the ability to pass arguments.

@@ -38,7 +38,7 @@ type Batch interface {
 	Replay(w KeyValueWriter) error
 }
 
-// Batcher wraps the NewBatch mccmod of a backing data store.
+// Batcher wraps the NewBatch method of a backing data store.
 type Batcher interface {
 	// NewBatch creates a write-only database that buffers changes to its host db
 	// until a final write is called.

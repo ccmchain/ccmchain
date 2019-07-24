@@ -64,7 +64,7 @@
 			this.callstack[left-1].calls.push({type: op});
 			return
 		}
-		// If a new mccmod invocation is being done, add to the call stack
+		// If a new method invocation is being done, add to the call stack
 		if (syscall && (op == 'CALL' || op == 'CALLCODE' || op == 'DELEGATECALL' || op == 'STATICCALL')) {
 			// Skip any pre-compile invocations, those are just fancy opcodes
 			var to = toAddress(log.stack.peek(1).toString(16));

@@ -27,7 +27,7 @@ import (
 
 func TestInterfaceGetSet(t *testing.T) {
 	var tests = []struct {
-		mccmod string
+		method string
 		input  interface{}
 		expect interface{}
 	}{
@@ -64,10 +64,10 @@ func TestInterfaceGetSet(t *testing.T) {
 
 	args := NewInterfaces(len(tests))
 
-	callFn := func(receiver interface{}, mccmod string, arg interface{}) interface{} {
+	callFn := func(receiver interface{}, method string, arg interface{}) interface{} {
 		rval := reflect.ValueOf(receiver)
-		rval.MccmodByName(fmt.Sprintf("Set%s", mccmod)).Call([]reflect.Value{reflect.ValueOf(arg)})
-		res := rval.MccmodByName(fmt.Sprintf("Get%s", mccmod)).Call(nil)
+		rval.MethodByName(fmt.Sprintf("Set%s", method)).Call([]reflect.Value{reflect.ValueOf(arg)})
+		res := rval.MethodByName(fmt.Sprintf("Get%s", method)).Call(nil)
 		if len(res) > 0 {
 			return res[0].Interface()
 		}
@@ -77,7 +77,7 @@ func TestInterfaceGetSet(t *testing.T) {
 	for index, c := range tests {
 		// In theory the change of iface shouldn't effect the args value
 		iface, _ := args.Get(index)
-		result := callFn(iface, c.mccmod, c.input)
+		result := callFn(iface, c.method, c.input)
 		if !reflect.DeepEqual(result, c.expect) {
 			t.Errorf("Interface get/set mismatch, want %v, got %v", c.expect, result)
 		}

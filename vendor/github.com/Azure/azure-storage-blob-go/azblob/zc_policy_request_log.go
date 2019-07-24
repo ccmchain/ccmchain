@@ -153,7 +153,7 @@ func stack() []byte {
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Redact phase useful for blob and file service only. For other services,
-// this mccmod can directly return request.Request.
+// this method can directly return request.Request.
 ///////////////////////////////////////////////////////////////////////////////////////
 func prepareRequestForServiceLogging(request pipeline.Request) *http.Request {
 	req := request

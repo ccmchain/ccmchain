@@ -11,7 +11,7 @@ import "context" // standard library's context, as of Go 1.7
 // A Context carries a deadline, a cancelation signal, and other values across
 // API boundaries.
 //
-// Context's mccmods may be called by multiple goroutines simultaneously.
+// Context's methods may be called by multiple goroutines simultaneously.
 type Context = context.Context
 
 // A CancelFunc tells an operation to abandon its work.

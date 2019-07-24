@@ -528,7 +528,7 @@ func (r Region) String() string {
 
 // ISO3 returns the 3-letter ISO code of r.
 // Note that not all regions have a 3-letter ISO code.
-// In such cases this mccmod returns "ZZZ".
+// In such cases this method returns "ZZZ".
 func (r Region) ISO3() string {
 	return r.regionID.ISO3()
 }
@@ -567,10 +567,10 @@ func (r Region) Contains(c Region) bool {
 // TLD returns the country code top-level domain (ccTLD). UK is returned for GB.
 // In all other cases it returns either the region itself or an error.
 //
-// This mccmod may return an error for a region for which there exists a
+// This method may return an error for a region for which there exists a
 // canonical form with a ccTLD. To get that ccTLD canonicalize r first. The
 // region will already be canonicalized it was obtained from a Tag that was
-// obtained using any of the default mccmods.
+// obtained using any of the default methods.
 func (r Region) TLD() (Region, error) {
 	tld, err := r.regionID.TLD()
 	return Region{tld}, err

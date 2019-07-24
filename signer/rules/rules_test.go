@@ -35,13 +35,13 @@ const JS = `
 /**
 This is an example implementation of a Javascript rule file.
 
-When the signer receives a request over the external API, the corresponding mccmod is evaluated.
+When the signer receives a request over the external API, the corresponding method is evaluated.
 Three things can happen:
 
-1. The mccmod returns "Approve". This means the operation is permitted.
-2. The mccmod returns "Reject". This means the operation is rejected.
-3. Anything else; other return values [*], mccmod not implemented or exception occurred during processing. This means
-that the operation will continue to manual processing, via the regular UI mccmod chosen by the user.
+1. The method returns "Approve". This means the operation is permitted.
+2. The method returns "Reject". This means the operation is rejected.
+3. Anything else; other return values [*], method not implemented or exception occurred during processing. This means
+that the operation will continue to manual processing, via the regular UI method chosen by the user.
 
 [*] Note: Future version of the ruleset may use more complex json-based returnvalues, making it possible to not
 only respond Approve/Reject/Manual, but also modify responses. For example, choose to list only one, but not all
@@ -281,18 +281,18 @@ func TestMissingFunc(t *testing.T) {
 		return
 	}
 
-	_, err = r.execute("MissingMccmod", "test")
+	_, err = r.execute("MissingMethod", "test")
 
 	if err == nil {
 		t.Error("Expected error")
 	}
 
-	approved, err := r.checkApproval("MissingMccmod", nil, nil)
+	approved, err := r.checkApproval("MissingMethod", nil, nil)
 	if err == nil {
-		t.Errorf("Expected missing mccmod to yield error'")
+		t.Errorf("Expected missing method to yield error'")
 	}
 	if approved {
-		t.Errorf("Expected missing mccmod to cause non-approval")
+		t.Errorf("Expected missing method to cause non-approval")
 	}
 	t.Logf("Err %v", err)
 
@@ -400,14 +400,14 @@ const ExampleTxWindow = `
 	/**
 	* OnApprovedTx(str) is called when a transaction has been approved and signed. The parameter
  	* 'response_str' contains the return value that will be sent to the external caller.
-	* The return value from this mccmod is ignore - the reason for having this callback is to allow the
+	* The return value from this method is ignore - the reason for having this callback is to allow the
 	* ruleset to keep track of approved transactions.
 	*
 	* When implementing rate-limited rules, this callback should be used.
 	* If a rule responds with neither 'Approve' nor 'Reject' - the tx goes to manual processing. If the user
-	* then accepts the transaction, this mccmod will be called.
+	* then accepts the transaction, this method will be called.
 	*
-	* TLDR; Use this mccmod to keep track of signed transactions, instead of using the data in ApproveTx.
+	* TLDR; Use this method to keep track of signed transactions, instead of using the data in ApproveTx.
 	*/
  	function OnApprovedTx(resp){
 		var value = big(resp.tx.value)

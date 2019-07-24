@@ -16,7 +16,7 @@ var trie = newBidiTrie(0)
 
 // TODO: using this for bidirule reduces the running time by about 5%. Consider
 // if this is worth exposing or if we can find a way to speed up the Class
-// mccmod.
+// method.
 //
 // // CompactClass is like Class, but maps all of the BiDi control classes
 // // (LRO, RLO, LRE, RLE, PDF, LRI, RLI, FSI, PDI) to the class Control.
@@ -64,7 +64,7 @@ func LookupRune(r rune) (p Properties, size int) {
 	return Lookup(buf[:n])
 }
 
-// TODO: these lookup mccmods are based on the generated trie code. The returned
+// TODO: these lookup methods are based on the generated trie code. The returned
 // sizes have slightly different semantics from the generated code, in that it
 // always returns size==1 for an illegal UTF-8 byte (instead of the length
 // of the maximum invalid subsequence). Most Transformers, like unicode/norm,

@@ -24,9 +24,9 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 //*
 // Request: Ask device for public key corresponding to address_n path
 // @start
-// @next EthereumPublicKey
+// @next CcmchainPublicKey
 // @next Failure
-type EthereumGetPublicKey struct {
+type CcmchainGetPublicKey struct {
 	AddressN             []uint32 `protobuf:"varint,1,rep,name=address_n,json=addressN" json:"address_n,omitempty"`
 	ShowDisplay          *bool    `protobuf:"varint,2,opt,name=show_display,json=showDisplay" json:"show_display,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -34,39 +34,39 @@ type EthereumGetPublicKey struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *EthereumGetPublicKey) Reset()         { *m = EthereumGetPublicKey{} }
-func (m *EthereumGetPublicKey) String() string { return proto.CompactTextString(m) }
-func (*EthereumGetPublicKey) ProtoMessage()    {}
-func (*EthereumGetPublicKey) Descriptor() ([]byte, []int) {
+func (m *CcmchainGetPublicKey) Reset()         { *m = CcmchainGetPublicKey{} }
+func (m *CcmchainGetPublicKey) String() string { return proto.CompactTextString(m) }
+func (*CcmchainGetPublicKey) ProtoMessage()    {}
+func (*CcmchainGetPublicKey) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cb33f46ba915f15c, []int{0}
 }
 
-func (m *EthereumGetPublicKey) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_EthereumGetPublicKey.Unmarshal(m, b)
+func (m *CcmchainGetPublicKey) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CcmchainGetPublicKey.Unmarshal(m, b)
 }
-func (m *EthereumGetPublicKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_EthereumGetPublicKey.Marshal(b, m, deterministic)
+func (m *CcmchainGetPublicKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CcmchainGetPublicKey.Marshal(b, m, deterministic)
 }
-func (m *EthereumGetPublicKey) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EthereumGetPublicKey.Merge(m, src)
+func (m *CcmchainGetPublicKey) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CcmchainGetPublicKey.Merge(m, src)
 }
-func (m *EthereumGetPublicKey) XXX_Size() int {
-	return xxx_messageInfo_EthereumGetPublicKey.Size(m)
+func (m *CcmchainGetPublicKey) XXX_Size() int {
+	return xxx_messageInfo_CcmchainGetPublicKey.Size(m)
 }
-func (m *EthereumGetPublicKey) XXX_DiscardUnknown() {
-	xxx_messageInfo_EthereumGetPublicKey.DiscardUnknown(m)
+func (m *CcmchainGetPublicKey) XXX_DiscardUnknown() {
+	xxx_messageInfo_CcmchainGetPublicKey.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_EthereumGetPublicKey proto.InternalMessageInfo
+var xxx_messageInfo_CcmchainGetPublicKey proto.InternalMessageInfo
 
-func (m *EthereumGetPublicKey) GetAddressN() []uint32 {
+func (m *CcmchainGetPublicKey) GetAddressN() []uint32 {
 	if m != nil {
 		return m.AddressN
 	}
 	return nil
 }
 
-func (m *EthereumGetPublicKey) GetShowDisplay() bool {
+func (m *CcmchainGetPublicKey) GetShowDisplay() bool {
 	if m != nil && m.ShowDisplay != nil {
 		return *m.ShowDisplay
 	}
@@ -76,7 +76,7 @@ func (m *EthereumGetPublicKey) GetShowDisplay() bool {
 //*
 // Response: Contains public key derived from device private seed
 // @end
-type EthereumPublicKey struct {
+type CcmchainPublicKey struct {
 	Node                 *HDNodeType `protobuf:"bytes,1,opt,name=node" json:"node,omitempty"`
 	Xpub                 *string     `protobuf:"bytes,2,opt,name=xpub" json:"xpub,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
@@ -84,39 +84,39 @@ type EthereumPublicKey struct {
 	XXX_sizecache        int32       `json:"-"`
 }
 
-func (m *EthereumPublicKey) Reset()         { *m = EthereumPublicKey{} }
-func (m *EthereumPublicKey) String() string { return proto.CompactTextString(m) }
-func (*EthereumPublicKey) ProtoMessage()    {}
-func (*EthereumPublicKey) Descriptor() ([]byte, []int) {
+func (m *CcmchainPublicKey) Reset()         { *m = CcmchainPublicKey{} }
+func (m *CcmchainPublicKey) String() string { return proto.CompactTextString(m) }
+func (*CcmchainPublicKey) ProtoMessage()    {}
+func (*CcmchainPublicKey) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cb33f46ba915f15c, []int{1}
 }
 
-func (m *EthereumPublicKey) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_EthereumPublicKey.Unmarshal(m, b)
+func (m *CcmchainPublicKey) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CcmchainPublicKey.Unmarshal(m, b)
 }
-func (m *EthereumPublicKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_EthereumPublicKey.Marshal(b, m, deterministic)
+func (m *CcmchainPublicKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CcmchainPublicKey.Marshal(b, m, deterministic)
 }
-func (m *EthereumPublicKey) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EthereumPublicKey.Merge(m, src)
+func (m *CcmchainPublicKey) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CcmchainPublicKey.Merge(m, src)
 }
-func (m *EthereumPublicKey) XXX_Size() int {
-	return xxx_messageInfo_EthereumPublicKey.Size(m)
+func (m *CcmchainPublicKey) XXX_Size() int {
+	return xxx_messageInfo_CcmchainPublicKey.Size(m)
 }
-func (m *EthereumPublicKey) XXX_DiscardUnknown() {
-	xxx_messageInfo_EthereumPublicKey.DiscardUnknown(m)
+func (m *CcmchainPublicKey) XXX_DiscardUnknown() {
+	xxx_messageInfo_CcmchainPublicKey.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_EthereumPublicKey proto.InternalMessageInfo
+var xxx_messageInfo_CcmchainPublicKey proto.InternalMessageInfo
 
-func (m *EthereumPublicKey) GetNode() *HDNodeType {
+func (m *CcmchainPublicKey) GetNode() *HDNodeType {
 	if m != nil {
 		return m.Node
 	}
 	return nil
 }
 
-func (m *EthereumPublicKey) GetXpub() string {
+func (m *CcmchainPublicKey) GetXpub() string {
 	if m != nil && m.Xpub != nil {
 		return *m.Xpub
 	}
@@ -124,11 +124,11 @@ func (m *EthereumPublicKey) GetXpub() string {
 }
 
 //*
-// Request: Ask device for Ethereum address corresponding to address_n path
+// Request: Ask device for Ccmchain address corresponding to address_n path
 // @start
-// @next EthereumAddress
+// @next CcmchainAddress
 // @next Failure
-type EthereumGetAddress struct {
+type CcmchainGetAddress struct {
 	AddressN             []uint32 `protobuf:"varint,1,rep,name=address_n,json=addressN" json:"address_n,omitempty"`
 	ShowDisplay          *bool    `protobuf:"varint,2,opt,name=show_display,json=showDisplay" json:"show_display,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -136,39 +136,39 @@ type EthereumGetAddress struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *EthereumGetAddress) Reset()         { *m = EthereumGetAddress{} }
-func (m *EthereumGetAddress) String() string { return proto.CompactTextString(m) }
-func (*EthereumGetAddress) ProtoMessage()    {}
-func (*EthereumGetAddress) Descriptor() ([]byte, []int) {
+func (m *CcmchainGetAddress) Reset()         { *m = CcmchainGetAddress{} }
+func (m *CcmchainGetAddress) String() string { return proto.CompactTextString(m) }
+func (*CcmchainGetAddress) ProtoMessage()    {}
+func (*CcmchainGetAddress) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cb33f46ba915f15c, []int{2}
 }
 
-func (m *EthereumGetAddress) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_EthereumGetAddress.Unmarshal(m, b)
+func (m *CcmchainGetAddress) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CcmchainGetAddress.Unmarshal(m, b)
 }
-func (m *EthereumGetAddress) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_EthereumGetAddress.Marshal(b, m, deterministic)
+func (m *CcmchainGetAddress) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CcmchainGetAddress.Marshal(b, m, deterministic)
 }
-func (m *EthereumGetAddress) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EthereumGetAddress.Merge(m, src)
+func (m *CcmchainGetAddress) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CcmchainGetAddress.Merge(m, src)
 }
-func (m *EthereumGetAddress) XXX_Size() int {
-	return xxx_messageInfo_EthereumGetAddress.Size(m)
+func (m *CcmchainGetAddress) XXX_Size() int {
+	return xxx_messageInfo_CcmchainGetAddress.Size(m)
 }
-func (m *EthereumGetAddress) XXX_DiscardUnknown() {
-	xxx_messageInfo_EthereumGetAddress.DiscardUnknown(m)
+func (m *CcmchainGetAddress) XXX_DiscardUnknown() {
+	xxx_messageInfo_CcmchainGetAddress.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_EthereumGetAddress proto.InternalMessageInfo
+var xxx_messageInfo_CcmchainGetAddress proto.InternalMessageInfo
 
-func (m *EthereumGetAddress) GetAddressN() []uint32 {
+func (m *CcmchainGetAddress) GetAddressN() []uint32 {
 	if m != nil {
 		return m.AddressN
 	}
 	return nil
 }
 
-func (m *EthereumGetAddress) GetShowDisplay() bool {
+func (m *CcmchainGetAddress) GetShowDisplay() bool {
 	if m != nil && m.ShowDisplay != nil {
 		return *m.ShowDisplay
 	}
@@ -176,9 +176,9 @@ func (m *EthereumGetAddress) GetShowDisplay() bool {
 }
 
 //*
-// Response: Contains an Ethereum address derived from device private seed
+// Response: Contains an Ccmchain address derived from device private seed
 // @end
-type EthereumAddress struct {
+type CcmchainAddress struct {
 	AddressBin           []byte   `protobuf:"bytes,1,opt,name=addressBin" json:"addressBin,omitempty"`
 	AddressHex           *string  `protobuf:"bytes,2,opt,name=addressHex" json:"addressHex,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -186,39 +186,39 @@ type EthereumAddress struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *EthereumAddress) Reset()         { *m = EthereumAddress{} }
-func (m *EthereumAddress) String() string { return proto.CompactTextString(m) }
-func (*EthereumAddress) ProtoMessage()    {}
-func (*EthereumAddress) Descriptor() ([]byte, []int) {
+func (m *CcmchainAddress) Reset()         { *m = CcmchainAddress{} }
+func (m *CcmchainAddress) String() string { return proto.CompactTextString(m) }
+func (*CcmchainAddress) ProtoMessage()    {}
+func (*CcmchainAddress) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cb33f46ba915f15c, []int{3}
 }
 
-func (m *EthereumAddress) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_EthereumAddress.Unmarshal(m, b)
+func (m *CcmchainAddress) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CcmchainAddress.Unmarshal(m, b)
 }
-func (m *EthereumAddress) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_EthereumAddress.Marshal(b, m, deterministic)
+func (m *CcmchainAddress) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CcmchainAddress.Marshal(b, m, deterministic)
 }
-func (m *EthereumAddress) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EthereumAddress.Merge(m, src)
+func (m *CcmchainAddress) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CcmchainAddress.Merge(m, src)
 }
-func (m *EthereumAddress) XXX_Size() int {
-	return xxx_messageInfo_EthereumAddress.Size(m)
+func (m *CcmchainAddress) XXX_Size() int {
+	return xxx_messageInfo_CcmchainAddress.Size(m)
 }
-func (m *EthereumAddress) XXX_DiscardUnknown() {
-	xxx_messageInfo_EthereumAddress.DiscardUnknown(m)
+func (m *CcmchainAddress) XXX_DiscardUnknown() {
+	xxx_messageInfo_CcmchainAddress.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_EthereumAddress proto.InternalMessageInfo
+var xxx_messageInfo_CcmchainAddress proto.InternalMessageInfo
 
-func (m *EthereumAddress) GetAddressBin() []byte {
+func (m *CcmchainAddress) GetAddressBin() []byte {
 	if m != nil {
 		return m.AddressBin
 	}
 	return nil
 }
 
-func (m *EthereumAddress) GetAddressHex() string {
+func (m *CcmchainAddress) GetAddressHex() string {
 	if m != nil && m.AddressHex != nil {
 		return *m.AddressHex
 	}
@@ -230,9 +230,9 @@ func (m *EthereumAddress) GetAddressHex() string {
 // All fields are optional from the protocol's point of view. Each field defaults to value `0` if missing.
 // Note: the first at most 1024 bytes of data MUST be transmitted as part of this message.
 // @start
-// @next EthereumTxRequest
+// @next CcmchainTxRequest
 // @next Failure
-type EthereumSignTx struct {
+type CcmchainSignTx struct {
 	AddressN             []uint32 `protobuf:"varint,1,rep,name=address_n,json=addressN" json:"address_n,omitempty"`
 	Nonce                []byte   `protobuf:"bytes,2,opt,name=nonce" json:"nonce,omitempty"`
 	GasPrice             []byte   `protobuf:"bytes,3,opt,name=gas_price,json=gasPrice" json:"gas_price,omitempty"`
@@ -249,102 +249,102 @@ type EthereumSignTx struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *EthereumSignTx) Reset()         { *m = EthereumSignTx{} }
-func (m *EthereumSignTx) String() string { return proto.CompactTextString(m) }
-func (*EthereumSignTx) ProtoMessage()    {}
-func (*EthereumSignTx) Descriptor() ([]byte, []int) {
+func (m *CcmchainSignTx) Reset()         { *m = CcmchainSignTx{} }
+func (m *CcmchainSignTx) String() string { return proto.CompactTextString(m) }
+func (*CcmchainSignTx) ProtoMessage()    {}
+func (*CcmchainSignTx) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cb33f46ba915f15c, []int{4}
 }
 
-func (m *EthereumSignTx) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_EthereumSignTx.Unmarshal(m, b)
+func (m *CcmchainSignTx) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CcmchainSignTx.Unmarshal(m, b)
 }
-func (m *EthereumSignTx) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_EthereumSignTx.Marshal(b, m, deterministic)
+func (m *CcmchainSignTx) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CcmchainSignTx.Marshal(b, m, deterministic)
 }
-func (m *EthereumSignTx) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EthereumSignTx.Merge(m, src)
+func (m *CcmchainSignTx) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CcmchainSignTx.Merge(m, src)
 }
-func (m *EthereumSignTx) XXX_Size() int {
-	return xxx_messageInfo_EthereumSignTx.Size(m)
+func (m *CcmchainSignTx) XXX_Size() int {
+	return xxx_messageInfo_CcmchainSignTx.Size(m)
 }
-func (m *EthereumSignTx) XXX_DiscardUnknown() {
-	xxx_messageInfo_EthereumSignTx.DiscardUnknown(m)
+func (m *CcmchainSignTx) XXX_DiscardUnknown() {
+	xxx_messageInfo_CcmchainSignTx.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_EthereumSignTx proto.InternalMessageInfo
+var xxx_messageInfo_CcmchainSignTx proto.InternalMessageInfo
 
-func (m *EthereumSignTx) GetAddressN() []uint32 {
+func (m *CcmchainSignTx) GetAddressN() []uint32 {
 	if m != nil {
 		return m.AddressN
 	}
 	return nil
 }
 
-func (m *EthereumSignTx) GetNonce() []byte {
+func (m *CcmchainSignTx) GetNonce() []byte {
 	if m != nil {
 		return m.Nonce
 	}
 	return nil
 }
 
-func (m *EthereumSignTx) GetGasPrice() []byte {
+func (m *CcmchainSignTx) GetGasPrice() []byte {
 	if m != nil {
 		return m.GasPrice
 	}
 	return nil
 }
 
-func (m *EthereumSignTx) GetGasLimit() []byte {
+func (m *CcmchainSignTx) GetGasLimit() []byte {
 	if m != nil {
 		return m.GasLimit
 	}
 	return nil
 }
 
-func (m *EthereumSignTx) GetToBin() []byte {
+func (m *CcmchainSignTx) GetToBin() []byte {
 	if m != nil {
 		return m.ToBin
 	}
 	return nil
 }
 
-func (m *EthereumSignTx) GetToHex() string {
+func (m *CcmchainSignTx) GetToHex() string {
 	if m != nil && m.ToHex != nil {
 		return *m.ToHex
 	}
 	return ""
 }
 
-func (m *EthereumSignTx) GetValue() []byte {
+func (m *CcmchainSignTx) GetValue() []byte {
 	if m != nil {
 		return m.Value
 	}
 	return nil
 }
 
-func (m *EthereumSignTx) GetDataInitialChunk() []byte {
+func (m *CcmchainSignTx) GetDataInitialChunk() []byte {
 	if m != nil {
 		return m.DataInitialChunk
 	}
 	return nil
 }
 
-func (m *EthereumSignTx) GetDataLength() uint32 {
+func (m *CcmchainSignTx) GetDataLength() uint32 {
 	if m != nil && m.DataLength != nil {
 		return *m.DataLength
 	}
 	return 0
 }
 
-func (m *EthereumSignTx) GetChainId() uint32 {
+func (m *CcmchainSignTx) GetChainId() uint32 {
 	if m != nil && m.ChainId != nil {
 		return *m.ChainId
 	}
 	return 0
 }
 
-func (m *EthereumSignTx) GetTxType() uint32 {
+func (m *CcmchainSignTx) GetTxType() uint32 {
 	if m != nil && m.TxType != nil {
 		return *m.TxType
 	}
@@ -356,8 +356,8 @@ func (m *EthereumSignTx) GetTxType() uint32 {
 // If data_length is set, device awaits that many more bytes of payload.
 // Otherwise, the signature_* fields contain the computed transaction signature. All three fields will be present.
 // @end
-// @next EthereumTxAck
-type EthereumTxRequest struct {
+// @next CcmchainTxAck
+type CcmchainTxRequest struct {
 	DataLength           *uint32  `protobuf:"varint,1,opt,name=data_length,json=dataLength" json:"data_length,omitempty"`
 	SignatureV           *uint32  `protobuf:"varint,2,opt,name=signature_v,json=signatureV" json:"signature_v,omitempty"`
 	SignatureR           []byte   `protobuf:"bytes,3,opt,name=signature_r,json=signatureR" json:"signature_r,omitempty"`
@@ -367,53 +367,53 @@ type EthereumTxRequest struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *EthereumTxRequest) Reset()         { *m = EthereumTxRequest{} }
-func (m *EthereumTxRequest) String() string { return proto.CompactTextString(m) }
-func (*EthereumTxRequest) ProtoMessage()    {}
-func (*EthereumTxRequest) Descriptor() ([]byte, []int) {
+func (m *CcmchainTxRequest) Reset()         { *m = CcmchainTxRequest{} }
+func (m *CcmchainTxRequest) String() string { return proto.CompactTextString(m) }
+func (*CcmchainTxRequest) ProtoMessage()    {}
+func (*CcmchainTxRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cb33f46ba915f15c, []int{5}
 }
 
-func (m *EthereumTxRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_EthereumTxRequest.Unmarshal(m, b)
+func (m *CcmchainTxRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CcmchainTxRequest.Unmarshal(m, b)
 }
-func (m *EthereumTxRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_EthereumTxRequest.Marshal(b, m, deterministic)
+func (m *CcmchainTxRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CcmchainTxRequest.Marshal(b, m, deterministic)
 }
-func (m *EthereumTxRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EthereumTxRequest.Merge(m, src)
+func (m *CcmchainTxRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CcmchainTxRequest.Merge(m, src)
 }
-func (m *EthereumTxRequest) XXX_Size() int {
-	return xxx_messageInfo_EthereumTxRequest.Size(m)
+func (m *CcmchainTxRequest) XXX_Size() int {
+	return xxx_messageInfo_CcmchainTxRequest.Size(m)
 }
-func (m *EthereumTxRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_EthereumTxRequest.DiscardUnknown(m)
+func (m *CcmchainTxRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CcmchainTxRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_EthereumTxRequest proto.InternalMessageInfo
+var xxx_messageInfo_CcmchainTxRequest proto.InternalMessageInfo
 
-func (m *EthereumTxRequest) GetDataLength() uint32 {
+func (m *CcmchainTxRequest) GetDataLength() uint32 {
 	if m != nil && m.DataLength != nil {
 		return *m.DataLength
 	}
 	return 0
 }
 
-func (m *EthereumTxRequest) GetSignatureV() uint32 {
+func (m *CcmchainTxRequest) GetSignatureV() uint32 {
 	if m != nil && m.SignatureV != nil {
 		return *m.SignatureV
 	}
 	return 0
 }
 
-func (m *EthereumTxRequest) GetSignatureR() []byte {
+func (m *CcmchainTxRequest) GetSignatureR() []byte {
 	if m != nil {
 		return m.SignatureR
 	}
 	return nil
 }
 
-func (m *EthereumTxRequest) GetSignatureS() []byte {
+func (m *CcmchainTxRequest) GetSignatureS() []byte {
 	if m != nil {
 		return m.SignatureS
 	}
@@ -422,40 +422,40 @@ func (m *EthereumTxRequest) GetSignatureS() []byte {
 
 //*
 // Request: Transaction payload data.
-// @next EthereumTxRequest
-type EthereumTxAck struct {
+// @next CcmchainTxRequest
+type CcmchainTxAck struct {
 	DataChunk            []byte   `protobuf:"bytes,1,opt,name=data_chunk,json=dataChunk" json:"data_chunk,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *EthereumTxAck) Reset()         { *m = EthereumTxAck{} }
-func (m *EthereumTxAck) String() string { return proto.CompactTextString(m) }
-func (*EthereumTxAck) ProtoMessage()    {}
-func (*EthereumTxAck) Descriptor() ([]byte, []int) {
+func (m *CcmchainTxAck) Reset()         { *m = CcmchainTxAck{} }
+func (m *CcmchainTxAck) String() string { return proto.CompactTextString(m) }
+func (*CcmchainTxAck) ProtoMessage()    {}
+func (*CcmchainTxAck) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cb33f46ba915f15c, []int{6}
 }
 
-func (m *EthereumTxAck) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_EthereumTxAck.Unmarshal(m, b)
+func (m *CcmchainTxAck) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CcmchainTxAck.Unmarshal(m, b)
 }
-func (m *EthereumTxAck) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_EthereumTxAck.Marshal(b, m, deterministic)
+func (m *CcmchainTxAck) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CcmchainTxAck.Marshal(b, m, deterministic)
 }
-func (m *EthereumTxAck) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EthereumTxAck.Merge(m, src)
+func (m *CcmchainTxAck) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CcmchainTxAck.Merge(m, src)
 }
-func (m *EthereumTxAck) XXX_Size() int {
-	return xxx_messageInfo_EthereumTxAck.Size(m)
+func (m *CcmchainTxAck) XXX_Size() int {
+	return xxx_messageInfo_CcmchainTxAck.Size(m)
 }
-func (m *EthereumTxAck) XXX_DiscardUnknown() {
-	xxx_messageInfo_EthereumTxAck.DiscardUnknown(m)
+func (m *CcmchainTxAck) XXX_DiscardUnknown() {
+	xxx_messageInfo_CcmchainTxAck.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_EthereumTxAck proto.InternalMessageInfo
+var xxx_messageInfo_CcmchainTxAck proto.InternalMessageInfo
 
-func (m *EthereumTxAck) GetDataChunk() []byte {
+func (m *CcmchainTxAck) GetDataChunk() []byte {
 	if m != nil {
 		return m.DataChunk
 	}
@@ -465,9 +465,9 @@ func (m *EthereumTxAck) GetDataChunk() []byte {
 //*
 // Request: Ask device to sign message
 // @start
-// @next EthereumMessageSignature
+// @next CcmchainMessageSignature
 // @next Failure
-type EthereumSignMessage struct {
+type CcmchainSignMessage struct {
 	AddressN             []uint32 `protobuf:"varint,1,rep,name=address_n,json=addressN" json:"address_n,omitempty"`
 	Message              []byte   `protobuf:"bytes,2,opt,name=message" json:"message,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -475,39 +475,39 @@ type EthereumSignMessage struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *EthereumSignMessage) Reset()         { *m = EthereumSignMessage{} }
-func (m *EthereumSignMessage) String() string { return proto.CompactTextString(m) }
-func (*EthereumSignMessage) ProtoMessage()    {}
-func (*EthereumSignMessage) Descriptor() ([]byte, []int) {
+func (m *CcmchainSignMessage) Reset()         { *m = CcmchainSignMessage{} }
+func (m *CcmchainSignMessage) String() string { return proto.CompactTextString(m) }
+func (*CcmchainSignMessage) ProtoMessage()    {}
+func (*CcmchainSignMessage) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cb33f46ba915f15c, []int{7}
 }
 
-func (m *EthereumSignMessage) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_EthereumSignMessage.Unmarshal(m, b)
+func (m *CcmchainSignMessage) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CcmchainSignMessage.Unmarshal(m, b)
 }
-func (m *EthereumSignMessage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_EthereumSignMessage.Marshal(b, m, deterministic)
+func (m *CcmchainSignMessage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CcmchainSignMessage.Marshal(b, m, deterministic)
 }
-func (m *EthereumSignMessage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EthereumSignMessage.Merge(m, src)
+func (m *CcmchainSignMessage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CcmchainSignMessage.Merge(m, src)
 }
-func (m *EthereumSignMessage) XXX_Size() int {
-	return xxx_messageInfo_EthereumSignMessage.Size(m)
+func (m *CcmchainSignMessage) XXX_Size() int {
+	return xxx_messageInfo_CcmchainSignMessage.Size(m)
 }
-func (m *EthereumSignMessage) XXX_DiscardUnknown() {
-	xxx_messageInfo_EthereumSignMessage.DiscardUnknown(m)
+func (m *CcmchainSignMessage) XXX_DiscardUnknown() {
+	xxx_messageInfo_CcmchainSignMessage.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_EthereumSignMessage proto.InternalMessageInfo
+var xxx_messageInfo_CcmchainSignMessage proto.InternalMessageInfo
 
-func (m *EthereumSignMessage) GetAddressN() []uint32 {
+func (m *CcmchainSignMessage) GetAddressN() []uint32 {
 	if m != nil {
 		return m.AddressN
 	}
 	return nil
 }
 
-func (m *EthereumSignMessage) GetMessage() []byte {
+func (m *CcmchainSignMessage) GetMessage() []byte {
 	if m != nil {
 		return m.Message
 	}
@@ -517,7 +517,7 @@ func (m *EthereumSignMessage) GetMessage() []byte {
 //*
 // Response: Signed message
 // @end
-type EthereumMessageSignature struct {
+type CcmchainMessageSignature struct {
 	AddressBin           []byte   `protobuf:"bytes,1,opt,name=addressBin" json:"addressBin,omitempty"`
 	Signature            []byte   `protobuf:"bytes,2,opt,name=signature" json:"signature,omitempty"`
 	AddressHex           *string  `protobuf:"bytes,3,opt,name=addressHex" json:"addressHex,omitempty"`
@@ -526,46 +526,46 @@ type EthereumMessageSignature struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *EthereumMessageSignature) Reset()         { *m = EthereumMessageSignature{} }
-func (m *EthereumMessageSignature) String() string { return proto.CompactTextString(m) }
-func (*EthereumMessageSignature) ProtoMessage()    {}
-func (*EthereumMessageSignature) Descriptor() ([]byte, []int) {
+func (m *CcmchainMessageSignature) Reset()         { *m = CcmchainMessageSignature{} }
+func (m *CcmchainMessageSignature) String() string { return proto.CompactTextString(m) }
+func (*CcmchainMessageSignature) ProtoMessage()    {}
+func (*CcmchainMessageSignature) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cb33f46ba915f15c, []int{8}
 }
 
-func (m *EthereumMessageSignature) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_EthereumMessageSignature.Unmarshal(m, b)
+func (m *CcmchainMessageSignature) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CcmchainMessageSignature.Unmarshal(m, b)
 }
-func (m *EthereumMessageSignature) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_EthereumMessageSignature.Marshal(b, m, deterministic)
+func (m *CcmchainMessageSignature) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CcmchainMessageSignature.Marshal(b, m, deterministic)
 }
-func (m *EthereumMessageSignature) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EthereumMessageSignature.Merge(m, src)
+func (m *CcmchainMessageSignature) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CcmchainMessageSignature.Merge(m, src)
 }
-func (m *EthereumMessageSignature) XXX_Size() int {
-	return xxx_messageInfo_EthereumMessageSignature.Size(m)
+func (m *CcmchainMessageSignature) XXX_Size() int {
+	return xxx_messageInfo_CcmchainMessageSignature.Size(m)
 }
-func (m *EthereumMessageSignature) XXX_DiscardUnknown() {
-	xxx_messageInfo_EthereumMessageSignature.DiscardUnknown(m)
+func (m *CcmchainMessageSignature) XXX_DiscardUnknown() {
+	xxx_messageInfo_CcmchainMessageSignature.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_EthereumMessageSignature proto.InternalMessageInfo
+var xxx_messageInfo_CcmchainMessageSignature proto.InternalMessageInfo
 
-func (m *EthereumMessageSignature) GetAddressBin() []byte {
+func (m *CcmchainMessageSignature) GetAddressBin() []byte {
 	if m != nil {
 		return m.AddressBin
 	}
 	return nil
 }
 
-func (m *EthereumMessageSignature) GetSignature() []byte {
+func (m *CcmchainMessageSignature) GetSignature() []byte {
 	if m != nil {
 		return m.Signature
 	}
 	return nil
 }
 
-func (m *EthereumMessageSignature) GetAddressHex() string {
+func (m *CcmchainMessageSignature) GetAddressHex() string {
 	if m != nil && m.AddressHex != nil {
 		return *m.AddressHex
 	}
@@ -577,7 +577,7 @@ func (m *EthereumMessageSignature) GetAddressHex() string {
 // @start
 // @next Success
 // @next Failure
-type EthereumVerifyMessage struct {
+type CcmchainVerifyMessage struct {
 	AddressBin           []byte   `protobuf:"bytes,1,opt,name=addressBin" json:"addressBin,omitempty"`
 	Signature            []byte   `protobuf:"bytes,2,opt,name=signature" json:"signature,omitempty"`
 	Message              []byte   `protobuf:"bytes,3,opt,name=message" json:"message,omitempty"`
@@ -587,53 +587,53 @@ type EthereumVerifyMessage struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *EthereumVerifyMessage) Reset()         { *m = EthereumVerifyMessage{} }
-func (m *EthereumVerifyMessage) String() string { return proto.CompactTextString(m) }
-func (*EthereumVerifyMessage) ProtoMessage()    {}
-func (*EthereumVerifyMessage) Descriptor() ([]byte, []int) {
+func (m *CcmchainVerifyMessage) Reset()         { *m = CcmchainVerifyMessage{} }
+func (m *CcmchainVerifyMessage) String() string { return proto.CompactTextString(m) }
+func (*CcmchainVerifyMessage) ProtoMessage()    {}
+func (*CcmchainVerifyMessage) Descriptor() ([]byte, []int) {
 	return fileDescriptor_cb33f46ba915f15c, []int{9}
 }
 
-func (m *EthereumVerifyMessage) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_EthereumVerifyMessage.Unmarshal(m, b)
+func (m *CcmchainVerifyMessage) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CcmchainVerifyMessage.Unmarshal(m, b)
 }
-func (m *EthereumVerifyMessage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_EthereumVerifyMessage.Marshal(b, m, deterministic)
+func (m *CcmchainVerifyMessage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CcmchainVerifyMessage.Marshal(b, m, deterministic)
 }
-func (m *EthereumVerifyMessage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EthereumVerifyMessage.Merge(m, src)
+func (m *CcmchainVerifyMessage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CcmchainVerifyMessage.Merge(m, src)
 }
-func (m *EthereumVerifyMessage) XXX_Size() int {
-	return xxx_messageInfo_EthereumVerifyMessage.Size(m)
+func (m *CcmchainVerifyMessage) XXX_Size() int {
+	return xxx_messageInfo_CcmchainVerifyMessage.Size(m)
 }
-func (m *EthereumVerifyMessage) XXX_DiscardUnknown() {
-	xxx_messageInfo_EthereumVerifyMessage.DiscardUnknown(m)
+func (m *CcmchainVerifyMessage) XXX_DiscardUnknown() {
+	xxx_messageInfo_CcmchainVerifyMessage.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_EthereumVerifyMessage proto.InternalMessageInfo
+var xxx_messageInfo_CcmchainVerifyMessage proto.InternalMessageInfo
 
-func (m *EthereumVerifyMessage) GetAddressBin() []byte {
+func (m *CcmchainVerifyMessage) GetAddressBin() []byte {
 	if m != nil {
 		return m.AddressBin
 	}
 	return nil
 }
 
-func (m *EthereumVerifyMessage) GetSignature() []byte {
+func (m *CcmchainVerifyMessage) GetSignature() []byte {
 	if m != nil {
 		return m.Signature
 	}
 	return nil
 }
 
-func (m *EthereumVerifyMessage) GetMessage() []byte {
+func (m *CcmchainVerifyMessage) GetMessage() []byte {
 	if m != nil {
 		return m.Message
 	}
 	return nil
 }
 
-func (m *EthereumVerifyMessage) GetAddressHex() string {
+func (m *CcmchainVerifyMessage) GetAddressHex() string {
 	if m != nil && m.AddressHex != nil {
 		return *m.AddressHex
 	}
@@ -641,16 +641,16 @@ func (m *EthereumVerifyMessage) GetAddressHex() string {
 }
 
 func init() {
-	proto.RegisterType((*EthereumGetPublicKey)(nil), "hw.trezor.messages.ccmchain.EthereumGetPublicKey")
-	proto.RegisterType((*EthereumPublicKey)(nil), "hw.trezor.messages.ccmchain.EthereumPublicKey")
-	proto.RegisterType((*EthereumGetAddress)(nil), "hw.trezor.messages.ccmchain.EthereumGetAddress")
-	proto.RegisterType((*EthereumAddress)(nil), "hw.trezor.messages.ccmchain.EthereumAddress")
-	proto.RegisterType((*EthereumSignTx)(nil), "hw.trezor.messages.ccmchain.EthereumSignTx")
-	proto.RegisterType((*EthereumTxRequest)(nil), "hw.trezor.messages.ccmchain.EthereumTxRequest")
-	proto.RegisterType((*EthereumTxAck)(nil), "hw.trezor.messages.ccmchain.EthereumTxAck")
-	proto.RegisterType((*EthereumSignMessage)(nil), "hw.trezor.messages.ccmchain.EthereumSignMessage")
-	proto.RegisterType((*EthereumMessageSignature)(nil), "hw.trezor.messages.ccmchain.EthereumMessageSignature")
-	proto.RegisterType((*EthereumVerifyMessage)(nil), "hw.trezor.messages.ccmchain.EthereumVerifyMessage")
+	proto.RegisterType((*CcmchainGetPublicKey)(nil), "hw.trezor.messages.ccmchain.CcmchainGetPublicKey")
+	proto.RegisterType((*CcmchainPublicKey)(nil), "hw.trezor.messages.ccmchain.CcmchainPublicKey")
+	proto.RegisterType((*CcmchainGetAddress)(nil), "hw.trezor.messages.ccmchain.CcmchainGetAddress")
+	proto.RegisterType((*CcmchainAddress)(nil), "hw.trezor.messages.ccmchain.CcmchainAddress")
+	proto.RegisterType((*CcmchainSignTx)(nil), "hw.trezor.messages.ccmchain.CcmchainSignTx")
+	proto.RegisterType((*CcmchainTxRequest)(nil), "hw.trezor.messages.ccmchain.CcmchainTxRequest")
+	proto.RegisterType((*CcmchainTxAck)(nil), "hw.trezor.messages.ccmchain.CcmchainTxAck")
+	proto.RegisterType((*CcmchainSignMessage)(nil), "hw.trezor.messages.ccmchain.CcmchainSignMessage")
+	proto.RegisterType((*CcmchainMessageSignature)(nil), "hw.trezor.messages.ccmchain.CcmchainMessageSignature")
+	proto.RegisterType((*CcmchainVerifyMessage)(nil), "hw.trezor.messages.ccmchain.CcmchainVerifyMessage")
 }
 
 func init() { proto.RegisterFile("messages-ccmchain.proto", fileDescriptor_cb33f46ba915f15c) }

@@ -30,7 +30,7 @@ import (
 )
 
 // InitDatabaseFromFreezer reinitializes an empty database from a previous batch
-// of frozen ancient blocks. The mccmod iterates over all the frozen blocks and
+// of frozen ancient blocks. The method iterates over all the frozen blocks and
 // injects into the database the block hash->number mappings and the transaction
 // lookup entries.
 func InitDatabaseFromFreezer(db ccmdb.Database) error {

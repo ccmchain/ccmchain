@@ -235,7 +235,7 @@ type stateTask struct {
 	attempts map[string]struct{}
 }
 
-// newStateSync creates a new state trie download scheduler. This mccmod does not
+// newStateSync creates a new state trie download scheduler. This method does not
 // yet start the sync. The user needs to call run to initiate.
 func newStateSync(d *Downloader, root common.Hash) *stateSync {
 	return &stateSync{
@@ -312,7 +312,7 @@ func (s *stateSync) loop() (err error) {
 				// this peer at the moment.
 				log.Warn("Stalling state sync, dropping peer", "peer", req.peer.id)
 				if s.d.dropPeer == nil {
-					// The dropPeer mccmod is nil when `--copydb` is used for a local copy.
+					// The dropPeer method is nil when `--copydb` is used for a local copy.
 					// Timeouts can occur if e.g. compaction hits at the wrong time, and can be ignored
 					req.peer.log.Warn("Downloader wants to drop peer, but peerdrop-function is not set", "peer", req.peer.id)
 				} else {

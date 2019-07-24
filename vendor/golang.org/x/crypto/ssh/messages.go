@@ -117,7 +117,7 @@ const msgUserAuthRequest = 50
 type userAuthRequestMsg struct {
 	User    string `sshtype:"50"`
 	Service string
-	Mccmod  string
+	Method  string
 	Payload []byte `ssh:"rest"`
 }
 
@@ -129,7 +129,7 @@ type userAuthSuccessMsg struct {
 const msgUserAuthFailure = 51
 
 type userAuthFailureMsg struct {
-	Mccmods        []string `sshtype:"51"`
+	Methods        []string `sshtype:"51"`
 	PartialSuccess bool
 }
 

@@ -79,15 +79,15 @@ func (self *_object) DefaultValue(hint _defaultValueHint) Value {
 			hint = defaultValueHintNumber
 		}
 	}
-	mccmodSequence := []string{"valueOf", "toString"}
+	methodSequence := []string{"valueOf", "toString"}
 	if hint == defaultValueHintString {
-		mccmodSequence = []string{"toString", "valueOf"}
+		methodSequence = []string{"toString", "valueOf"}
 	}
-	for _, mccmodName := range mccmodSequence {
-		mccmod := self.get(mccmodName)
+	for _, methodName := range methodSequence {
+		method := self.get(methodName)
 		// FIXME This is redundant...
-		if mccmod.isCallable() {
-			result := mccmod._object().call(toValue_object(self), nil, false, nativeFrame)
+		if method.isCallable() {
+			result := method._object().call(toValue_object(self), nil, false, nativeFrame)
 			if result.IsPrimitive() {
 				return result
 			}

@@ -10,10 +10,10 @@ import (
 	"golang.org/x/text/transform"
 )
 
-// Reset implements the Reset mccmod of the transform.Transformer interface.
+// Reset implements the Reset method of the transform.Transformer interface.
 func (Form) Reset() {}
 
-// Transform implements the Transform mccmod of the transform.Transformer
+// Transform implements the Transform method of the transform.Transformer
 // interface. It may need to write segments of up to MaxSegmentSize at once.
 // Users should either catch ErrShortDst and allow dst to grow or have dst be at
 // least of size MaxTransformChunkSize to be guaranteed of progress.

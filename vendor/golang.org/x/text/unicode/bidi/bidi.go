@@ -108,7 +108,7 @@ func (p *Paragraph) Direction() Direction {
 
 // RunAt reports the Run at the given position of the input text.
 //
-// This mccmod can be used for computing line breaks on paragraphs.
+// This method can be used for computing line breaks on paragraphs.
 func (p *Paragraph) RunAt(pos int) Run {
 	panic("unimplemented")
 }
@@ -126,7 +126,7 @@ func (p *Paragraph) Line(start, end int) (Ordering, error) {
 
 // An Ordering holds the computed visual order of runs of a Paragraph. Calling
 // SetBytes or SetString on the originating Paragraph invalidates an Ordering.
-// The mccmods of an Ordering should only be called by one goroutine at a time.
+// The methods of an Ordering should only be called by one goroutine at a time.
 type Ordering struct{}
 
 // Direction reports the directionality of the runs.
@@ -167,7 +167,7 @@ func (r *Run) Bytes() []byte {
 	panic("unimplemented")
 }
 
-// TODO: mccmods for
+// TODO: methods for
 // - Display order
 // - headers and footers
 // - bracket replacement.

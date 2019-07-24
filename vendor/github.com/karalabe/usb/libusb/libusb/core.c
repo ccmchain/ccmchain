@@ -262,7 +262,7 @@ if (cfg != desired)
  * -# Check that the currently active configuration is the one that you want
  *    to use.
  *
- * The above mccmod works because once an interface is claimed, no application
+ * The above method works because once an interface is claimed, no application
  * or driver is able to select another configuration.
  *
  * \section earlycomp Early transfer completion

@@ -28,13 +28,13 @@ import (
 	"github.com/ccmchain/go-ccmchain/rpc"
 )
 
-// PrivateAdminAPI is the collection of administrative API mccmods exposed only
+// PrivateAdminAPI is the collection of administrative API methods exposed only
 // over a secure RPC channel.
 type PrivateAdminAPI struct {
 	node *Node // Node interfaced by this API
 }
 
-// NewPrivateAdminAPI creates a new API definition for the private admin mccmods
+// NewPrivateAdminAPI creates a new API definition for the private admin methods
 // of the node itself.
 func NewPrivateAdminAPI(node *Node) *PrivateAdminAPI {
 	return &PrivateAdminAPI{node: node}
@@ -258,13 +258,13 @@ func (api *PrivateAdminAPI) StopWS() (bool, error) {
 	return true, nil
 }
 
-// PublicAdminAPI is the collection of administrative API mccmods exposed over
+// PublicAdminAPI is the collection of administrative API methods exposed over
 // both secure and unsecure RPC channels.
 type PublicAdminAPI struct {
 	node *Node // Node interfaced by this API
 }
 
-// NewPublicAdminAPI creates a new API definition for the public admin mccmods
+// NewPublicAdminAPI creates a new API definition for the public admin methods
 // of the node itself.
 func NewPublicAdminAPI(node *Node) *PublicAdminAPI {
 	return &PublicAdminAPI{node: node}

@@ -27,8 +27,8 @@ import (
 	"github.com/ccmchain/go-ccmchain/common"
 )
 
-// decodedCallData is an internal type to represent a mccmod call parsed according
-// to an ABI mccmod signature.
+// decodedCallData is an internal type to represent a method call parsed according
+// to an ABI method signature.
 type decodedCallData struct {
 	signature string
 	name      string
@@ -36,7 +36,7 @@ type decodedCallData struct {
 }
 
 // decodedArgument is an internal type to represent an argument parsed according
-// to an ABI mccmod signature.
+// to an ABI method signature.
 type decodedArgument struct {
 	soltype abi.Argument
 	value   interface{}
@@ -83,7 +83,7 @@ func verifySelector(selector string, calldata []byte) (*decodedCallData, error) 
 // by the type checker.
 var selectorRegexp = regexp.MustCompile(`^([^\)]+)\(([A-Za-z0-9,\[\]]*)\)`)
 
-// parseSelector converts a mccmod selector into an ABI JSON spec. The returned
+// parseSelector converts a method selector into an ABI JSON spec. The returned
 // data is a valid JSON string which can be consumed by the standard abi package.
 func parseSelector(selector string) ([]byte, error) {
 	// Define a tiny fake ABI struct for JSON marshalling
@@ -118,7 +118,7 @@ func parseSelector(selector string) ([]byte, error) {
 func parseCallData(calldata []byte, abidata string) (*decodedCallData, error) {
 	// Validate the call data that it has the 4byte prefix and the rest divisible by 32 bytes
 	if len(calldata) < 4 {
-		return nil, fmt.Errorf("invalid call data, incomplete mccmod signature (%d bytes < 4)", len(calldata))
+		return nil, fmt.Errorf("invalid call data, incomplete method signature (%d bytes < 4)", len(calldata))
 	}
 	sigdata := calldata[:4]
 
@@ -126,24 +126,24 @@ func parseCallData(calldata []byte, abidata string) (*decodedCallData, error) {
 	if len(argdata)%32 != 0 {
 		return nil, fmt.Errorf("invalid call data; length should be a multiple of 32 bytes (was %d)", len(argdata))
 	}
-	// Validate the called mccmod and upack the call data accordingly
+	// Validate the called method and upack the call data accordingly
 	abispec, err := abi.JSON(strings.NewReader(abidata))
 	if err != nil {
-		return nil, fmt.Errorf("invalid mccmod signature (%s): %v", abidata, err)
+		return nil, fmt.Errorf("invalid method signature (%s): %v", abidata, err)
 	}
-	mccmod, err := abispec.MccmodById(sigdata)
+	method, err := abispec.MethodById(sigdata)
 	if err != nil {
 		return nil, err
 	}
-	values, err := mccmod.Inputs.UnpackValues(argdata)
+	values, err := method.Inputs.UnpackValues(argdata)
 	if err != nil {
 		return nil, err
 	}
 	// Everything valid, assemble the call infos for the signer
-	decoded := decodedCallData{signature: mccmod.Sig(), name: mccmod.Name}
-	for i := 0; i < len(mccmod.Inputs); i++ {
+	decoded := decodedCallData{signature: method.Sig(), name: method.Name}
+	for i := 0; i < len(method.Inputs); i++ {
 		decoded.inputs = append(decoded.inputs, decodedArgument{
-			soltype: mccmod.Inputs[i],
+			soltype: method.Inputs[i],
 			value:   values[i],
 		})
 	}
@@ -151,14 +151,14 @@ func parseCallData(calldata []byte, abidata string) (*decodedCallData, error) {
 	// to see if it matches with the original data. If we didn't do that, it would
 	// be possible to stuff extra data into the arguments, which is not detected
 	// by merely decoding the data.
-	encoded, err := mccmod.Inputs.PackValues(values)
+	encoded, err := method.Inputs.PackValues(values)
 	if err != nil {
 		return nil, err
 	}
 	if !bytes.Equal(encoded, argdata) {
 		was := common.Bytes2Hex(encoded)
 		exp := common.Bytes2Hex(argdata)
-		return nil, fmt.Errorf("WARNING: Supplied data is stuffed with extra data. \nWant %s\nHave %s\nfor mccmod %v", exp, was, mccmod.Sig())
+		return nil, fmt.Errorf("WARNING: Supplied data is stuffed with extra data. \nWant %s\nHave %s\nfor method %v", exp, was, method.Sig())
 	}
 	return &decoded, nil
 }

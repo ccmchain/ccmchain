@@ -114,8 +114,8 @@ func (e *ErrCorrupted) Error() string {
 	return fmt.Sprintf("leveldb/journal: block/chunk corrupted: %s (%d bytes)", e.Reason, e.Size)
 }
 
-// Dropper is the interface that wrap simple Drop mccmod. The Drop
-// mccmod will be called when the journal reader dropping a block or chunk.
+// Dropper is the interface that wrap simple Drop method. The Drop
+// method will be called when the journal reader dropping a block or chunk.
 type Dropper interface {
 	Drop(err error)
 }

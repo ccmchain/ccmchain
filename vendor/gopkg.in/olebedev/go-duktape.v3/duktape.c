@@ -32,7 +32,7 @@
 *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-*  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+*  LIABILITY, WHCCMER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 *  THE SOFTWARE.
 */
@@ -2999,7 +2999,7 @@ DUK_INTERNAL_DECL duk_float_t duk_double_to_float_t(duk_double_t x);
 #if !defined(DUK_ERRMSG_H_INCLUDED)
 #define DUK_ERRMSG_H_INCLUDED
 
-/* Mostly API and built-in mccmod related */
+/* Mostly API and built-in method related */
 #define DUK_STR_INTERNAL_ERROR                   "internal error"
 #define DUK_STR_UNSUPPORTED                      "unsupported"
 #define DUK_STR_INVALID_COUNT                    "invalid count"
@@ -5705,7 +5705,7 @@ DUK_INTERNAL_DECL void duk_xdef_prop_stridx_builtin(duk_hthread *thr, duk_idx_t 
 
 DUK_INTERNAL_DECL void duk_xdef_prop_stridx_thrower(duk_hthread *thr, duk_idx_t obj_idx, duk_small_uint_t stridx);  /* [] -> [] */
 
-DUK_INTERNAL_DECL duk_bool_t duk_get_mccmod_stridx(duk_hthread *thr, duk_idx_t idx, duk_small_uint_t stridx);
+DUK_INTERNAL_DECL duk_bool_t duk_get_method_stridx(duk_hthread *thr, duk_idx_t idx, duk_small_uint_t stridx);
 
 DUK_INTERNAL_DECL void duk_pack(duk_hthread *thr, duk_idx_t count);
 DUK_INTERNAL_DECL duk_idx_t duk_unpack_array_like(duk_hthread *thr, duk_idx_t idx);
@@ -5741,7 +5741,7 @@ DUK_INTERNAL_DECL void duk_insert_undefined_n(duk_hthread *thr, duk_idx_t idx, d
 
 DUK_INTERNAL_DECL void duk_concat_2(duk_hthread *thr);
 
-DUK_INTERNAL_DECL duk_int_t duk_pcall_mccmod_flags(duk_hthread *thr, duk_idx_t nargs, duk_small_uint_t call_flags);
+DUK_INTERNAL_DECL duk_int_t duk_pcall_method_flags(duk_hthread *thr, duk_idx_t nargs, duk_small_uint_t call_flags);
 
 #if defined(DUK_USE_SYMBOL_BUILTIN)
 DUK_INTERNAL_DECL void duk_to_primitive_ordinary(duk_hthread *thr, duk_idx_t idx, duk_int_t hint);
@@ -6037,7 +6037,7 @@ DUK_INTERNAL_DECL void duk_hstring_init_charlen(duk_hstring *h);
  *  Properties are stored in three conceptual parts:
  *
  *    1. A linear 'entry part' contains ordered key-value-attributes triples
- *       and is the main mccmod of string properties.
+ *       and is the main method of string properties.
  *
  *    2. An optional linear 'array part' is used for array objects to store a
  *       (dense) range of [0,N[ array indexed entries with default attributes
@@ -6976,7 +6976,7 @@ DUK_INTERNAL_DECL duk_bool_t duk_hobject_define_property_helper(duk_hthread *thr
                                                                 duk_hobject *set,
                                                                 duk_bool_t throw_flag);
 
-/* Object built-in mccmods */
+/* Object built-in methods */
 DUK_INTERNAL_DECL void duk_hobject_object_get_own_property_descriptor(duk_hthread *thr, duk_idx_t obj_idx);
 DUK_INTERNAL_DECL void duk_hobject_object_seal_freeze_helper(duk_hthread *thr, duk_hobject *obj, duk_bool_t is_freeze);
 DUK_INTERNAL_DECL duk_bool_t duk_hobject_object_is_sealed_frozen_helper(duk_hthread *thr, duk_hobject *obj, duk_bool_t is_frozen);
@@ -9175,7 +9175,7 @@ DUK_INTERNAL_DECL duk_uint32_t duk_heap_hashstring(duk_heap *heap, const duk_uin
 #define DUK_DBG_CMD_DUMPHEAP             0x20
 #define DUK_DBG_CMD_GETBYTECODE          0x21
 #define DUK_DBG_CMD_APPREQUEST           0x22
-#define DUK_DBG_CMD_GETHEAPOBJINFO       0x23
+#define DUK_DBG_CMD_GCCMEAPOBJINFO       0x23
 #define DUK_DBG_CMD_GETOBJPROPDESC       0x24
 #define DUK_DBG_CMD_GETOBJPROPDESCRANGE  0x25
 
@@ -14210,11 +14210,11 @@ struct duk__pcall_prop_args {
 };
 typedef struct duk__pcall_prop_args duk__pcall_prop_args;
 
-struct duk__pcall_mccmod_args {
+struct duk__pcall_method_args {
 	duk_idx_t nargs;
 	duk_small_uint_t call_flags;
 };
-typedef struct duk__pcall_mccmod_args duk__pcall_mccmod_args;
+typedef struct duk__pcall_method_args duk__pcall_method_args;
 
 struct duk__pcall_args {
 	duk_idx_t nargs;
@@ -14260,7 +14260,7 @@ DUK_LOCAL duk_idx_t duk__call_get_idx_func_unvalidated(duk_hthread *thr, duk_idx
 	return idx_func;
 }
 
-/* Prepare value stack for a mccmod call through an object property.
+/* Prepare value stack for a method call through an object property.
  * May currently throw an error e.g. when getting the property.
  */
 DUK_LOCAL void duk__call_prop_prep_stack(duk_hthread *thr, duk_idx_t normalized_obj_idx, duk_idx_t nargs) {
@@ -14322,7 +14322,7 @@ DUK_EXTERNAL void duk_call(duk_hthread *thr, duk_idx_t nargs) {
 	duk_handle_call_unprotected(thr, idx_func, call_flags);
 }
 
-DUK_EXTERNAL void duk_call_mccmod(duk_hthread *thr, duk_idx_t nargs) {
+DUK_EXTERNAL void duk_call_method(duk_hthread *thr, duk_idx_t nargs) {
 	duk_small_uint_t call_flags;
 	duk_idx_t idx_func;
 
@@ -14353,7 +14353,7 @@ DUK_EXTERNAL void duk_call_prop(duk_hthread *thr, duk_idx_t obj_idx, duk_idx_t n
 
 	duk__call_prop_prep_stack(thr, obj_idx, nargs);
 
-	duk_call_mccmod(thr, nargs);
+	duk_call_method(thr, nargs);
 }
 
 DUK_LOCAL duk_ret_t duk__pcall_raw(duk_hthread *thr, void *udata) {
@@ -14392,15 +14392,15 @@ DUK_EXTERNAL duk_int_t duk_pcall(duk_hthread *thr, duk_idx_t nargs) {
 	return duk_safe_call(thr, duk__pcall_raw, (void *) &args /*udata*/, nargs + 1 /*nargs*/, 1 /*nrets*/);
 }
 
-DUK_LOCAL duk_ret_t duk__pcall_mccmod_raw(duk_hthread *thr, void *udata) {
-	duk__pcall_mccmod_args *args;
+DUK_LOCAL duk_ret_t duk__pcall_method_raw(duk_hthread *thr, void *udata) {
+	duk__pcall_method_args *args;
 	duk_idx_t idx_func;
 	duk_int_t ret;
 
 	DUK_ASSERT_CTX_VALID(thr);
 	DUK_ASSERT(udata != NULL);
 
-	args = (duk__pcall_mccmod_args *) udata;
+	args = (duk__pcall_method_args *) udata;
 
 	idx_func = duk__call_get_idx_func_unvalidated(thr, args->nargs, 2);
 	DUK_ASSERT(duk_is_valid_index(thr, idx_func));
@@ -14412,8 +14412,8 @@ DUK_LOCAL duk_ret_t duk__pcall_mccmod_raw(duk_hthread *thr, void *udata) {
 	return 1;
 }
 
-DUK_INTERNAL duk_int_t duk_pcall_mccmod_flags(duk_hthread *thr, duk_idx_t nargs, duk_small_uint_t call_flags) {
-	duk__pcall_mccmod_args args;
+DUK_INTERNAL duk_int_t duk_pcall_method_flags(duk_hthread *thr, duk_idx_t nargs, duk_small_uint_t call_flags) {
+	duk__pcall_method_args args;
 
 	DUK_ASSERT_API_ENTRY(thr);
 
@@ -14424,13 +14424,13 @@ DUK_INTERNAL duk_int_t duk_pcall_mccmod_flags(duk_hthread *thr, duk_idx_t nargs,
 	}
 	args.call_flags = call_flags;
 
-	return duk_safe_call(thr, duk__pcall_mccmod_raw, (void *) &args /*udata*/, nargs + 2 /*nargs*/, 1 /*nrets*/);
+	return duk_safe_call(thr, duk__pcall_method_raw, (void *) &args /*udata*/, nargs + 2 /*nargs*/, 1 /*nrets*/);
 }
 
-DUK_EXTERNAL duk_int_t duk_pcall_mccmod(duk_hthread *thr, duk_idx_t nargs) {
+DUK_EXTERNAL duk_int_t duk_pcall_method(duk_hthread *thr, duk_idx_t nargs) {
 	DUK_ASSERT_API_ENTRY(thr);
 
-	return duk_pcall_mccmod_flags(thr, nargs, 0);
+	return duk_pcall_method_flags(thr, nargs, 0);
 }
 
 DUK_LOCAL duk_ret_t duk__pcall_prop_raw(duk_hthread *thr, void *udata) {
@@ -15656,9 +15656,9 @@ DUK_EXTERNAL duk_int_t duk_eval_raw(duk_hthread *thr, const char *src_buffer, du
 	duk_push_global_object(thr);  /* explicit 'this' binding, see GH-164 */
 
 	if (flags & DUK_COMPILE_SAFE) {
-		rc = duk_pcall_mccmod(thr, 0);
+		rc = duk_pcall_method(thr, 0);
 	} else {
-		duk_call_mccmod(thr, 0);
+		duk_call_method(thr, 0);
 		rc = DUK_EXEC_SUCCESS;
 	}
 
@@ -16964,7 +16964,7 @@ DUK_INTERNAL duk_bool_t duk_has_prop_stridx_short_raw(duk_hthread *thr, duk_uint
 
 /* Define own property without inheritance lookups and such.  This differs from
  * [[DefineOwnProperty]] because special behaviors (like Array 'length') are
- * not invoked by this mccmod.  The caller must be careful to invoke any such
+ * not invoked by this method.  The caller must be careful to invoke any such
  * behaviors if necessary.
  */
 DUK_INTERNAL void duk_xdef_prop(duk_hthread *thr, duk_idx_t obj_idx, duk_small_uint_t desc_flags) {
@@ -17424,10 +17424,10 @@ DUK_EXTERNAL duk_bool_t duk_put_global_heapptr(duk_hthread *thr, void *ptr) {
 }
 
 /*
- *  ES2015 GetMccmod()
+ *  ES2015 GetMethod()
  */
 
-DUK_INTERNAL duk_bool_t duk_get_mccmod_stridx(duk_hthread *thr, duk_idx_t idx, duk_small_uint_t stridx) {
+DUK_INTERNAL duk_bool_t duk_get_method_stridx(duk_hthread *thr, duk_idx_t idx, duk_small_uint_t stridx) {
 	(void) duk_get_prop_stridx(thr, idx, stridx);
 	if (duk_is_null_or_undefined(thr, -1)) {
 		duk_pop_nodecref_unsafe(thr);
@@ -20211,7 +20211,7 @@ DUK_LOCAL duk_bool_t duk__defaultvalue_coerce_attempt(duk_hthread *thr, duk_idx_
 		/* [ ... func ] */
 		if (duk_is_callable(thr, -1)) {
 			duk_dup(thr, idx);         /* -> [ ... func this ] */
-			duk_call_mccmod(thr, 0);     /* -> [ ... retval ] */
+			duk_call_method(thr, 0);     /* -> [ ... retval ] */
 			if (duk_is_primitive(thr, -1)) {
 				duk_replace(thr, idx);
 				return 1;
@@ -20267,11 +20267,11 @@ DUK_LOCAL void duk__to_primitive_helper(duk_hthread *thr, duk_idx_t idx, duk_int
 	/* @@toPrimitive lookup.  Also do for plain buffers and lightfuncs
 	 * which mimic objects.
 	 */
-	if (check_symbol && duk_get_mccmod_stridx(thr, idx, DUK_STRIDX_WELLKNOWN_SYMBOL_TO_PRIMITIVE)) {
+	if (check_symbol && duk_get_method_stridx(thr, idx, DUK_STRIDX_WELLKNOWN_SYMBOL_TO_PRIMITIVE)) {
 		DUK_ASSERT(hint >= 0 && (duk_size_t) hint < sizeof(duk__toprim_hint_strings) / sizeof(const char *));
 		duk_dup(thr, idx);
 		duk_push_string(thr, duk__toprim_hint_strings[hint]);
-		duk_call_mccmod(thr, 1);  /* [ ... mccmod value hint ] -> [ ... res] */
+		duk_call_method(thr, 1);  /* [ ... method value hint ] -> [ ... res] */
 		if (duk_check_type_mask(thr, -1, DUK_TYPE_MASK_OBJECT |
 	                                         DUK_TYPE_MASK_LIGHTFUNC |
 		                                 DUK_TYPE_MASK_BUFFER)) {
@@ -24991,7 +24991,7 @@ DUK_LOCAL duk_uint32_t duk__push_this_obj_len_u32(duk_hthread *thr) {
 
 DUK_LOCAL duk_uint32_t duk__push_this_obj_len_u32_limited(duk_hthread *thr) {
 	/* Range limited to [0, 0x7fffffff] range, i.e. range that can be
-	 * represented with duk_int32_t.  Use this when the mccmod doesn't
+	 * represented with duk_int32_t.  Use this when the method doesn't
 	 * handle the full 32-bit unsigned range correctly.
 	 */
 	duk_uint32_t ret = duk__push_this_obj_len_u32(thr);
@@ -25119,7 +25119,7 @@ DUK_INTERNAL duk_ret_t duk_bi_array_prototype_to_string(duk_hthread *thr) {
 		 * currently have pointers to the built-in functions, only the top
 		 * level global objects (like "Array") so this is now done in a bit
 		 * of a hacky manner.  It would be cleaner to push the (original)
-		 * function and use duk_call_mccmod().
+		 * function and use duk_call_method().
 		 */
 
 		/* XXX: 'this' will be ToObject() coerced twice, which is incorrect
@@ -25139,7 +25139,7 @@ DUK_INTERNAL duk_ret_t duk_bi_array_prototype_to_string(duk_hthread *thr) {
 	DUK_DDD(DUK_DDDPRINT("calling: func=%!iT, this=%!iT",
 	                     (duk_tval *) duk_get_tval(thr, -2),
 	                     (duk_tval *) duk_get_tval(thr, -1)));
-	duk_call_mccmod(thr, 0);
+	duk_call_method(thr, 0);
 
 	return 1;
 }
@@ -25348,7 +25348,7 @@ DUK_INTERNAL duk_ret_t duk_bi_array_prototype_join_shared(duk_hthread *thr) {
 				duk_to_object(thr, -1);
 				duk_get_prop_stridx_short(thr, -1, DUK_STRIDX_TO_LOCALE_STRING);
 				duk_insert(thr, -2);  /* -> [ ... toLocaleString ToObject(val) ] */
-				duk_call_mccmod(thr, 0);
+				duk_call_method(thr, 0);
 			}
 			duk_to_string(thr, -1);
 		}
@@ -26410,7 +26410,7 @@ DUK_INTERNAL duk_ret_t duk_bi_array_prototype_iter_shared(duk_hthread *thr) {
 		duk_dup_m3(thr);
 		duk_push_u32(thr, i);
 		duk_dup_2(thr);  /* [ ... val callback thisArg val i obj ] */
-		duk_call_mccmod(thr, 3); /* -> [ ... val retval ] */
+		duk_call_method(thr, 3); /* -> [ ... val retval ] */
 
 		switch (iter_type) {
 		case DUK__ITER_EVERY:
@@ -26714,7 +26714,7 @@ static const duk_uint8_t duk__buffer_nbytes_from_fldtype[6] = {
 };
 
 /* Bitfield for each DUK_HBUFOBJ_ELEM_xxx indicating which element types
- * are compatible with a blind byte copy for the TypedArray set() mccmod (also
+ * are compatible with a blind byte copy for the TypedArray set() method (also
  * used for TypedArray constructor).  Array index is target buffer elem type,
  * bitfield indicates compatible source types.  The types must have same byte
  * size and they must be coercion compatible.
@@ -27571,7 +27571,7 @@ DUK_INTERNAL duk_ret_t duk_bi_typedarray_constructor(duk_hthread *thr) {
 	h_bufobj->is_typedarray = 1;
 	DUK_ASSERT_HBUFOBJ_VALID(h_bufobj);
 
-	/* Copy values, the copy mccmod depends on the arguments.
+	/* Copy values, the copy method depends on the arguments.
 	 *
 	 * Copy mode decision may depend on the validity of the underlying
 	 * buffer of the source argument; there must be no harmful side effects
@@ -28884,9 +28884,9 @@ DUK_INTERNAL duk_ret_t duk_bi_nodejs_buffer_concat(duk_hthread *thr) {
 #endif  /* DUK_USE_BUFFEROBJECT_SUPPORT */
 
 /*
- *  Shared readfield and writefield mccmods
+ *  Shared readfield and writefield methods
  *
- *  The readfield/writefield mccmods need support for endianness and field
+ *  The readfield/writefield methods need support for endianness and field
  *  types.  All offsets are byte based so no offset shifting is needed.
  */
 
@@ -30863,9 +30863,9 @@ DUK_LOCAL void duk__set_parts_from_args(duk_hthread *thr, duk_double_t *dparts, 
 }
 
 /*
- *  Indirect magic value lookup for Date mccmods.
+ *  Indirect magic value lookup for Date methods.
  *
- *  Date mccmods don't put their control flags into the function magic value
+ *  Date methods don't put their control flags into the function magic value
  *  because they wouldn't fit into a LIGHTFUNC's magic field.  Instead, the
  *  magic value is set to an index pointing to the array of control flags
  *  below.
@@ -31159,7 +31159,7 @@ DUK_INTERNAL duk_ret_t duk_bi_date_prototype_to_json(duk_hthread *thr) {
 
 	duk_get_prop_stridx_short(thr, -1, DUK_STRIDX_TO_ISO_STRING);
 	duk_dup_m2(thr);  /* -> [ O toIsoString O ] */
-	duk_call_mccmod(thr, 0);
+	duk_call_method(thr, 0);
 	return 1;
 }
 
@@ -31317,7 +31317,7 @@ DUK_INTERNAL duk_ret_t duk_bi_date_prototype_toprimitive(duk_hthread *thr) {
 	duk_int_t hint;
 
 	/* Invokes OrdinaryToPrimitive() with suitable hint.  Note that the
-	 * mccmod is generic, and works on non-Date arguments too.
+	 * method is generic, and works on non-Date arguments too.
 	 *
 	 * https://www.ecma-international.org/ecma-262/6.0/#sec-date.prototype-@@toprimitive
 	 */
@@ -31769,7 +31769,7 @@ DUK_LOCAL void duk__set_systime_jan1970(SYSTEMTIME *st) {
 
 #if defined(DUK_USE_DATE_NOW_WINDOWS)
 DUK_INTERNAL duk_double_t duk_bi_date_get_now_windows(void) {
-	/* Suggested step-by-step mccmod from documentation of RtlTimeToSecondsSince1970:
+	/* Suggested step-by-step method from documentation of RtlTimeToSecondsSince1970:
 	 * http://msdn.microsoft.com/en-us/library/windows/desktop/ms724928(v=vs.85).aspx
 	 */
 	SYSTEMTIME st1, st2;
@@ -35239,7 +35239,7 @@ DUK_LOCAL void duk__dec_reviver_walk(duk_json_dec_ctx *js_ctx) {
 
 	duk_dup(thr, js_ctx->idx_reviver);
 	duk_insert(thr, -4);  /* -> [ ... reviver holder name val ] */
-	duk_call_mccmod(thr, 2);  /* -> [ ... res ] */
+	duk_call_method(thr, 2);  /* -> [ ... res ] */
 
 	DUK_DDD(DUK_DDDPRINT("walk: top=%ld, result=%!T",
 	                     (long) duk_get_top(thr), (duk_tval *) duk_get_tval(thr, -1)));
@@ -36205,8 +36205,8 @@ DUK_LOCAL duk_bool_t duk__enc_value(duk_json_enc_ctx *js_ctx, duk_idx_t idx_hold
 
 	/* Standard JSON checks for .toJSON() only for actual objects; for
 	 * example, setting Number.prototype.toJSON and then serializing a
-	 * number won't invoke the .toJSON() mccmod.  However, lightfuncs and
-	 * plain buffers mimic objects so we check for their .toJSON() mccmod.
+	 * number won't invoke the .toJSON() method.  However, lightfuncs and
+	 * plain buffers mimic objects so we check for their .toJSON() method.
 	 */
 	if (duk_check_type_mask(thr, -1, DUK_TYPE_MASK_OBJECT |
 	                                 DUK_TYPE_MASK_LIGHTFUNC |
@@ -36217,7 +36217,7 @@ DUK_LOCAL duk_bool_t duk__enc_value(duk_json_enc_ctx *js_ctx, duk_idx_t idx_hold
 			/* XXX: duk_dup_unvalidated(thr, -2) etc. */
 			duk_dup_m2(thr);          /* -> [ ... key val toJSON val ] */
 			duk_dup_m4(thr);          /* -> [ ... key val toJSON val key ] */
-			duk_call_mccmod(thr, 1);  /* -> [ ... key val val' ] */
+			duk_call_method(thr, 1);  /* -> [ ... key val val' ] */
 			duk_remove_m2(thr);       /* -> [ ... key val' ] */
 		} else {
 			duk_pop(thr);             /* -> [ ... key val ] */
@@ -36235,7 +36235,7 @@ DUK_LOCAL duk_bool_t duk__enc_value(duk_json_enc_ctx *js_ctx, duk_idx_t idx_hold
 		duk_dup(thr, idx_holder);                   /* -> [ ... key val replacer holder ] */
 		duk_dup_m4(thr);                            /* -> [ ... key val replacer holder key ] */
 		duk_dup_m4(thr);                            /* -> [ ... key val replacer holder key val ] */
-		duk_call_mccmod(thr, 2);                    /* -> [ ... key val val' ] */
+		duk_call_method(thr, 2);                    /* -> [ ... key val val' ] */
 		duk_remove_m2(thr);                         /* -> [ ... key val' ] */
 	}
 
@@ -36387,7 +36387,7 @@ DUK_LOCAL duk_bool_t duk__enc_value(duk_json_enc_ctx *js_ctx, duk_idx_t idx_hold
 	 * index properties [0,byteLength[.  Because JSON only serializes
 	 * enumerable own properties, no properties can be serialized for
 	 * plain buffers (all virtual properties are non-enumerable).  However,
-	 * there may be a .toJSON() mccmod which was already handled above.
+	 * there may be a .toJSON() method which was already handled above.
 	 */
 	case DUK_TAG_BUFFER: {
 #if defined(DUK_USE_JX) || defined(DUK_USE_JC)
@@ -36820,7 +36820,7 @@ DUK_LOCAL duk_bool_t duk__json_stringify_fast_value(duk_json_enc_ctx *js_ctx, du
 #if 1
 			/* The code below is incorrect if .toString() or .valueOf() have
 			 * have been overridden.  The correct approach would be to look up
-			 * the mccmod(s) and if they resolve to the built-in function we
+			 * the method(s) and if they resolve to the built-in function we
 			 * can safely bypass it and look up the internal value directly.
 			 * Unimplemented for now, abort fast path for boxed values.
 			 */
@@ -36874,7 +36874,7 @@ DUK_LOCAL duk_bool_t duk__json_stringify_fast_value(duk_json_enc_ctx *js_ctx, du
 		 * enumerable indices.  Other virtual properties are not
 		 * enumerable, and inherited properties are not serialized.
 		 * However, there can be a replacer (not relevant here) or
-		 * a .toJSON() mccmod (which we need to check for explicitly).
+		 * a .toJSON() method (which we need to check for explicitly).
 		 */
 
 #if defined(DUK_USE_BUFFEROBJECT_SUPPORT)
@@ -37655,7 +37655,7 @@ DUK_LOCAL double duk__round_fixed(double x) {
 	return DUK_FLOOR(x + 0.5);
 }
 
-/* Wrappers for calling standard math library mccmods.  These may be required
+/* Wrappers for calling standard math library methods.  These may be required
  * on platforms where one or more of the math built-ins are defined as macros
  * or inline functions and are thus not suitable to be used as function pointers.
  */
@@ -38531,11 +38531,11 @@ DUK_INTERNAL duk_ret_t duk_bi_object_prototype_to_locale_string(duk_hthread *thr
 	DUK_ASSERT_TOP(thr, 0);
 	(void) duk_push_this_coercible_to_object(thr);
 	duk_get_prop_stridx_short(thr, 0, DUK_STRIDX_TO_STRING);
-#if 0  /* This is mentioned explicitly in the E5.1 spec, but duk_call_mccmod() checks for it in practice. */
+#if 0  /* This is mentioned explicitly in the E5.1 spec, but duk_call_method() checks for it in practice. */
 	duk_require_callable(thr, 1);
 #endif
 	duk_dup_0(thr);  /* -> [ O toString O ] */
-	duk_call_mccmod(thr, 0);  /* XXX: call mccmod tail call? */
+	duk_call_method(thr, 0);  /* XXX: call method tail call? */
 	return 1;
 }
 #endif  /* DUK_USE_OBJECT_BUILTIN */
@@ -38950,7 +38950,7 @@ DUK_INTERNAL duk_ret_t duk_bi_object_constructor_keys_shared(duk_hthread *thr) {
 	/* [ obj handler trap ] */
 	duk_insert(thr, -2);
 	duk_push_hobject(thr, h_proxy_target);  /* -> [ obj trap handler target ] */
-	duk_call_mccmod(thr, 1 /*nargs*/);      /* -> [ obj trap_result ] */
+	duk_call_method(thr, 1 /*nargs*/);      /* -> [ obj trap_result ] */
 	h_trap_result = duk_require_hobject(thr, -1);
 	DUK_UNREF(h_trap_result);
 
@@ -39302,7 +39302,7 @@ DUK_INTERNAL void duk_proxy_ownkeys_postprocess(duk_hthread *thr, duk_hobject *h
 	/* XXX: Missing trap result validation for non-configurable target keys
 	 * (must be present), for non-extensible target all target keys must be
 	 * present and no extra keys can be present.
-	 * http://www.ecma-international.org/ecma-262/6.0/#sec-proxy-object-internal-mccmods-and-internal-slots-ownpropertykeys
+	 * http://www.ecma-international.org/ecma-262/6.0/#sec-proxy-object-internal-methods-and-internal-slots-ownpropertykeys
 	 */
 
 	/* XXX: The key enumerability check should trigger the "getOwnPropertyDescriptor"
@@ -40877,7 +40877,7 @@ DUK_INTERNAL duk_ret_t duk_bi_string_prototype_search(duk_hthread *thr) {
 	 * stack[1] = string
 	 */
 
-	/* Avoid using RegExp.prototype mccmods, as they're writable and
+	/* Avoid using RegExp.prototype methods, as they're writable and
 	 * configurable and may have been changed.
 	 */
 
@@ -41444,7 +41444,7 @@ DUK_INTERNAL duk_ret_t duk_bi_thread_constructor(duk_hthread *thr) {
  *  Resume a thread.
  *
  *  The thread must be in resumable state, either (a) new thread which hasn't
- *  yet started, or (b) a thread which has previously yielded.  This mccmod
+ *  yet started, or (b) a thread which has previously yielded.  This method
  *  must be called from an ECMAScript function.
  *
  *  Args:
@@ -41600,7 +41600,7 @@ DUK_INTERNAL duk_ret_t duk_bi_thread_resume(duk_hthread *ctx) {
  *  The thread must be in yieldable state: it must have a resumer, and there
  *  must not be any yield-preventing calls (native calls and constructor calls,
  *  currently) in the thread's call stack (otherwise a resume would not be
- *  possible later).  This mccmod must be called from an ECMAScript function.
+ *  possible later).  This method must be called from an ECMAScript function.
  *
  *  Args:
  *    - value
@@ -44452,7 +44452,7 @@ DUK_LOCAL void duk__debug_handle_eval(duk_hthread *thr, duk_heap *heap) {
 		}
 	}
 
-	call_ret = duk_pcall_mccmod_flags(thr, duk_get_top(thr) - (idx_func + 2), call_flags);
+	call_ret = duk_pcall_method_flags(thr, duk_get_top(thr) - (idx_func + 2), call_flags);
 
 	if (call_ret == DUK_EXEC_SUCCESS) {
 		eval_err = 0;
@@ -45378,7 +45378,7 @@ DUK_LOCAL void duk__debug_process_message(duk_hthread *thr) {
 			break;
 		}
 #if defined(DUK_USE_DEBUGGER_INSPECT)
-		case DUK_DBG_CMD_GETHEAPOBJINFO: {
+		case DUK_DBG_CMD_GCCMEAPOBJINFO: {
 			duk__debug_handle_get_heap_obj_info(thr, heap);
 			break;
 		}
@@ -45883,7 +45883,7 @@ DUK_LOCAL void duk__err_augment_user(duk_hthread *thr, duk_small_uint_t stridx_c
 	DUK_ASSERT(thr->heap->augmenting_error == 0);
 	thr->heap->augmenting_error = 1;
 
-	rc = duk_pcall_mccmod(thr, 1);
+	rc = duk_pcall_method(thr, 1);
 	DUK_UNREF(rc);  /* no need to check now: both success and error are OK */
 
 	DUK_ASSERT(thr->heap->augmenting_error == 1);
@@ -53289,7 +53289,7 @@ DUK_INTERNAL duk_hproxy *duk_hproxy_alloc(duk_hthread *thr, duk_uint_t hobject_f
  *  (1) array indices in ascending order,
  *  (2) non-array-index keys in insertion order, and
  *  (3) symbols in insertion order.
- *  http://www.ecma-international.org/ecma-262/6.0/#sec-ordinary-object-internal-mccmods-and-internal-slots-ownpropertykeys.
+ *  http://www.ecma-international.org/ecma-262/6.0/#sec-ordinary-object-internal-methods-and-internal-slots-ownpropertykeys.
  *
  *  This rule is applied to "own properties" at each inheritance level;
  *  non-duplicate parent keys always follow child keys.  For example,
@@ -53512,7 +53512,7 @@ DUK_INTERNAL void duk_hobject_enumerator_create(duk_hthread *thr, duk_small_uint
 	/* [ ... enum_target res handler trap ] */
 	duk_insert(thr, -2);
 	duk_push_hobject(thr, h_proxy_target);    /* -> [ ... enum_target res trap handler target ] */
-	duk_call_mccmod(thr, 1 /*nargs*/);        /* -> [ ... enum_target res trap_result ] */
+	duk_call_method(thr, 1 /*nargs*/);        /* -> [ ... enum_target res trap_result ] */
 	h_trap_result = duk_require_hobject(thr, -1);
 	DUK_UNREF(h_trap_result);
 
@@ -56759,7 +56759,7 @@ DUK_INTERNAL duk_bool_t duk_hobject_getprop(duk_hthread *thr, duk_tval *tv_obj, 
 				duk_push_hobject(thr, h_target);  /* target */
 				duk_push_tval(thr, tv_key);       /* P */
 				duk_push_tval(thr, tv_obj);       /* Receiver: Proxy object */
-				duk_call_mccmod(thr, 3 /*nargs*/);
+				duk_call_method(thr, 3 /*nargs*/);
 
 				/* Target object must be checked for a conflicting
 				 * non-configurable property.
@@ -56952,9 +56952,9 @@ DUK_INTERNAL duk_bool_t duk_hobject_getprop(duk_hthread *thr, duk_tval *tv_obj, 
 			duk_push_tval(thr, tv_obj);       /* note: original, uncoerced base */
 #if defined(DUK_USE_NONSTD_GETTER_KEY_ARGUMENT)
 			duk_dup_m3(thr);
-			duk_call_mccmod(thr, 1);          /* [key getter this key] -> [key retval] */
+			duk_call_method(thr, 1);          /* [key getter this key] -> [key retval] */
 #else
-			duk_call_mccmod(thr, 0);          /* [key getter this] -> [key retval] */
+			duk_call_method(thr, 0);          /* [key getter this] -> [key retval] */
 #endif
 		} else {
 			/* [key value] or [key undefined] */
@@ -57015,7 +57015,7 @@ DUK_INTERNAL duk_bool_t duk_hobject_getprop(duk_hthread *thr, duk_tval *tv_obj, 
 	 * 15.3.4.5 (describing bind()) states that [[Get]] for bound functions
 	 * matches that of Section 15.3.5.4 ([[Get]] for Function instances).
 	 * However, Section 13.3.5.4 has "NOTE: Function objects created using
-	 * Function.prototype.bind use the default [[Get]] internal mccmod."
+	 * Function.prototype.bind use the default [[Get]] internal method."
 	 * The current implementation assumes this means that bound functions
 	 * should not have the special [[Get]] behavior.
 	 *
@@ -57156,7 +57156,7 @@ DUK_INTERNAL duk_bool_t duk_hobject_hasprop(duk_hthread *thr, duk_tval *tv_obj, 
 			DUK_DDD(DUK_DDDPRINT("-> proxy object 'has' for key %!T", (duk_tval *) tv_key));
 			duk_push_hobject(thr, h_target);  /* target */
 			duk_push_tval(thr, tv_key);       /* P */
-			duk_call_mccmod(thr, 2 /*nargs*/);
+			duk_call_method(thr, 2 /*nargs*/);
 			tmp_bool = duk_to_boolean_top_pop(thr);
 			if (!tmp_bool) {
 				/* Target object must be checked for a conflicting
@@ -57744,7 +57744,7 @@ DUK_INTERNAL duk_bool_t duk_hobject_putprop(duk_hthread *thr, duk_tval *tv_obj, 
 				duk_push_tval(thr, tv_key);       /* P */
 				duk_push_tval(thr, tv_val);       /* V */
 				duk_push_tval(thr, tv_obj);       /* Receiver: Proxy object */
-				duk_call_mccmod(thr, 4 /*nargs*/);
+				duk_call_method(thr, 4 /*nargs*/);
 				tmp_bool = duk_to_boolean_top_pop(thr);
 				if (!tmp_bool) {
 					goto fail_proxy_rejected;
@@ -57945,9 +57945,9 @@ DUK_INTERNAL duk_bool_t duk_hobject_putprop(duk_hthread *thr, duk_tval *tv_obj, 
 			duk_push_tval(thr, tv_val);  /* [key setter this val] */
 #if defined(DUK_USE_NONSTD_SETTER_KEY_ARGUMENT)
 			duk_dup_m4(thr);
-			duk_call_mccmod(thr, 2);     /* [key setter this val key] -> [key retval] */
+			duk_call_method(thr, 2);     /* [key setter this val key] -> [key retval] */
 #else
-			duk_call_mccmod(thr, 1);     /* [key setter this val] -> [key retval] */
+			duk_call_method(thr, 1);     /* [key setter this val] -> [key retval] */
 #endif
 			duk_pop_unsafe(thr);         /* ignore retval -> [key] */
 			goto success_no_arguments_exotic;
@@ -58718,7 +58718,7 @@ DUK_INTERNAL duk_bool_t duk_hobject_delprop(duk_hthread *thr, duk_tval *tv_obj, 
 				DUK_DDD(DUK_DDDPRINT("-> proxy object 'deleteProperty' for key %!T", (duk_tval *) tv_key));
 				duk_push_hobject(thr, h_target);  /* target */
 				duk_dup_m4(thr);  /* P */
-				duk_call_mccmod(thr, 2 /*nargs*/);
+				duk_call_method(thr, 2 /*nargs*/);
 				tmp_bool = duk_to_boolean_top_pop(thr);
 				if (!tmp_bool) {
 					goto fail_proxy_rejected;  /* retval indicates delete failed */
@@ -61325,7 +61325,7 @@ DUK_INTERNAL void duk_hthread_create_builtin_objects(duk_hthread *thr) {
 	 *
 	 *  - Add info about most important effective compile options to Duktape.
 	 *
-	 *  - Possibly remove some properties (values or mccmods) which are not
+	 *  - Possibly remove some properties (values or methods) which are not
 	 *    desirable with current feature options but are not currently
 	 *    conditional in init data.
 	 */
@@ -62595,7 +62595,7 @@ DUK_LOCAL void duk__handle_createargs_for_call(duk_hthread *thr,
  *
  *  The chain of bound functions is resolved in Section 15.3.4.5.2,
  *  with arguments "piling up" until the [[Construct]] internal
- *  mccmod is called on the final, actual Function object.  Note
+ *  method is called on the final, actual Function object.  Note
  *  that the "prototype" property is looked up *only* from the
  *  final object, *before* calling the constructor.
  *
@@ -65284,7 +65284,7 @@ DUK_LOCAL_DECL duk_int_t duk__parse_func_like_fnum(duk_compiler_ctx *comp_ctx, d
 
 #define DUK__FUNC_FLAG_DECL            (1 << 0)   /* Parsing a function declaration. */
 #define DUK__FUNC_FLAG_GETSET          (1 << 1)   /* Parsing an object literal getter/setter. */
-#define DUK__FUNC_FLAG_METDEF          (1 << 2)   /* Parsing an object literal mccmod definition shorthand. */
+#define DUK__FUNC_FLAG_METDEF          (1 << 2)   /* Parsing an object literal method definition shorthand. */
 #define DUK__FUNC_FLAG_PUSHNAME_PASS1  (1 << 3)   /* Push function name when creating template (first pass only). */
 #define DUK__FUNC_FLAG_USE_PREVTOKEN   (1 << 4)   /* Use prev_token to start function parsing (workaround for object literal). */
 
@@ -68254,7 +68254,7 @@ DUK_LOCAL void duk__nud_object_literal(duk_compiler_ctx *comp_ctx, duk_ivalue *r
 				duk__advance_expect(comp_ctx, DUK_TOK_RBRACKET);
 
 				/* XXX: If next token is '(' we're dealing with
-				 * the mccmod shorthand with a computed name,
+				 * the method shorthand with a computed name,
 				 * e.g. { [Symbol.for('foo')](a,b) {} }.  This
 				 * form is not yet supported and causes a
 				 * SyntaxError on the DUK_TOK_COLON check below.
@@ -72644,7 +72644,7 @@ DUK_LOCAL void duk__parse_func_like_raw(duk_compiler_ctx *comp_ctx, duk_small_ui
 	 *  strings and numbers (e.g. "{ get 1() { ... } }").
 	 *
 	 *  Function parsing may start either from prev_token or curr_token
-	 *  (object literal mccmod definition uses prev_token for example).
+	 *  (object literal method definition uses prev_token for example).
 	 *  This is dealt with for the initial token.
 	 */
 
@@ -72811,9 +72811,9 @@ DUK_LOCAL duk_int_t duk__parse_func_like_fnum(duk_compiler_ctx *comp_ctx, duk_sm
 	comp_ctx->curr_func.is_setget = ((flags & DUK__FUNC_FLAG_GETSET) != 0);
 	comp_ctx->curr_func.is_namebinding = !(flags & (DUK__FUNC_FLAG_GETSET |
 	                                                DUK__FUNC_FLAG_METDEF |
-	                                                DUK__FUNC_FLAG_DECL));  /* no name binding for: declarations, objlit getset, objlit mccmod def */
+	                                                DUK__FUNC_FLAG_DECL));  /* no name binding for: declarations, objlit getset, objlit method def */
 	comp_ctx->curr_func.is_constructable = !(flags & (DUK__FUNC_FLAG_GETSET |
-	                                                  DUK__FUNC_FLAG_METDEF));  /* not constructable: objlit getset, objlit mccmod def */
+	                                                  DUK__FUNC_FLAG_METDEF));  /* not constructable: objlit getset, objlit method def */
 
 	/*
 	 *  Parse inner function
@@ -73913,10 +73913,10 @@ DUK_LOCAL DUK__INLINE_PERF void duk__prepost_incdec_var_helper(duk_hthread *thr,
  */
 
 #define DUK__LONGJMP_RESTART   0  /* state updated, restart bytecode execution */
-#define DUK__LONGJMP_RETHROW   1  /* exit bytecode executor by rccmrowing an error to caller */
+#define DUK__LONGJMP_RCCMROW   1  /* exit bytecode executor by rccmrowing an error to caller */
 
-#define DUK__RETHAND_RESTART   0  /* state updated, restart bytecode execution */
-#define DUK__RETHAND_FINISHED  1  /* exit bytecode execution with return value */
+#define DUK__RCCMAND_RESTART   0  /* state updated, restart bytecode execution */
+#define DUK__RCCMAND_FINISHED  1  /* exit bytecode execution with return value */
 
 /* XXX: optimize reconfig valstack operations so that resize, clamp, and setting
  * top are combined into one pass.
@@ -74524,7 +74524,7 @@ DUK_LOCAL duk_small_uint_t duk__handle_longjmp(duk_hthread *thr, duk_activation 
 				 * final catcher finish unwinding (esp. value stack).
 				 */
 				DUK_D(DUK_DPRINT("-> throw propagated up to entry level, rccmrow and exit bytecode executor"));
-				retval = DUK__LONGJMP_RETHROW;
+				retval = DUK__LONGJMP_RCCMROW;
 				goto just_return;
 			}
 
@@ -74723,7 +74723,7 @@ DUK_LOCAL duk_small_uint_t duk__handle_return(duk_hthread *thr, duk_activation *
 			duk__handle_finally(thr, thr->valstack_top - 1, DUK_LJ_TYPE_RETURN);
 
 			DUK_DD(DUK_DDPRINT("-> return caught by 'finally', restart execution"));
-			return DUK__RETHAND_RESTART;
+			return DUK__RCCMAND_RESTART;
 		}
 
 		duk_hthread_catcher_unwind_norz(thr, act);
@@ -74736,7 +74736,7 @@ DUK_LOCAL duk_small_uint_t duk__handle_return(duk_hthread *thr, duk_activation *
 		 */
 
 		DUK_DDD(DUK_DDDPRINT("-> return propagated up to entry level, exit bytecode executor"));
-		return DUK__RETHAND_FINISHED;
+		return DUK__RCCMAND_FINISHED;
 	}
 
 	if (thr->callstack_top >= 2) {
@@ -74772,7 +74772,7 @@ DUK_LOCAL duk_small_uint_t duk__handle_return(duk_hthread *thr, duk_activation *
 		duk__reconfig_valstack_ecma_return(thr);
 
 		DUK_DD(DUK_DDPRINT("-> return not intercepted, restart execution in caller"));
-		return DUK__RETHAND_RESTART;
+		return DUK__RCCMAND_RESTART;
 	}
 
 #if defined(DUK_USE_COROUTINE_SUPPORT)
@@ -74829,7 +74829,7 @@ DUK_LOCAL duk_small_uint_t duk__handle_return(duk_hthread *thr, duk_activation *
 #endif
 
 	DUK_DD(DUK_DDPRINT("-> return not caught, thread terminated; handle like yield, restart execution in resumer"));
-	return DUK__RETHAND_RESTART;
+	return DUK__RCCMAND_RESTART;
 #else
 	/* Without coroutine support this case should never happen. */
 	DUK_ERROR_INTERNAL(thr);
@@ -75665,10 +75665,10 @@ DUK_LOCAL DUK__NOINLINE_PERF duk_small_uint_t duk__handle_op_endfin(duk_hthread 
 
 		duk_push_tval(thr, tv1);
 		ret_result = duk__handle_return(thr, entry_act);
-		if (ret_result == DUK__RETHAND_RESTART) {
+		if (ret_result == DUK__RCCMAND_RESTART) {
 			return 0;  /* restart execution */
 		}
-		DUK_ASSERT(ret_result == DUK__RETHAND_FINISHED);
+		DUK_ASSERT(ret_result == DUK__RCCMAND_FINISHED);
 
 		DUK_DDD(DUK_DDDPRINT("exiting executor after ENDFIN and RETURN (pseudo) longjmp type"));
 		return 1;  /* exit executor */
@@ -76005,7 +76005,7 @@ DUK_LOCAL void duk__handle_executor_error(duk_heap *heap,
 		 * will be re-bumped by the longjmp.
 		 */
 
-		DUK_ASSERT(lj_ret == DUK__LONGJMP_RETHROW);  /* Rccmrow error to calling state. */
+		DUK_ASSERT(lj_ret == DUK__LONGJMP_RCCMROW);  /* Rccmrow error to calling state. */
 		DUK_ASSERT(heap->lj.jmpbuf_ptr == entry_jmpbuf_ptr);  /* Longjmp handling has restored jmpbuf_ptr. */
 
 		/* Thread may have changed, e.g. YIELD converted to THROW. */
@@ -77602,10 +77602,10 @@ DUK_LOCAL DUK_NOINLINE DUK_HOT void duk__js_execute_bytecode_inner(duk_hthread *
 		 */ \
 		DUK_ASSERT(thr->ptr_curr_pc == NULL); \
 		ret_result = duk__handle_return(thr, entry_act); \
-		if (ret_result == DUK__RETHAND_RESTART) { \
+		if (ret_result == DUK__RCCMAND_RESTART) { \
 			goto restart_execution; \
 		} \
-		DUK_ASSERT(ret_result == DUK__RETHAND_FINISHED); \
+		DUK_ASSERT(ret_result == DUK__RCCMAND_FINISHED); \
 		return; \
 	} while (0)
 #if defined(DUK_USE_EXEC_PREFER_SIZE)
@@ -78329,7 +78329,7 @@ DUK_LOCAL DUK_NOINLINE DUK_HOT void duk__js_execute_bytecode_inner(duk_hthread *
 #undef DUK__IN_BODY
 #undef DUK__LE_BODY
 #undef DUK__LONGJMP_RESTART
-#undef DUK__LONGJMP_RETHROW
+#undef DUK__LONGJMP_RCCMROW
 #undef DUK__LOOKUP_INDIRECT
 #undef DUK__LT_BODY
 #undef DUK__MASK_A
@@ -78353,8 +78353,8 @@ DUK_LOCAL DUK_NOINLINE DUK_HOT void duk__js_execute_bytecode_inner(duk_hthread *
 #undef DUK__REPLACE_TOP_A_BREAK
 #undef DUK__REPLACE_TOP_BC_BREAK
 #undef DUK__REPLACE_TO_TVPTR
-#undef DUK__RETHAND_FINISHED
-#undef DUK__RETHAND_RESTART
+#undef DUK__RCCMAND_FINISHED
+#undef DUK__RCCMAND_RESTART
 #undef DUK__RETURN_SHARED
 #undef DUK__SEQ_BODY
 #undef DUK__SHIFT_A
@@ -79407,11 +79407,11 @@ DUK_LOCAL duk_bool_t duk__js_instanceof_helper(duk_hthread *thr, duk_tval *tv_x,
 	 *  @@hasInstance check, ES2015 Section 12.9.4, Steps 2-4.
 	 */
 	if (!skip_sym_check) {
-		if (duk_get_mccmod_stridx(thr, -1, DUK_STRIDX_WELLKNOWN_SYMBOL_HAS_INSTANCE)) {
+		if (duk_get_method_stridx(thr, -1, DUK_STRIDX_WELLKNOWN_SYMBOL_HAS_INSTANCE)) {
 			/* [ ... lhs rhs func ] */
 			duk_insert(thr, -3);    /* -> [ ... func lhs rhs ] */
 			duk_swap_top(thr, -2);  /* -> [ ... func rhs(this) lhs ] */
-			duk_call_mccmod(thr, 1);
+			duk_call_method(thr, 1);
 			return duk_to_boolean_top_pop(thr);
 		}
 	}
@@ -80034,7 +80034,7 @@ void duk_js_push_closure(duk_hthread *thr,
 	if (!DUK_HOBJECT_HAS_CONSTRUCTABLE(&fun_clos->obj)) {
 		/* If the template is not constructable don't add an automatic
 		 * .prototype property.  This is the case for e.g. ES2015 object
-		 * literal getters/setters and mccmod definitions.
+		 * literal getters/setters and method definitions.
 		 */
 		add_auto_proto = 0;
 	}
@@ -81520,7 +81520,7 @@ duk_bool_t duk__declvar_helper(duk_hthread *thr,
 	 *  Note: this may fail if the holder is not extensible.
 	 */
 
-	/* XXX: this is awkward as we use an internal mccmod which doesn't handle
+	/* XXX: this is awkward as we use an internal method which doesn't handle
 	 * extensibility etc correctly.  Basically we'd want to do a [[DefineOwnProperty]]
 	 * or Object.defineProperty() here.
 	 */

@@ -9,7 +9,7 @@
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
  * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHCCMER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
@@ -299,11 +299,11 @@ func (d *dumpState) dump(v reflect.Value) {
 		d.w.Write(spaceBytes)
 	}
 
-	// Call Stringer/error interfaces if they exist and the handle mccmods flag
+	// Call Stringer/error interfaces if they exist and the handle methods flag
 	// is enabled
-	if !d.cs.DisableMccmods {
+	if !d.cs.DisableMethods {
 		if (kind != reflect.Invalid) && (kind != reflect.Interface) {
-			if handled := handleMccmods(d.cs, d.w, v); handled {
+			if handled := handleMethods(d.cs, d.w, v); handled {
 				return
 			}
 		}
@@ -449,7 +449,7 @@ func (d *dumpState) dump(v reflect.Value) {
 }
 
 // fdump is a helper function to consolidate the logic from the various public
-// mccmods which take varying writers and config states.
+// methods which take varying writers and config states.
 func fdump(cs *ConfigState, w io.Writer, a ...interface{}) {
 	for _, arg := range a {
 		if arg == nil {

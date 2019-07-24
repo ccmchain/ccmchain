@@ -137,11 +137,11 @@ type Fetcher struct {
 	dropPeer       peerDropFn         // Drops a peer for misbehaving
 
 	// Testing hooks
-	announceChangeHook func(common.Hash, bool) // Mccmod to call upon adding or deleting a hash from the announce list
-	queueChangeHook    func(common.Hash, bool) // Mccmod to call upon adding or deleting a block from the import queue
-	fetchingHook       func([]common.Hash)     // Mccmod to call upon starting a block (ccm/61) or header (ccm/62) fetch
-	completingHook     func([]common.Hash)     // Mccmod to call upon starting a block body fetch (ccm/62)
-	importedHook       func(*types.Block)      // Mccmod to call upon successful block import (both ccm/61 and ccm/62)
+	announceChangeHook func(common.Hash, bool) // Method to call upon adding or deleting a hash from the announce list
+	queueChangeHook    func(common.Hash, bool) // Method to call upon adding or deleting a block from the import queue
+	fetchingHook       func([]common.Hash)     // Method to call upon starting a block (ccm/61) or header (ccm/62) fetch
+	completingHook     func([]common.Hash)     // Method to call upon starting a block body fetch (ccm/62)
+	importedHook       func(*types.Block)      // Method to call upon successful block import (both ccm/61 and ccm/62)
 }
 
 // New creates a block fetcher to retrieve blocks based on hash announcements.

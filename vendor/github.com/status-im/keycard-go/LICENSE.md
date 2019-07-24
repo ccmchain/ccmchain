@@ -54,7 +54,7 @@ Mozilla Public License Version 2.0
     Software.
 
 **1.11. “Patent Claims” of a Contributor**  
-    means any patent claim(s), including without limitation, mccmod,
+    means any patent claim(s), including without limitation, method,
     process, and apparatus claims, in any patent Licensable by such
     Contributor that would be infringed, but for the grant of the
     License, by the making, using, selling, offering for sale, having

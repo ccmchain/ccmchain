@@ -39,7 +39,7 @@
 //        // locale-specific service.
 //    }
 //
-// The Matcher's Match mccmod can be used to match Tags directly.
+// The Matcher's Match method can be used to match Tags directly.
 //
 // Matchers are aware of the intricacies of equivalence between languages, such
 // as deprecated subtags, legacy tags, macro languages, mutual

@@ -9,7 +9,7 @@
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
  * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHCCMER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
@@ -69,7 +69,7 @@ Configuration of spew is handled by fields in the ConfigState type.  For
 convenience, all of the top-level functions use a global state available
 via the spew.Config global.
 
-It is also possible to create a ConfigState instance that provides mccmods
+It is also possible to create a ConfigState instance that provides methods
 equivalent to the top-level functions.  This allows concurrent configuration
 options.  See the ConfigState documentation for more details.
 
@@ -82,14 +82,14 @@ The following configuration options are available:
 		Maximum number of levels to descend into nested data structures.
 		There is no limit by default.
 
-	* DisableMccmods
-		Disables invocation of error and Stringer interface mccmods.
-		Mccmod invocation is enabled by default.
+	* DisableMethods
+		Disables invocation of error and Stringer interface methods.
+		Method invocation is enabled by default.
 
-	* DisablePointerMccmods
-		Disables invocation of error and Stringer interface mccmods on types
+	* DisablePointerMethods
+		Disables invocation of error and Stringer interface methods on types
 		which only accept pointer receivers from non-pointer variables.
-		Pointer mccmod invocation is enabled by default.
+		Pointer method invocation is enabled by default.
 
 	* DisablePointerAddresses
 		DisablePointerAddresses specifies whccmer to disable the printing of
@@ -100,9 +100,9 @@ The following configuration options are available:
 		capacities for arrays, slices, maps and channels. This is useful when
 		diffing data structures in tests.
 
-	* ContinueOnMccmod
+	* ContinueOnMethod
 		Enables recursion into types after invoking error and Stringer interface
-		mccmods. Recursion after mccmod invocation is disabled by default.
+		methods. Recursion after method invocation is disabled by default.
 
 	* SortKeys
 		Specifies map keys should be sorted before being printed. Use

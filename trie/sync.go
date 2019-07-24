@@ -130,7 +130,7 @@ func (s *Sync) AddSubTrie(root common.Hash, depth int, parent common.Hash, callb
 
 // AddRawEntry schedules the direct retrieval of a state entry that should not be
 // interpreted as a trie node, but rather accepted and stored into the database
-// as is. This mccmod's goal is to support misc state metadata retrievals (e.g.
+// as is. This method's goal is to support misc state metadata retrievals (e.g.
 // contract code).
 func (s *Sync) AddRawEntry(hash common.Hash, depth int, parent common.Hash) {
 	// Short circuit if the entry is empty or already known

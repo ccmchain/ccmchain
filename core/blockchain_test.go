@@ -701,7 +701,7 @@ func TestFastVsFullChains(t *testing.T) {
 	}
 }
 
-// Tests that various import mccmods move the chain head pointers to the correct
+// Tests that various import methods move the chain head pointers to the correct
 // positions.
 func TestLightVsFastVsFullChainHeads(t *testing.T) {
 	// Configure and generate a sample block chain
@@ -735,7 +735,7 @@ func TestLightVsFastVsFullChainHeads(t *testing.T) {
 	for _, block := range blocks[height/2:] {
 		remove = append(remove, block.Hash())
 	}
-	// Create a small assertion mccmod to check the three heads
+	// Create a small assertion method to check the three heads
 	assert := func(t *testing.T, kind string, chain *BlockChain, header uint64, fast uint64, block uint64) {
 		if num := chain.CurrentBlock().NumberU64(); num != block {
 			t.Errorf("%s head block mismatch: have #%v, want #%v", kind, num, block)

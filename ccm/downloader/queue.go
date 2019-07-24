@@ -478,10 +478,10 @@ func (q *queue) ReserveReceipts(p *peerConnection, count int) (*fetchRequest, bo
 }
 
 // reserveHeaders reserves a set of data download operations for a given peer,
-// skipping any previously failed ones. This mccmod is a generic version used
+// skipping any previously failed ones. This method is a generic version used
 // by the individual special reservation functions.
 //
-// Note, this mccmod expects the queue lock to be already held for writing. The
+// Note, this method expects the queue lock to be already held for writing. The
 // reason the lock is not obtained in here is because the parameters already need
 // to access the queue, so they already need a lock anyway.
 func (q *queue) reserveHeaders(p *peerConnection, count int, taskPool map[common.Hash]*types.Header, taskQueue *prque.Prque,
@@ -593,7 +593,7 @@ func (q *queue) cancel(request *fetchRequest, taskQueue *prque.Prque, pendPool m
 	delete(pendPool, request.Peer.id)
 }
 
-// Revoke cancels all pending requests belonging to a given peer. This mccmod is
+// Revoke cancels all pending requests belonging to a given peer. This method is
 // meant to be called during a peer drop to quickly reassign owned data fetches
 // to remaining nodes.
 func (q *queue) Revoke(peerID string) {
@@ -644,7 +644,7 @@ func (q *queue) ExpireReceipts(timeout time.Duration) map[string]int {
 // expire is the generic check that move expired tasks from a pending pool back
 // into a task pool, returning all entities caught with expired tasks.
 //
-// Note, this mccmod expects the queue lock to be already held. The
+// Note, this method expects the queue lock to be already held. The
 // reason the lock is not obtained in here is because the parameters already need
 // to access the queue, so they already need a lock anyway.
 func (q *queue) expire(timeout time.Duration, pendPool map[string]*fetchRequest, taskQueue *prque.Prque, timeoutMeter metrics.Meter) map[string]int {
@@ -673,10 +673,10 @@ func (q *queue) expire(timeout time.Duration, pendPool map[string]*fetchRequest,
 }
 
 // DeliverHeaders injects a header retrieval response into the header results
-// cache. This mccmod either accepts all headers it received, or none of them
+// cache. This method either accepts all headers it received, or none of them
 // if they do not map correctly to the skeleton.
 //
-// If the headers are accepted, the mccmod makes an attempt to deliver the set
+// If the headers are accepted, the method makes an attempt to deliver the set
 // of ready headers to the processor to keep the pipeline full. However it will
 // not block to prevent stalling other pending deliveries.
 func (q *queue) DeliverHeaders(id string, headers []*types.Header, headerProcCh chan []*types.Header) (int, error) {
@@ -761,7 +761,7 @@ func (q *queue) DeliverHeaders(id string, headers []*types.Header, headerProcCh 
 }
 
 // DeliverBodies injects a block body retrieval response into the results queue.
-// The mccmod returns the number of blocks bodies accepted from the delivery and
+// The method returns the number of blocks bodies accepted from the delivery and
 // also wakes any threads waiting for data delivery.
 func (q *queue) DeliverBodies(id string, txLists [][]*types.Transaction, uncleLists [][]*types.Header) (int, error) {
 	q.lock.Lock()
@@ -779,7 +779,7 @@ func (q *queue) DeliverBodies(id string, txLists [][]*types.Transaction, uncleLi
 }
 
 // DeliverReceipts injects a receipt retrieval response into the results queue.
-// The mccmod returns the number of transaction receipts accepted from the delivery
+// The method returns the number of transaction receipts accepted from the delivery
 // and also wakes any threads waiting for data delivery.
 func (q *queue) DeliverReceipts(id string, receiptList [][]*types.Receipt) (int, error) {
 	q.lock.Lock()
@@ -797,7 +797,7 @@ func (q *queue) DeliverReceipts(id string, receiptList [][]*types.Receipt) (int,
 
 // deliver injects a data retrieval response into the results queue.
 //
-// Note, this mccmod expects the queue lock to be already held for writing. The
+// Note, this method expects the queue lock to be already held for writing. The
 // reason the lock is not obtained in here is because the parameters already need
 // to access the queue, so they already need a lock anyway.
 func (q *queue) deliver(id string, taskPool map[common.Hash]*types.Header, taskQueue *prque.Prque,

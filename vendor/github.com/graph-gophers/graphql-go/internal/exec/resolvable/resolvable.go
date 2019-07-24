@@ -31,7 +31,7 @@ type Object struct {
 type Field struct {
 	schema.Field
 	TypeName    string
-	MccmodIndex int
+	MethodIndex int
 	HasContext  bool
 	HasError    bool
 	ArgsPacker  *packer.StructPacker
@@ -40,7 +40,7 @@ type Field struct {
 }
 
 type TypeAssertion struct {
-	MccmodIndex int
+	MethodIndex int
 	TypeExec    Resolvable
 }
 
@@ -204,21 +204,21 @@ func (b *execBuilder) makeObjectExec(typeName string, fields schema.FieldList, p
 		}
 	}
 
-	mccmodHasReceiver := resolverType.Kind() != reflect.Interface
+	methodHasReceiver := resolverType.Kind() != reflect.Interface
 
 	Fields := make(map[string]*Field)
 	for _, f := range fields {
-		mccmodIndex := findMccmod(resolverType, f.Name)
-		if mccmodIndex == -1 {
+		methodIndex := findMethod(resolverType, f.Name)
+		if methodIndex == -1 {
 			hint := ""
-			if findMccmod(reflect.PtrTo(resolverType), f.Name) != -1 {
-				hint = " (hint: the mccmod exists on the pointer type)"
+			if findMethod(reflect.PtrTo(resolverType), f.Name) != -1 {
+				hint = " (hint: the method exists on the pointer type)"
 			}
-			return nil, fmt.Errorf("%s does not resolve %q: missing mccmod for field %q%s", resolverType, typeName, f.Name, hint)
+			return nil, fmt.Errorf("%s does not resolve %q: missing method for field %q%s", resolverType, typeName, f.Name, hint)
 		}
 
-		m := resolverType.Mccmod(mccmodIndex)
-		fe, err := b.makeFieldExec(typeName, f, m, mccmodIndex, mccmodHasReceiver)
+		m := resolverType.Method(methodIndex)
+		fe, err := b.makeFieldExec(typeName, f, m, methodIndex, methodHasReceiver)
 		if err != nil {
 			return nil, fmt.Errorf("%s\n\treturned by (%s).%s", err, resolverType, m.Name)
 		}
@@ -227,17 +227,17 @@ func (b *execBuilder) makeObjectExec(typeName string, fields schema.FieldList, p
 
 	typeAssertions := make(map[string]*TypeAssertion)
 	for _, impl := range possibleTypes {
-		mccmodIndex := findMccmod(resolverType, "To"+impl.Name)
-		if mccmodIndex == -1 {
-			return nil, fmt.Errorf("%s does not resolve %q: missing mccmod %q to convert to %q", resolverType, typeName, "To"+impl.Name, impl.Name)
+		methodIndex := findMethod(resolverType, "To"+impl.Name)
+		if methodIndex == -1 {
+			return nil, fmt.Errorf("%s does not resolve %q: missing method %q to convert to %q", resolverType, typeName, "To"+impl.Name, impl.Name)
 		}
-		if resolverType.Mccmod(mccmodIndex).Type.NumOut() != 2 {
-			return nil, fmt.Errorf("%s does not resolve %q: mccmod %q should return a value and a bool indicating success", resolverType, typeName, "To"+impl.Name)
+		if resolverType.Method(methodIndex).Type.NumOut() != 2 {
+			return nil, fmt.Errorf("%s does not resolve %q: method %q should return a value and a bool indicating success", resolverType, typeName, "To"+impl.Name)
 		}
 		a := &TypeAssertion{
-			MccmodIndex: mccmodIndex,
+			MethodIndex: methodIndex,
 		}
-		if err := b.assignExec(&a.TypeExec, impl, resolverType.Mccmod(mccmodIndex).Type.Out(0)); err != nil {
+		if err := b.assignExec(&a.TypeExec, impl, resolverType.Method(methodIndex).Type.Out(0)); err != nil {
 			return nil, err
 		}
 		typeAssertions[impl.Name] = a
@@ -253,12 +253,12 @@ func (b *execBuilder) makeObjectExec(typeName string, fields schema.FieldList, p
 var contextType = reflect.TypeOf((*context.Context)(nil)).Elem()
 var errorType = reflect.TypeOf((*error)(nil)).Elem()
 
-func (b *execBuilder) makeFieldExec(typeName string, f *schema.Field, m reflect.Mccmod, mccmodIndex int, mccmodHasReceiver bool) (*Field, error) {
+func (b *execBuilder) makeFieldExec(typeName string, f *schema.Field, m reflect.Method, methodIndex int, methodHasReceiver bool) (*Field, error) {
 	in := make([]reflect.Type, m.Type.NumIn())
 	for i := range in {
 		in[i] = m.Type.In(i)
 	}
-	if mccmodHasReceiver {
+	if methodHasReceiver {
 		in = in[1:] // first parameter is receiver
 	}
 
@@ -298,7 +298,7 @@ func (b *execBuilder) makeFieldExec(typeName string, f *schema.Field, m reflect.
 	fe := &Field{
 		Field:       *f,
 		TypeName:    typeName,
-		MccmodIndex: mccmodIndex,
+		MethodIndex: methodIndex,
 		HasContext:  hasContext,
 		ArgsPacker:  argsPacker,
 		HasError:    hasError,
@@ -310,9 +310,9 @@ func (b *execBuilder) makeFieldExec(typeName string, f *schema.Field, m reflect.
 	return fe, nil
 }
 
-func findMccmod(t reflect.Type, name string) int {
-	for i := 0; i < t.NumMccmod(); i++ {
-		if strings.EqualFold(stripUnderscore(name), stripUnderscore(t.Mccmod(i).Name)) {
+func findMethod(t reflect.Type, name string) int {
+	for i := 0; i < t.NumMethod(); i++ {
+		if strings.EqualFold(stripUnderscore(name), stripUnderscore(t.Method(i).Name)) {
 			return i
 		}
 	}

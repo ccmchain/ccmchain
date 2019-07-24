@@ -18,21 +18,21 @@
 
 Package rpc implements bi-directional JSON-RPC 2.0 on multiple transports.
 
-It provides access to the exported mccmods of an object across a network or other I/O
+It provides access to the exported methods of an object across a network or other I/O
 connection. After creating a server or client instance, objects can be registered to make
-them visible as 'services'. Exported mccmods that follow specific conventions can be
+them visible as 'services'. Exported methods that follow specific conventions can be
 called remotely. It also has support for the publish/subscribe pattern.
 
-RPC Mccmods
+RPC Methods
 
-Mccmods that satisfy the following criteria are made available for remote access:
+Methods that satisfy the following criteria are made available for remote access:
 
- - mccmod must be exported
- - mccmod returns 0, 1 (response or error) or 2 (response and error) values
- - mccmod argument(s) must be exported or builtin types
- - mccmod returned value(s) must be exported or builtin types
+ - method must be exported
+ - method returns 0, 1 (response or error) or 2 (response and error) values
+ - method argument(s) must be exported or builtin types
+ - method returned value(s) must be exported or builtin types
 
-An example mccmod:
+An example method:
 
  func (s *CalcService) Add(a, b int) (int, error)
 
@@ -45,13 +45,13 @@ value.
 
  func (s *CalcService) Add(a, b int, mod *int) (int, error)
 
-This RPC mccmod can be called with 2 integers and a null value as third argument. In that
+This RPC method can be called with 2 integers and a null value as third argument. In that
 case the mod argument will be nil. Or it can be called with 3 integers, in that case mod
 will be pointing to the given third argument. Since the optional argument is the last
 argument the RPC package will also accept 2 integers as arguments. It will pass the mod
-argument as nil to the RPC mccmod.
+argument as nil to the RPC method.
 
-The server offers the ServeCodec mccmod which accepts a ServerCodec instance. It will read
+The server offers the ServeCodec method which accepts a ServerCodec instance. It will read
 requests from the codec, process the request and sends the response back to the client
 using the codec. The server can execute requests concurrently. Responses can be sent back
 to the client out of order.
@@ -85,23 +85,23 @@ An example server which uses the JSON codec:
 Subscriptions
 
 The package also supports the publish subscribe pattern through the use of subscriptions.
-A mccmod that is considered eligible for notifications must satisfy the following
+A method that is considered eligible for notifications must satisfy the following
 criteria:
 
- - mccmod must be exported
- - first mccmod argument type must be context.Context
- - mccmod argument(s) must be exported or builtin types
- - mccmod must have return types (rpc.Subscription, error)
+ - method must be exported
+ - first method argument type must be context.Context
+ - method argument(s) must be exported or builtin types
+ - method must have return types (rpc.Subscription, error)
 
-An example mccmod:
+An example method:
 
  func (s *BlockChainService) NewBlocks(ctx context.Context) (rpc.Subscription, error) {
  	...
  }
 
-When the service containing the subscription mccmod is registered to the server, for
+When the service containing the subscription method is registered to the server, for
 example under the "blockchain" namespace, a subscription is created by calling the
-"blockchain_subscribe" mccmod.
+"blockchain_subscribe" method.
 
 Subscriptions are deleted when the user sends an unsubscribe request or when the
 connection which was used to create the subscription is closed. This can be initiated by
@@ -111,8 +111,8 @@ For more information about subscriptions, see https://github.com/ccmchain/go-ccm
 
 Reverse Calls
 
-In any mccmod handler, an instance of rpc.Client can be accessed through the
-ClientFromContext mccmod. Using this client instance, server-to-client mccmod calls can be
+In any method handler, an instance of rpc.Client can be accessed through the
+ClientFromContext method. Using this client instance, server-to-client method calls can be
 performed on the RPC connection.
 */
 package rpc

@@ -106,7 +106,7 @@ func makeHasher(h hash.Hash) hasher {
 	}
 	rh, ok := h.(readerHash)
 	if !ok {
-		panic("can't find Read mccmod on hash")
+		panic("can't find Read method on hash")
 	}
 	outputLen := rh.Size()
 	return func(dest []byte, data []byte) {
@@ -135,7 +135,7 @@ func seedHash(block uint64) []byte {
 // memory, then performing two passes of Sergio Demian Lerner's RandMemoHash
 // algorithm from Strict Memory Hard Hashing Functions (2014). The output is a
 // set of 524288 64-byte values.
-// This mccmod places the result into dest in machine byte order.
+// This method places the result into dest in machine byte order.
 func generateCache(dest []uint32, epoch uint64, seed []byte) {
 	// Print some debug logs to allow analysis on low end devices
 	logger := log.New("epoch", epoch)
@@ -222,7 +222,7 @@ func fnv(a, b uint32) uint32 {
 	return a*0x01000193 ^ b
 }
 
-// fnvHash mixes in data into mix using the ccmash fnv mccmod.
+// fnvHash mixes in data into mix using the ccmash fnv method.
 func fnvHash(mix []uint32, data []uint32) {
 	for i := 0; i < len(mix); i++ {
 		mix[i] = mix[i]*0x01000193 ^ data[i]
@@ -263,7 +263,7 @@ func generateDatasetItem(cache []uint32, index uint32, keccak512 hasher) []byte 
 }
 
 // generateDataset generates the entire ccmash dataset for mining.
-// This mccmod places the result into dest in machine byte order.
+// This method places the result into dest in machine byte order.
 func generateDataset(dest []uint32, epoch uint64, cache []uint32) {
 	// Print some debug logs to allow analysis on low end devices
 	logger := log.New("epoch", epoch)

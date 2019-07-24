@@ -19,7 +19,7 @@ package ccmdb
 // Iterator iterates over a database's key/value pairs in ascending key order.
 //
 // When it encounters an error any seek will return false and will yield no key/
-// value pairs. The error can be queried by calling the Error mccmod. Calling
+// value pairs. The error can be queried by calling the Error method. Calling
 // Release is still necessary.
 //
 // An iterator must be released after use, but it is not necessary to read an
@@ -49,7 +49,7 @@ type Iterator interface {
 	Release()
 }
 
-// Iteratee wraps the NewIterator mccmods of a backing data store.
+// Iteratee wraps the NewIterator methods of a backing data store.
 type Iteratee interface {
 	// NewIterator creates a binary-alphabetical iterator over the entire keyspace
 	// contained within the key-value database.

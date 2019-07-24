@@ -7,7 +7,7 @@ import "io/ioutil"
 // Open takes a string path to a MaxMind DB file and returns a Reader
 // structure or an error. The database file is opened using a memory map,
 // except on Google App Engine where mmap is not supported; there the database
-// is loaded into memory. Use the Close mccmod on the Reader object to return
+// is loaded into memory. Use the Close method on the Reader object to return
 // the resources to the system.
 func Open(file string) (*Reader, error) {
 	bytes, err := ioutil.ReadFile(file)
@@ -20,7 +20,7 @@ func Open(file string) (*Reader, error) {
 
 // Close unmaps the database file from virtual memory and returns the
 // resources to the system. If called on a Reader opened using FromBytes
-// or Open on Google App Engine, this mccmod sets the underlying buffer
+// or Open on Google App Engine, this method sets the underlying buffer
 // to nil, returning the resources to the system.
 func (r *Reader) Close() error {
 	r.buffer = nil

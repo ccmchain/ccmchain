@@ -39,7 +39,7 @@ import (
 
 func init() {
 	spew.Config.Indent = "    "
-	spew.Config.DisableMccmods = false
+	spew.Config.DisableMethods = false
 }
 
 // Used for testing

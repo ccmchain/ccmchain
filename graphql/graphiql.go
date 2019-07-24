@@ -16,7 +16,7 @@
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// LIABILITY, WHCCMER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
@@ -48,8 +48,8 @@ func errorJSON(msg string) []byte {
 }
 
 func (h GraphiQL) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Mccmod != "GET" {
-		respond(w, errorJSON("only GET requests are supported"), http.StatusMccmodNotAllowed)
+	if r.Method != "GET" {
+		respond(w, errorJSON("only GET requests are supported"), http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -97,7 +97,7 @@ var graphiql = []byte(`
 		<script>
 			function fetchGQL(params) {
 				return fetch("/graphql", {
-					mccmod: "post",
+					method: "post",
 					body: JSON.stringify(params),
 					credentials: "include",
 				}).then(function (resp) {

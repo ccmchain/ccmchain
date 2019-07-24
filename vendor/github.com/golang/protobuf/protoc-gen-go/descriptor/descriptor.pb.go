@@ -298,49 +298,49 @@ func (FieldOptions_JSType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_e5baabe45344a177, []int{12, 1}
 }
 
-// Is this mccmod side-effect-free (or safe in HTTP parlance), or idempotent,
+// Is this method side-effect-free (or safe in HTTP parlance), or idempotent,
 // or neither? HTTP based RPC implementation may choose GET verb for safe
-// mccmods, and PUT verb for idempotent mccmods instead of the default POST.
-type MccmodOptions_IdempotencyLevel int32
+// methods, and PUT verb for idempotent methods instead of the default POST.
+type MethodOptions_IdempotencyLevel int32
 
 const (
-	MccmodOptions_IDEMPOTENCY_UNKNOWN MccmodOptions_IdempotencyLevel = 0
-	MccmodOptions_NO_SIDE_EFFECTS     MccmodOptions_IdempotencyLevel = 1
-	MccmodOptions_IDEMPOTENT          MccmodOptions_IdempotencyLevel = 2
+	MethodOptions_IDEMPOTENCY_UNKNOWN MethodOptions_IdempotencyLevel = 0
+	MethodOptions_NO_SIDE_EFFECTS     MethodOptions_IdempotencyLevel = 1
+	MethodOptions_IDEMPOTENT          MethodOptions_IdempotencyLevel = 2
 )
 
-var MccmodOptions_IdempotencyLevel_name = map[int32]string{
+var MethodOptions_IdempotencyLevel_name = map[int32]string{
 	0: "IDEMPOTENCY_UNKNOWN",
 	1: "NO_SIDE_EFFECTS",
 	2: "IDEMPOTENT",
 }
 
-var MccmodOptions_IdempotencyLevel_value = map[string]int32{
+var MethodOptions_IdempotencyLevel_value = map[string]int32{
 	"IDEMPOTENCY_UNKNOWN": 0,
 	"NO_SIDE_EFFECTS":     1,
 	"IDEMPOTENT":          2,
 }
 
-func (x MccmodOptions_IdempotencyLevel) Enum() *MccmodOptions_IdempotencyLevel {
-	p := new(MccmodOptions_IdempotencyLevel)
+func (x MethodOptions_IdempotencyLevel) Enum() *MethodOptions_IdempotencyLevel {
+	p := new(MethodOptions_IdempotencyLevel)
 	*p = x
 	return p
 }
 
-func (x MccmodOptions_IdempotencyLevel) String() string {
-	return proto.EnumName(MccmodOptions_IdempotencyLevel_name, int32(x))
+func (x MethodOptions_IdempotencyLevel) String() string {
+	return proto.EnumName(MethodOptions_IdempotencyLevel_name, int32(x))
 }
 
-func (x *MccmodOptions_IdempotencyLevel) UnmarshalJSON(data []byte) error {
-	value, err := proto.UnmarshalJSONEnum(MccmodOptions_IdempotencyLevel_value, data, "MccmodOptions_IdempotencyLevel")
+func (x *MethodOptions_IdempotencyLevel) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(MethodOptions_IdempotencyLevel_value, data, "MethodOptions_IdempotencyLevel")
 	if err != nil {
 		return err
 	}
-	*x = MccmodOptions_IdempotencyLevel(value)
+	*x = MethodOptions_IdempotencyLevel(value)
 	return nil
 }
 
-func (MccmodOptions_IdempotencyLevel) EnumDescriptor() ([]byte, []int) {
+func (MethodOptions_IdempotencyLevel) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_e5baabe45344a177, []int{17, 0}
 }
 
@@ -1161,7 +1161,7 @@ func (m *EnumValueDescriptorProto) GetOptions() *EnumValueOptions {
 // Describes a service.
 type ServiceDescriptorProto struct {
 	Name                 *string                  `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
-	Mccmod               []*MccmodDescriptorProto `protobuf:"bytes,2,rep,name=mccmod" json:"mccmod,omitempty"`
+	Method               []*MethodDescriptorProto `protobuf:"bytes,2,rep,name=method" json:"method,omitempty"`
 	Options              *ServiceOptions          `protobuf:"bytes,3,opt,name=options" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
 	XXX_unrecognized     []byte                   `json:"-"`
@@ -1200,9 +1200,9 @@ func (m *ServiceDescriptorProto) GetName() string {
 	return ""
 }
 
-func (m *ServiceDescriptorProto) GetMccmod() []*MccmodDescriptorProto {
+func (m *ServiceDescriptorProto) GetMethod() []*MethodDescriptorProto {
 	if m != nil {
-		return m.Mccmod
+		return m.Method
 	}
 	return nil
 }
@@ -1214,14 +1214,14 @@ func (m *ServiceDescriptorProto) GetOptions() *ServiceOptions {
 	return nil
 }
 
-// Describes a mccmod of a service.
-type MccmodDescriptorProto struct {
+// Describes a method of a service.
+type MethodDescriptorProto struct {
 	Name *string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
 	// Input and output type names.  These are resolved in the same way as
 	// FieldDescriptorProto.type_name, but must refer to a message type.
 	InputType  *string        `protobuf:"bytes,2,opt,name=input_type,json=inputType" json:"input_type,omitempty"`
 	OutputType *string        `protobuf:"bytes,3,opt,name=output_type,json=outputType" json:"output_type,omitempty"`
-	Options    *MccmodOptions `protobuf:"bytes,4,opt,name=options" json:"options,omitempty"`
+	Options    *MethodOptions `protobuf:"bytes,4,opt,name=options" json:"options,omitempty"`
 	// Identifies if client streams multiple client messages
 	ClientStreaming *bool `protobuf:"varint,5,opt,name=client_streaming,json=clientStreaming,def=0" json:"client_streaming,omitempty"`
 	// Identifies if server streams multiple server messages
@@ -1231,74 +1231,74 @@ type MccmodDescriptorProto struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *MccmodDescriptorProto) Reset()         { *m = MccmodDescriptorProto{} }
-func (m *MccmodDescriptorProto) String() string { return proto.CompactTextString(m) }
-func (*MccmodDescriptorProto) ProtoMessage()    {}
-func (*MccmodDescriptorProto) Descriptor() ([]byte, []int) {
+func (m *MethodDescriptorProto) Reset()         { *m = MethodDescriptorProto{} }
+func (m *MethodDescriptorProto) String() string { return proto.CompactTextString(m) }
+func (*MethodDescriptorProto) ProtoMessage()    {}
+func (*MethodDescriptorProto) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e5baabe45344a177, []int{9}
 }
 
-func (m *MccmodDescriptorProto) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_MccmodDescriptorProto.Unmarshal(m, b)
+func (m *MethodDescriptorProto) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MethodDescriptorProto.Unmarshal(m, b)
 }
-func (m *MccmodDescriptorProto) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_MccmodDescriptorProto.Marshal(b, m, deterministic)
+func (m *MethodDescriptorProto) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MethodDescriptorProto.Marshal(b, m, deterministic)
 }
-func (m *MccmodDescriptorProto) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MccmodDescriptorProto.Merge(m, src)
+func (m *MethodDescriptorProto) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MethodDescriptorProto.Merge(m, src)
 }
-func (m *MccmodDescriptorProto) XXX_Size() int {
-	return xxx_messageInfo_MccmodDescriptorProto.Size(m)
+func (m *MethodDescriptorProto) XXX_Size() int {
+	return xxx_messageInfo_MethodDescriptorProto.Size(m)
 }
-func (m *MccmodDescriptorProto) XXX_DiscardUnknown() {
-	xxx_messageInfo_MccmodDescriptorProto.DiscardUnknown(m)
+func (m *MethodDescriptorProto) XXX_DiscardUnknown() {
+	xxx_messageInfo_MethodDescriptorProto.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MccmodDescriptorProto proto.InternalMessageInfo
+var xxx_messageInfo_MethodDescriptorProto proto.InternalMessageInfo
 
-const Default_MccmodDescriptorProto_ClientStreaming bool = false
-const Default_MccmodDescriptorProto_ServerStreaming bool = false
+const Default_MethodDescriptorProto_ClientStreaming bool = false
+const Default_MethodDescriptorProto_ServerStreaming bool = false
 
-func (m *MccmodDescriptorProto) GetName() string {
+func (m *MethodDescriptorProto) GetName() string {
 	if m != nil && m.Name != nil {
 		return *m.Name
 	}
 	return ""
 }
 
-func (m *MccmodDescriptorProto) GetInputType() string {
+func (m *MethodDescriptorProto) GetInputType() string {
 	if m != nil && m.InputType != nil {
 		return *m.InputType
 	}
 	return ""
 }
 
-func (m *MccmodDescriptorProto) GetOutputType() string {
+func (m *MethodDescriptorProto) GetOutputType() string {
 	if m != nil && m.OutputType != nil {
 		return *m.OutputType
 	}
 	return ""
 }
 
-func (m *MccmodDescriptorProto) GetOptions() *MccmodOptions {
+func (m *MethodDescriptorProto) GetOptions() *MethodOptions {
 	if m != nil {
 		return m.Options
 	}
 	return nil
 }
 
-func (m *MccmodDescriptorProto) GetClientStreaming() bool {
+func (m *MethodDescriptorProto) GetClientStreaming() bool {
 	if m != nil && m.ClientStreaming != nil {
 		return *m.ClientStreaming
 	}
-	return Default_MccmodDescriptorProto_ClientStreaming
+	return Default_MethodDescriptorProto_ClientStreaming
 }
 
-func (m *MccmodDescriptorProto) GetServerStreaming() bool {
+func (m *MethodDescriptorProto) GetServerStreaming() bool {
 	if m != nil && m.ServerStreaming != nil {
 		return *m.ServerStreaming
 	}
-	return Default_MccmodDescriptorProto_ServerStreaming
+	return Default_MethodDescriptorProto_ServerStreaming
 }
 
 type FileOptions struct {
@@ -1317,7 +1317,7 @@ type FileOptions struct {
 	// file for each top-level message, enum, and service defined in the .proto
 	// file.  Thus, these types will *not* be nested inside the outer class
 	// named by java_outer_classname.  However, the outer class will still be
-	// generated to contain the file's getDescriptor() mccmod as well as any
+	// generated to contain the file's getDescriptor() method as well as any
 	// top-level extensions defined in the file.
 	JavaMultipleFiles *bool `protobuf:"varint,10,opt,name=java_multiple_files,json=javaMultipleFiles,def=0" json:"java_multiple_files,omitempty"`
 	// This option does nothing.
@@ -1750,9 +1750,9 @@ type FieldOptions struct {
 	// overhead typically needed to implement it.
 	//
 	// This option does not affect the public interface of any generated code;
-	// all mccmod signatures remain the same.  Furthermore, thread-safety of the
-	// interface is not affected by this option; const mccmods remain safe to
-	// call from multiple threads concurrently, while non-const mccmods continue
+	// all method signatures remain the same.  Furthermore, thread-safety of the
+	// interface is not affected by this option; const methods remain safe to
+	// call from multiple threads concurrently, while non-const methods continue
 	// to require exclusive access.
 	//
 	//
@@ -2118,13 +2118,13 @@ func (m *ServiceOptions) GetUninterpretedOption() []*UninterpretedOption {
 	return nil
 }
 
-type MccmodOptions struct {
-	// Is this mccmod deprecated?
+type MethodOptions struct {
+	// Is this method deprecated?
 	// Depending on the target platform, this can emit Deprecated annotations
-	// for the mccmod, or it will be completely ignored; in the very least,
-	// this is a formalization for deprecating mccmods.
+	// for the method, or it will be completely ignored; in the very least,
+	// this is a formalization for deprecating methods.
 	Deprecated       *bool                           `protobuf:"varint,33,opt,name=deprecated,def=0" json:"deprecated,omitempty"`
-	IdempotencyLevel *MccmodOptions_IdempotencyLevel `protobuf:"varint,34,opt,name=idempotency_level,json=idempotencyLevel,enum=google.protobuf.MccmodOptions_IdempotencyLevel,def=0" json:"idempotency_level,omitempty"`
+	IdempotencyLevel *MethodOptions_IdempotencyLevel `protobuf:"varint,34,opt,name=idempotency_level,json=idempotencyLevel,enum=google.protobuf.MethodOptions_IdempotencyLevel,def=0" json:"idempotency_level,omitempty"`
 	// The parser stores options it doesn't recognize here. See above.
 	UninterpretedOption          []*UninterpretedOption `protobuf:"bytes,999,rep,name=uninterpreted_option,json=uninterpretedOption" json:"uninterpreted_option,omitempty"`
 	XXX_NoUnkeyedLiteral         struct{}               `json:"-"`
@@ -2133,57 +2133,57 @@ type MccmodOptions struct {
 	XXX_sizecache                int32  `json:"-"`
 }
 
-func (m *MccmodOptions) Reset()         { *m = MccmodOptions{} }
-func (m *MccmodOptions) String() string { return proto.CompactTextString(m) }
-func (*MccmodOptions) ProtoMessage()    {}
-func (*MccmodOptions) Descriptor() ([]byte, []int) {
+func (m *MethodOptions) Reset()         { *m = MethodOptions{} }
+func (m *MethodOptions) String() string { return proto.CompactTextString(m) }
+func (*MethodOptions) ProtoMessage()    {}
+func (*MethodOptions) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e5baabe45344a177, []int{17}
 }
 
-var extRange_MccmodOptions = []proto.ExtensionRange{
+var extRange_MethodOptions = []proto.ExtensionRange{
 	{Start: 1000, End: 536870911},
 }
 
-func (*MccmodOptions) ExtensionRangeArray() []proto.ExtensionRange {
-	return extRange_MccmodOptions
+func (*MethodOptions) ExtensionRangeArray() []proto.ExtensionRange {
+	return extRange_MethodOptions
 }
 
-func (m *MccmodOptions) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_MccmodOptions.Unmarshal(m, b)
+func (m *MethodOptions) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MethodOptions.Unmarshal(m, b)
 }
-func (m *MccmodOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_MccmodOptions.Marshal(b, m, deterministic)
+func (m *MethodOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MethodOptions.Marshal(b, m, deterministic)
 }
-func (m *MccmodOptions) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MccmodOptions.Merge(m, src)
+func (m *MethodOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MethodOptions.Merge(m, src)
 }
-func (m *MccmodOptions) XXX_Size() int {
-	return xxx_messageInfo_MccmodOptions.Size(m)
+func (m *MethodOptions) XXX_Size() int {
+	return xxx_messageInfo_MethodOptions.Size(m)
 }
-func (m *MccmodOptions) XXX_DiscardUnknown() {
-	xxx_messageInfo_MccmodOptions.DiscardUnknown(m)
+func (m *MethodOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_MethodOptions.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MccmodOptions proto.InternalMessageInfo
+var xxx_messageInfo_MethodOptions proto.InternalMessageInfo
 
-const Default_MccmodOptions_Deprecated bool = false
-const Default_MccmodOptions_IdempotencyLevel MccmodOptions_IdempotencyLevel = MccmodOptions_IDEMPOTENCY_UNKNOWN
+const Default_MethodOptions_Deprecated bool = false
+const Default_MethodOptions_IdempotencyLevel MethodOptions_IdempotencyLevel = MethodOptions_IDEMPOTENCY_UNKNOWN
 
-func (m *MccmodOptions) GetDeprecated() bool {
+func (m *MethodOptions) GetDeprecated() bool {
 	if m != nil && m.Deprecated != nil {
 		return *m.Deprecated
 	}
-	return Default_MccmodOptions_Deprecated
+	return Default_MethodOptions_Deprecated
 }
 
-func (m *MccmodOptions) GetIdempotencyLevel() MccmodOptions_IdempotencyLevel {
+func (m *MethodOptions) GetIdempotencyLevel() MethodOptions_IdempotencyLevel {
 	if m != nil && m.IdempotencyLevel != nil {
 		return *m.IdempotencyLevel
 	}
-	return Default_MccmodOptions_IdempotencyLevel
+	return Default_MethodOptions_IdempotencyLevel
 }
 
-func (m *MccmodOptions) GetUninterpretedOption() []*UninterpretedOption {
+func (m *MethodOptions) GetUninterpretedOption() []*UninterpretedOption {
 	if m != nil {
 		return m.UninterpretedOption
 	}
@@ -2688,7 +2688,7 @@ func init() {
 	proto.RegisterEnum("google.protobuf.FileOptions_OptimizeMode", FileOptions_OptimizeMode_name, FileOptions_OptimizeMode_value)
 	proto.RegisterEnum("google.protobuf.FieldOptions_CType", FieldOptions_CType_name, FieldOptions_CType_value)
 	proto.RegisterEnum("google.protobuf.FieldOptions_JSType", FieldOptions_JSType_name, FieldOptions_JSType_value)
-	proto.RegisterEnum("google.protobuf.MccmodOptions_IdempotencyLevel", MccmodOptions_IdempotencyLevel_name, MccmodOptions_IdempotencyLevel_value)
+	proto.RegisterEnum("google.protobuf.MethodOptions_IdempotencyLevel", MethodOptions_IdempotencyLevel_name, MethodOptions_IdempotencyLevel_value)
 	proto.RegisterType((*FileDescriptorSet)(nil), "google.protobuf.FileDescriptorSet")
 	proto.RegisterType((*FileDescriptorProto)(nil), "google.protobuf.FileDescriptorProto")
 	proto.RegisterType((*DescriptorProto)(nil), "google.protobuf.DescriptorProto")
@@ -2701,7 +2701,7 @@ func init() {
 	proto.RegisterType((*EnumDescriptorProto_EnumReservedRange)(nil), "google.protobuf.EnumDescriptorProto.EnumReservedRange")
 	proto.RegisterType((*EnumValueDescriptorProto)(nil), "google.protobuf.EnumValueDescriptorProto")
 	proto.RegisterType((*ServiceDescriptorProto)(nil), "google.protobuf.ServiceDescriptorProto")
-	proto.RegisterType((*MccmodDescriptorProto)(nil), "google.protobuf.MccmodDescriptorProto")
+	proto.RegisterType((*MethodDescriptorProto)(nil), "google.protobuf.MethodDescriptorProto")
 	proto.RegisterType((*FileOptions)(nil), "google.protobuf.FileOptions")
 	proto.RegisterType((*MessageOptions)(nil), "google.protobuf.MessageOptions")
 	proto.RegisterType((*FieldOptions)(nil), "google.protobuf.FieldOptions")
@@ -2709,7 +2709,7 @@ func init() {
 	proto.RegisterType((*EnumOptions)(nil), "google.protobuf.EnumOptions")
 	proto.RegisterType((*EnumValueOptions)(nil), "google.protobuf.EnumValueOptions")
 	proto.RegisterType((*ServiceOptions)(nil), "google.protobuf.ServiceOptions")
-	proto.RegisterType((*MccmodOptions)(nil), "google.protobuf.MccmodOptions")
+	proto.RegisterType((*MethodOptions)(nil), "google.protobuf.MethodOptions")
 	proto.RegisterType((*UninterpretedOption)(nil), "google.protobuf.UninterpretedOption")
 	proto.RegisterType((*UninterpretedOption_NamePart)(nil), "google.protobuf.UninterpretedOption.NamePart")
 	proto.RegisterType((*SourceCodeInfo)(nil), "google.protobuf.SourceCodeInfo")

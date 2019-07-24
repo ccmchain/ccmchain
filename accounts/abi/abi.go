@@ -26,11 +26,11 @@ import (
 )
 
 // The ABI holds information about a contract's context and available
-// invokable mccmods. It will allow you to type check function calls and
+// invokable methods. It will allow you to type check function calls and
 // packs data accordingly.
 type ABI struct {
-	Constructor Mccmod
-	Mccmods     map[string]Mccmod
+	Constructor Method
+	Methods     map[string]Method
 	Events      map[string]Event
 }
 
@@ -46,13 +46,13 @@ func JSON(reader io.Reader) (ABI, error) {
 	return abi, nil
 }
 
-// Pack the given mccmod name to conform the ABI. Mccmod call's data
-// will consist of mccmod_id, args0, arg1, ... argN. Mccmod id consists
+// Pack the given method name to conform the ABI. Method call's data
+// will consist of method_id, args0, arg1, ... argN. Method id consists
 // of 4 bytes and arguments are all 32 bytes.
-// Mccmod ids are created from the first 4 bytes of the hash of the
-// mccmods string signature. (signature = baz(uint32,string32))
+// Method ids are created from the first 4 bytes of the hash of the
+// methods string signature. (signature = baz(uint32,string32))
 func (abi ABI) Pack(name string, args ...interface{}) ([]byte, error) {
-	// Fetch the ABI of the requested mccmod
+	// Fetch the ABI of the requested method
 	if name == "" {
 		// constructor
 		arguments, err := abi.Constructor.Inputs.Pack(args...)
@@ -61,16 +61,16 @@ func (abi ABI) Pack(name string, args ...interface{}) ([]byte, error) {
 		}
 		return arguments, nil
 	}
-	mccmod, exist := abi.Mccmods[name]
+	method, exist := abi.Methods[name]
 	if !exist {
-		return nil, fmt.Errorf("mccmod '%s' not found", name)
+		return nil, fmt.Errorf("method '%s' not found", name)
 	}
-	arguments, err := mccmod.Inputs.Pack(args...)
+	arguments, err := method.Inputs.Pack(args...)
 	if err != nil {
 		return nil, err
 	}
-	// Pack up the mccmod ID too if not a constructor and return
-	return append(mccmod.Id(), arguments...), nil
+	// Pack up the method ID too if not a constructor and return
+	return append(method.Id(), arguments...), nil
 }
 
 // Unpack output in v according to the abi specification
@@ -79,17 +79,17 @@ func (abi ABI) Unpack(v interface{}, name string, data []byte) (err error) {
 		return fmt.Errorf("abi: unmarshalling empty output")
 	}
 	// since there can't be naming collisions with contracts and events,
-	// we need to decide whccmer we're calling a mccmod or an event
-	if mccmod, ok := abi.Mccmods[name]; ok {
+	// we need to decide whccmer we're calling a method or an event
+	if method, ok := abi.Methods[name]; ok {
 		if len(data)%32 != 0 {
 			return fmt.Errorf("abi: improperly formatted output: %s - Bytes: [%+v]", string(data), data)
 		}
-		return mccmod.Outputs.Unpack(v, data)
+		return method.Outputs.Unpack(v, data)
 	}
 	if event, ok := abi.Events[name]; ok {
 		return event.Inputs.Unpack(v, data)
 	}
-	return fmt.Errorf("abi: could not locate named mccmod or event")
+	return fmt.Errorf("abi: could not locate named method or event")
 }
 
 // UnpackIntoMap unpacks a log into the provided map[string]interface{}
@@ -98,17 +98,17 @@ func (abi ABI) UnpackIntoMap(v map[string]interface{}, name string, data []byte)
 		return fmt.Errorf("abi: unmarshalling empty output")
 	}
 	// since there can't be naming collisions with contracts and events,
-	// we need to decide whccmer we're calling a mccmod or an event
-	if mccmod, ok := abi.Mccmods[name]; ok {
+	// we need to decide whccmer we're calling a method or an event
+	if method, ok := abi.Methods[name]; ok {
 		if len(data)%32 != 0 {
 			return fmt.Errorf("abi: improperly formatted output")
 		}
-		return mccmod.Outputs.UnpackIntoMap(v, data)
+		return method.Outputs.UnpackIntoMap(v, data)
 	}
 	if event, ok := abi.Events[name]; ok {
 		return event.Inputs.UnpackIntoMap(v, data)
 	}
-	return fmt.Errorf("abi: could not locate named mccmod or event")
+	return fmt.Errorf("abi: could not locate named method or event")
 }
 
 // UnmarshalJSON implements json.Unmarshaler interface
@@ -126,23 +126,23 @@ func (abi *ABI) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	abi.Mccmods = make(map[string]Mccmod)
+	abi.Methods = make(map[string]Method)
 	abi.Events = make(map[string]Event)
 	for _, field := range fields {
 		switch field.Type {
 		case "constructor":
-			abi.Constructor = Mccmod{
+			abi.Constructor = Method{
 				Inputs: field.Inputs,
 			}
 		// empty defaults to function according to the abi spec
 		case "function", "":
 			name := field.Name
-			_, ok := abi.Mccmods[name]
+			_, ok := abi.Methods[name]
 			for idx := 0; ok; idx++ {
 				name = fmt.Sprintf("%s%d", field.Name, idx)
-				_, ok = abi.Mccmods[name]
+				_, ok = abi.Methods[name]
 			}
-			abi.Mccmods[name] = Mccmod{
+			abi.Methods[name] = Method{
 				Name:    name,
 				Const:   field.Constant,
 				Inputs:  field.Inputs,
@@ -166,18 +166,18 @@ func (abi *ABI) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MccmodById looks up a mccmod by the 4-byte id
+// MethodById looks up a method by the 4-byte id
 // returns nil if none found
-func (abi *ABI) MccmodById(sigdata []byte) (*Mccmod, error) {
+func (abi *ABI) MethodById(sigdata []byte) (*Method, error) {
 	if len(sigdata) < 4 {
-		return nil, fmt.Errorf("data too short (%d bytes) for abi mccmod lookup", len(sigdata))
+		return nil, fmt.Errorf("data too short (%d bytes) for abi method lookup", len(sigdata))
 	}
-	for _, mccmod := range abi.Mccmods {
-		if bytes.Equal(mccmod.Id(), sigdata[:4]) {
-			return &mccmod, nil
+	for _, method := range abi.Methods {
+		if bytes.Equal(method.Id(), sigdata[:4]) {
+			return &method, nil
 		}
 	}
-	return nil, fmt.Errorf("no mccmod with id: %#x", sigdata[:4])
+	return nil, fmt.Errorf("no method with id: %#x", sigdata[:4])
 }
 
 // EventByID looks an event up by its topic hash in the

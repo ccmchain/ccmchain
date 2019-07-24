@@ -604,7 +604,7 @@ var (
 	ListenPortFlag = cli.IntFlag{
 		Name:  "port",
 		Usage: "Network listening port",
-		Value: 30303,
+		Value: 17575,
 	}
 	BootnodesFlag = cli.StringFlag{
 		Name:  "bootnodes",
@@ -1511,7 +1511,7 @@ func SetDashboardConfig(ctx *cli.Context, cfg *dashboard.Config) {
 	cfg.Refresh = ctx.GlobalDuration(DashboardRefreshFlag.Name)
 }
 
-// RegisterEthService adds an Ethereum client to the stack.
+// RegisterEthService adds an Ccmchain client to the stack.
 func RegisterEthService(stack *node.Node, cfg *ccm.Config) {
 	var err error
 	if cfg.SyncMode == downloader.LightSync {
@@ -1529,7 +1529,7 @@ func RegisterEthService(stack *node.Node, cfg *ccm.Config) {
 		})
 	}
 	if err != nil {
-		Fatalf("Failed to register the Ethereum service: %v", err)
+		Fatalf("Failed to register the Ccmchain service: %v", err)
 	}
 }
 
@@ -1549,21 +1549,21 @@ func RegisterShhService(stack *node.Node, cfg *whisper.Config) {
 	}
 }
 
-// RegisterEthStatsService configures the Ethereum Stats daemon and adds it to
+// RegisterEthStatsService configures the Ccmchain Stats daemon and adds it to
 // the given node.
 func RegisterEthStatsService(stack *node.Node, url string) {
 	if err := stack.Register(func(ctx *node.ServiceContext) (node.Service, error) {
 		// Retrieve both ccm and les services
-		var ccmServ *ccm.Ethereum
+		var ccmServ *ccm.Ccmchain
 		ctx.Service(&ccmServ)
 
-		var lesServ *les.LightEthereum
+		var lesServ *les.LightCcmchain
 		ctx.Service(&lesServ)
 
 		// Let ccmstats use whichever is not nil
 		return ccmstats.New(url, ccmServ, lesServ)
 	}); err != nil {
-		Fatalf("Failed to register the Ethereum Stats service: %v", err)
+		Fatalf("Failed to register the Ccmchain Stats service: %v", err)
 	}
 }
 
@@ -1571,17 +1571,17 @@ func RegisterEthStatsService(stack *node.Node, url string) {
 func RegisterGraphQLService(stack *node.Node, endpoint string, cors, vhosts []string, timeouts rpc.HTTPTimeouts) {
 	if err := stack.Register(func(ctx *node.ServiceContext) (node.Service, error) {
 		// Try to construct the GraphQL service backed by a full node
-		var ccmServ *ccm.Ethereum
+		var ccmServ *ccm.Ccmchain
 		if err := ctx.Service(&ccmServ); err == nil {
 			return graphql.New(ccmServ.APIBackend, endpoint, cors, vhosts, timeouts)
 		}
 		// Try to construct the GraphQL service backed by a light node
-		var lesServ *les.LightEthereum
+		var lesServ *les.LightCcmchain
 		if err := ctx.Service(&lesServ); err == nil {
 			return graphql.New(lesServ.ApiBackend, endpoint, cors, vhosts, timeouts)
 		}
 		// Well, this should not have happened, bail out
-		return nil, errors.New("no Ethereum service")
+		return nil, errors.New("no Ccmchain service")
 	}); err != nil {
 		Fatalf("Failed to register the GraphQL service: %v", err)
 	}

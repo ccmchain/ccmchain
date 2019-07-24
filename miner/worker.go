@@ -170,10 +170,10 @@ type worker struct {
 	isLocalBlock func(block *types.Block) bool // Function used to determine whccmer the specified block is mined by local miner.
 
 	// Test hooks
-	newTaskHook  func(*task)                        // Mccmod to call upon receiving a new sealing task.
-	skipSealHook func(*task) bool                   // Mccmod to decide whccmer skipping the sealing.
-	fullTaskHook func()                             // Mccmod to call before pushing the full sealing task.
-	resubmitHook func(time.Duration, time.Duration) // Mccmod to call upon updating resubmitting interval.
+	newTaskHook  func(*task)                        // Method to call upon receiving a new sealing task.
+	skipSealHook func(*task) bool                   // Method to decide whccmer skipping the sealing.
+	fullTaskHook func()                             // Method to call before pushing the full sealing task.
+	resubmitHook func(time.Duration, time.Duration) // Method to call upon updating resubmitting interval.
 }
 
 func newWorker(config *Config, chainConfig *params.ChainConfig, engine consensus.Engine, ccm Backend, mux *event.TypeMux, isLocalBlock func(*types.Block) bool) *worker {
@@ -224,8 +224,8 @@ func newWorker(config *Config, chainConfig *params.ChainConfig, engine consensus
 	return worker
 }
 
-// setEtherbase sets the ccmerbase used to initialize the block coinbase field.
-func (w *worker) setEtherbase(addr common.Address) {
+// setCcmchainbase sets the ccmerbase used to initialize the block coinbase field.
+func (w *worker) setCcmchainbase(addr common.Address) {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	w.coinbase = addr
@@ -981,7 +981,7 @@ func (w *worker) commit(uncles []*types.Header, interval func(), update bool, st
 			for i, tx := range block.Transactions() {
 				feesWei.Add(feesWei, new(big.Int).Mul(new(big.Int).SetUint64(receipts[i].GasUsed), tx.GasPrice()))
 			}
-			feesEth := new(big.Float).Quo(new(big.Float).SetInt(feesWei), new(big.Float).SetInt(big.NewInt(params.Ether)))
+			feesEth := new(big.Float).Quo(new(big.Float).SetInt(feesWei), new(big.Float).SetInt(big.NewInt(params.Ccmchain)))
 
 			log.Info("Commit new mining work", "number", block.Number(), "sealhash", w.engine.SealHash(block.Header()),
 				"uncles", len(uncles), "txs", w.current.tcount, "gas", block.GasUsed(), "fees", feesEth, "elapsed", common.PrettyDuration(time.Since(start)))

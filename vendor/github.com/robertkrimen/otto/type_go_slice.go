@@ -67,10 +67,10 @@ func goSliceGetOwnProperty(self *_object, name string) *_property {
 		}
 	}
 
-	// Other mccmods
-	if mccmod := self.value.(*_goSliceObject).value.MccmodByName(name); (mccmod != reflect.Value{}) {
+	// Other methods
+	if method := self.value.(*_goSliceObject).value.MethodByName(name); (method != reflect.Value{}) {
 		return &_property{
-			value: self.runtime.toValue(mccmod.Interface()),
+			value: self.runtime.toValue(method.Interface()),
 			mode:  0110,
 		}
 	}

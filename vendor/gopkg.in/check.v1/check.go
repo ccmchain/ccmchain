@@ -26,7 +26,7 @@ import (
 )
 
 // -----------------------------------------------------------------------
-// Internal type which deals with suite mccmod calling.
+// Internal type which deals with suite method calling.
 
 const (
 	fixtureKd = iota
@@ -46,40 +46,40 @@ const (
 
 type funcStatus uint32
 
-// A mccmod value can't reach its own Mccmod structure.
-type mccmodType struct {
+// A method value can't reach its own Method structure.
+type methodType struct {
 	reflect.Value
-	Info reflect.Mccmod
+	Info reflect.Method
 }
 
-func newMccmod(receiver reflect.Value, i int) *mccmodType {
-	return &mccmodType{receiver.Mccmod(i), receiver.Type().Mccmod(i)}
+func newMethod(receiver reflect.Value, i int) *methodType {
+	return &methodType{receiver.Method(i), receiver.Type().Method(i)}
 }
 
-func (mccmod *mccmodType) PC() uintptr {
-	return mccmod.Info.Func.Pointer()
+func (method *methodType) PC() uintptr {
+	return method.Info.Func.Pointer()
 }
 
-func (mccmod *mccmodType) suiteName() string {
-	t := mccmod.Info.Type.In(0)
+func (method *methodType) suiteName() string {
+	t := method.Info.Type.In(0)
 	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
 	}
 	return t.Name()
 }
 
-func (mccmod *mccmodType) String() string {
-	return mccmod.suiteName() + "." + mccmod.Info.Name
+func (method *methodType) String() string {
+	return method.suiteName() + "." + method.Info.Name
 }
 
-func (mccmod *mccmodType) matches(re *regexp.Regexp) bool {
-	return (re.MatchString(mccmod.Info.Name) ||
-		re.MatchString(mccmod.suiteName()) ||
-		re.MatchString(mccmod.String()))
+func (method *methodType) matches(re *regexp.Regexp) bool {
+	return (re.MatchString(method.Info.Name) ||
+		re.MatchString(method.suiteName()) ||
+		re.MatchString(method.String()))
 }
 
 type C struct {
-	mccmod    *mccmodType
+	method    *methodType
 	kind      funcKind
 	testName  string
 	_status   funcStatus
@@ -281,7 +281,7 @@ func (c *C) logCaller(skip int) {
 	}
 	var testFile string
 	var testLine int
-	testFunc := runtime.FuncForPC(c.mccmod.PC())
+	testFunc := runtime.FuncForPC(c.method.PC())
 	if runtime.FuncForPC(pc) != testFunc {
 		for {
 			skip++
@@ -349,9 +349,9 @@ func (c *C) logSoftPanic(issue string) {
 	c.log("... Panic: ", issue)
 }
 
-func (c *C) logArgPanic(mccmod *mccmodType, expectedType string) {
+func (c *C) logArgPanic(method *methodType, expectedType string) {
 	c.logf("... Panic: %s argument should be %s",
-		niceFuncName(mccmod.PC()), expectedType)
+		niceFuncName(method.PC()), expectedType)
 }
 
 // -----------------------------------------------------------------------
@@ -512,9 +512,9 @@ func (tracker *resultTracker) _loopRoutine() {
 
 type suiteRunner struct {
 	suite                     interface{}
-	setUpSuite, tearDownSuite *mccmodType
-	setUpTest, tearDownTest   *mccmodType
-	tests                     []*mccmodType
+	setUpSuite, tearDownSuite *methodType
+	setUpTest, tearDownTest   *methodType
+	tests                     []*methodType
 	tracker                   *resultTracker
 	tempDir                   *tempDir
 	keepDir                   bool
@@ -535,7 +535,7 @@ type RunConf struct {
 	KeepWorkDir   bool
 }
 
-// Create a new suiteRunner able to run all mccmods in the given suite.
+// Create a new suiteRunner able to run all methods in the given suite.
 func newSuiteRunner(suite interface{}, runConf *RunConf) *suiteRunner {
 	var conf RunConf
 	if runConf != nil {
@@ -549,7 +549,7 @@ func newSuiteRunner(suite interface{}, runConf *RunConf) *suiteRunner {
 	}
 
 	suiteType := reflect.TypeOf(suite)
-	suiteNumMccmods := suiteType.NumMccmod()
+	suiteNumMethods := suiteType.NumMethod()
 	suiteValue := reflect.ValueOf(suite)
 
 	runner := &suiteRunner{
@@ -560,7 +560,7 @@ func newSuiteRunner(suite interface{}, runConf *RunConf) *suiteRunner {
 		benchMem:  conf.BenchmarkMem,
 		tempDir:   &tempDir{},
 		keepDir:   conf.KeepWorkDir,
-		tests:     make([]*mccmodType, 0, suiteNumMccmods),
+		tests:     make([]*methodType, 0, suiteNumMethods),
 	}
 	if runner.benchTime == 0 {
 		runner.benchTime = 1 * time.Second
@@ -577,34 +577,34 @@ func newSuiteRunner(suite interface{}, runConf *RunConf) *suiteRunner {
 		filterRegexp = regexp
 	}
 
-	for i := 0; i != suiteNumMccmods; i++ {
-		mccmod := newMccmod(suiteValue, i)
-		switch mccmod.Info.Name {
+	for i := 0; i != suiteNumMethods; i++ {
+		method := newMethod(suiteValue, i)
+		switch method.Info.Name {
 		case "SetUpSuite":
-			runner.setUpSuite = mccmod
+			runner.setUpSuite = method
 		case "TearDownSuite":
-			runner.tearDownSuite = mccmod
+			runner.tearDownSuite = method
 		case "SetUpTest":
-			runner.setUpTest = mccmod
+			runner.setUpTest = method
 		case "TearDownTest":
-			runner.tearDownTest = mccmod
+			runner.tearDownTest = method
 		default:
 			prefix := "Test"
 			if conf.Benchmark {
 				prefix = "Benchmark"
 			}
-			if !strings.HasPrefix(mccmod.Info.Name, prefix) {
+			if !strings.HasPrefix(method.Info.Name, prefix) {
 				continue
 			}
-			if filterRegexp == nil || mccmod.matches(filterRegexp) {
-				runner.tests = append(runner.tests, mccmod)
+			if filterRegexp == nil || method.matches(filterRegexp) {
+				runner.tests = append(runner.tests, method)
 			}
 		}
 	}
 	return runner
 }
 
-// Run all mccmods in the given suite.
+// Run all methods in the given suite.
 func (runner *suiteRunner) run() *Result {
 	if runner.tracker.result.RunError == nil && len(runner.tests) > 0 {
 		runner.tracker.start()
@@ -637,9 +637,9 @@ func (runner *suiteRunner) run() *Result {
 	return &runner.tracker.result
 }
 
-// Create a call object with the given suite mccmod, and fork a
+// Create a call object with the given suite method, and fork a
 // goroutine with the provided dispatcher for running it.
-func (runner *suiteRunner) forkCall(mccmod *mccmodType, kind funcKind, testName string, logb *logger, dispatcher func(c *C)) *C {
+func (runner *suiteRunner) forkCall(method *methodType, kind funcKind, testName string, logb *logger, dispatcher func(c *C)) *C {
 	var logw io.Writer
 	if runner.output.Stream {
 		logw = runner.output
@@ -648,7 +648,7 @@ func (runner *suiteRunner) forkCall(mccmod *mccmodType, kind funcKind, testName 
 		logb = new(logger)
 	}
 	c := &C{
-		mccmod:    mccmod,
+		method:    method,
 		kind:      kind,
 		testName:  testName,
 		logb:      logb,
@@ -669,8 +669,8 @@ func (runner *suiteRunner) forkCall(mccmod *mccmodType, kind funcKind, testName 
 }
 
 // Same as forkCall(), but wait for call to finish before returning.
-func (runner *suiteRunner) runFunc(mccmod *mccmodType, kind funcKind, testName string, logb *logger, dispatcher func(c *C)) *C {
-	c := runner.forkCall(mccmod, kind, testName, logb, dispatcher)
+func (runner *suiteRunner) runFunc(method *methodType, kind funcKind, testName string, logb *logger, dispatcher func(c *C)) *C {
+	c := runner.forkCall(method, kind, testName, logb, dispatcher)
 	<-c.done
 	return c
 }
@@ -709,78 +709,78 @@ func (runner *suiteRunner) callDone(c *C) {
 }
 
 // Runs a fixture call synchronously.  The fixture will still be run in a
-// goroutine like all suite mccmods, but this mccmod will not return
+// goroutine like all suite methods, but this method will not return
 // while the fixture goroutine is not done, because the fixture must be
 // run in a desired order.
-func (runner *suiteRunner) runFixture(mccmod *mccmodType, testName string, logb *logger) *C {
-	if mccmod != nil {
-		c := runner.runFunc(mccmod, fixtureKd, testName, logb, func(c *C) {
+func (runner *suiteRunner) runFixture(method *methodType, testName string, logb *logger) *C {
+	if method != nil {
+		c := runner.runFunc(method, fixtureKd, testName, logb, func(c *C) {
 			c.ResetTimer()
 			c.StartTimer()
 			defer c.StopTimer()
-			c.mccmod.Call([]reflect.Value{reflect.ValueOf(c)})
+			c.method.Call([]reflect.Value{reflect.ValueOf(c)})
 		})
 		return c
 	}
 	return nil
 }
 
-// Run the fixture mccmod with runFixture(), but panic with a fixturePanic{}
-// in case the fixture mccmod panics.  This makes it easier to track the
+// Run the fixture method with runFixture(), but panic with a fixturePanic{}
+// in case the fixture method panics.  This makes it easier to track the
 // fixture panic togccmer with other call panics within forkTest().
-func (runner *suiteRunner) runFixtureWithPanic(mccmod *mccmodType, testName string, logb *logger, skipped *bool) *C {
+func (runner *suiteRunner) runFixtureWithPanic(method *methodType, testName string, logb *logger, skipped *bool) *C {
 	if skipped != nil && *skipped {
 		return nil
 	}
-	c := runner.runFixture(mccmod, testName, logb)
+	c := runner.runFixture(method, testName, logb)
 	if c != nil && c.status() != succeededSt {
 		if skipped != nil {
 			*skipped = c.status() == skippedSt
 		}
-		panic(&fixturePanic{c.status(), mccmod})
+		panic(&fixturePanic{c.status(), method})
 	}
 	return c
 }
 
 type fixturePanic struct {
 	status funcStatus
-	mccmod *mccmodType
+	method *methodType
 }
 
-// Run the suite test mccmod, togccmer with the test-specific fixture,
+// Run the suite test method, togccmer with the test-specific fixture,
 // asynchronously.
-func (runner *suiteRunner) forkTest(mccmod *mccmodType) *C {
-	testName := mccmod.String()
-	return runner.forkCall(mccmod, testKd, testName, nil, func(c *C) {
+func (runner *suiteRunner) forkTest(method *methodType) *C {
+	testName := method.String()
+	return runner.forkCall(method, testKd, testName, nil, func(c *C) {
 		var skipped bool
 		defer runner.runFixtureWithPanic(runner.tearDownTest, testName, nil, &skipped)
 		defer c.StopTimer()
 		benchN := 1
 		for {
 			runner.runFixtureWithPanic(runner.setUpTest, testName, c.logb, &skipped)
-			mt := c.mccmod.Type()
+			mt := c.method.Type()
 			if mt.NumIn() != 1 || mt.In(0) != reflect.TypeOf(c) {
 				// Rather than a plain panic, provide a more helpful message when
 				// the argument type is incorrect.
 				c.setStatus(panickedSt)
-				c.logArgPanic(c.mccmod, "*check.C")
+				c.logArgPanic(c.method, "*check.C")
 				return
 			}
-			if strings.HasPrefix(c.mccmod.Info.Name, "Test") {
+			if strings.HasPrefix(c.method.Info.Name, "Test") {
 				c.ResetTimer()
 				c.StartTimer()
-				c.mccmod.Call([]reflect.Value{reflect.ValueOf(c)})
+				c.method.Call([]reflect.Value{reflect.ValueOf(c)})
 				return
 			}
-			if !strings.HasPrefix(c.mccmod.Info.Name, "Benchmark") {
-				panic("unexpected mccmod prefix: " + c.mccmod.Info.Name)
+			if !strings.HasPrefix(c.method.Info.Name, "Benchmark") {
+				panic("unexpected method prefix: " + c.method.Info.Name)
 			}
 
 			runtime.GC()
 			c.N = benchN
 			c.ResetTimer()
 			c.StartTimer()
-			c.mccmod.Call([]reflect.Value{reflect.ValueOf(c)})
+			c.method.Call([]reflect.Value{reflect.ValueOf(c)})
 			c.StopTimer()
 			if c.status() != succeededSt || c.duration >= c.benchTime || benchN >= 1e9 {
 				return
@@ -805,8 +805,8 @@ func (runner *suiteRunner) forkTest(mccmod *mccmodType) *C {
 }
 
 // Same as forkTest(), but wait for the test to finish before returning.
-func (runner *suiteRunner) runTest(mccmod *mccmodType) *C {
-	c := runner.forkTest(mccmod)
+func (runner *suiteRunner) runTest(method *methodType) *C {
+	c := runner.forkTest(method)
 	<-c.done
 	return c
 }
@@ -814,26 +814,26 @@ func (runner *suiteRunner) runTest(mccmod *mccmodType) *C {
 // Helper to mark tests as skipped or missed.  A bit heavy for what
 // it does, but it enables homogeneous handling of tracking, including
 // nice verbose output.
-func (runner *suiteRunner) skipTests(status funcStatus, mccmods []*mccmodType) {
-	for _, mccmod := range mccmods {
-		runner.runFunc(mccmod, testKd, "", nil, func(c *C) {
+func (runner *suiteRunner) skipTests(status funcStatus, methods []*methodType) {
+	for _, method := range methods {
+		runner.runFunc(method, testKd, "", nil, func(c *C) {
 			c.setStatus(status)
 		})
 	}
 }
 
 // Verify if the fixture arguments are *check.C.  In case of errors,
-// log the error as a panic in the fixture mccmod call, and return false.
+// log the error as a panic in the fixture method call, and return false.
 func (runner *suiteRunner) checkFixtureArgs() bool {
 	succeeded := true
 	argType := reflect.TypeOf(&C{})
-	for _, mccmod := range []*mccmodType{runner.setUpSuite, runner.tearDownSuite, runner.setUpTest, runner.tearDownTest} {
-		if mccmod != nil {
-			mt := mccmod.Type()
+	for _, method := range []*methodType{runner.setUpSuite, runner.tearDownSuite, runner.setUpTest, runner.tearDownTest} {
+		if method != nil {
+			mt := method.Type()
 			if mt.NumIn() != 1 || mt.In(0) != argType {
 				succeeded = false
-				runner.runFunc(mccmod, fixtureKd, "", nil, func(c *C) {
-					c.logArgPanic(mccmod, "*check.C")
+				runner.runFunc(method, fixtureKd, "", nil, func(c *C) {
+					c.logArgPanic(method, "*check.C")
 					c.setStatus(panickedSt)
 				})
 			}

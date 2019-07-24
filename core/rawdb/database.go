@@ -130,7 +130,7 @@ func NewDatabaseWithFreezer(db ccmdb.KeyValueStore, freezer string, namespace st
 	//     key-value store, since that would mean we already had an old freezer.
 
 	// If the genesis hash is empty, we have a new key-value store, so nothing to
-	// validate in this mccmod. If, however, the genesis hash is not nil, compare
+	// validate in this method. If, however, the genesis hash is not nil, compare
 	// it to the freezer content.
 	if kvgenesis, _ := db.Get(headerHashKey(0)); len(kvgenesis) > 0 {
 		if frozen, _ := frdb.Ancients(); frozen > 0 {

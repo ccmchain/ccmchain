@@ -127,7 +127,7 @@ func (hc *HeaderChain) GetBlockNumber(hash common.Hash) *uint64 {
 // already known. If the total difficulty of the newly inserted header becomes
 // greater than the current known TD, the canonical chain is re-routed.
 //
-// Note: This mccmod is not concurrent-safe with inserting blocks simultaneously
+// Note: This method is not concurrent-safe with inserting blocks simultaneously
 // into the chain, as side effects caused by reorganisations cannot be emulated
 // without the real blocks. Hence, writing headers directly should only be done
 // in two scenarios: pure-header mode of operation (light clients), or properly

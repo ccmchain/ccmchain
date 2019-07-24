@@ -86,23 +86,23 @@ var (
 	debExecutables = []debExecutable{
 		{
 			BinaryName:  "abigen",
-			Description: "Source code generator to convert Ethereum contract definitions into easy to use, compile-time type-safe Go packages.",
+			Description: "Source code generator to convert Ccmchain contract definitions into easy to use, compile-time type-safe Go packages.",
 		},
 		{
 			BinaryName:  "bootnode",
-			Description: "Ethereum bootnode.",
+			Description: "Ccmchain bootnode.",
 		},
 		{
 			BinaryName:  "evm",
-			Description: "Developer utility version of the EVM (Ethereum Virtual Machine) that is capable of running bytecode snippets within a configurable environment and execution mode.",
+			Description: "Developer utility version of the EVM (Ccmchain Virtual Machine) that is capable of running bytecode snippets within a configurable environment and execution mode.",
 		},
 		{
 			BinaryName:  "gccm",
-			Description: "Ethereum CLI client.",
+			Description: "Ccmchain CLI client.",
 		},
 		{
 			BinaryName:  "puppccm",
-			Description: "Ethereum private network manager.",
+			Description: "Ccmchain private network manager.",
 		},
 		{
 			BinaryName:  "rlpdump",
@@ -110,17 +110,17 @@ var (
 		},
 		{
 			BinaryName:  "wnode",
-			Description: "Ethereum Whisper diagnostic tool",
+			Description: "Ccmchain Whisper diagnostic tool",
 		},
 		{
 			BinaryName:  "clef",
-			Description: "Ethereum account management tool.",
+			Description: "Ccmchain account management tool.",
 		},
 	}
 
 	// A debian package is created for all executables listed here.
 
-	debEthereum = debPackage{
+	debCcmchain = debPackage{
 		Name:        "ccmchain",
 		Version:     params.Version,
 		Executables: debExecutables,
@@ -128,7 +128,7 @@ var (
 
 	// Debian meta packages to build and push to Ubuntu PPA
 	debPackages = []debPackage{
-		debEthereum,
+		debCcmchain,
 	}
 
 	// Distros for which packages are created.
@@ -594,7 +594,7 @@ func (d debExecutable) Package() string {
 func newDebMetadata(distro, author string, env build.Environment, t time.Time, name string, version string, exes []debExecutable) debMetadata {
 	if author == "" {
 		// No signing key, use default author.
-		author = "Ethereum Builds <fjl@ccmchain.org>"
+		author = "Ccmchain Builds <fjl@ccmchain.org>"
 	}
 	return debMetadata{
 		PackageName: name,

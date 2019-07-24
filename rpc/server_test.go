@@ -77,7 +77,7 @@ func runTestScript(t *testing.T, file string) {
 
 	clientConn, serverConn := net.Pipe()
 	defer clientConn.Close()
-	go server.ServeCodec(NewJSONCodec(serverConn), OptionMccmodInvocation|OptionSubscriptions)
+	go server.ServeCodec(NewJSONCodec(serverConn), OptionMethodInvocation|OptionSubscriptions)
 	readbuf := bufio.NewReader(clientConn)
 	for _, line := range strings.Split(string(content), "\n") {
 		line = strings.TrimSpace(line)
@@ -125,7 +125,7 @@ func TestServerShortLivedConn(t *testing.T) {
 	go server.ServeListener(listener)
 
 	var (
-		request  = `{"jsonrpc":"2.0","id":1,"mccmod":"rpc_modules"}` + "\n"
+		request  = `{"jsonrpc":"2.0","id":1,"method":"rpc_modules"}` + "\n"
 		wantResp = `{"jsonrpc":"2.0","id":1,"result":{"nftest":"1.0","rpc":"1.0","test":"1.0"}}` + "\n"
 		deadline = time.Now().Add(10 * time.Second)
 	)
