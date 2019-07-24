@@ -760,7 +760,7 @@ étendoir
 éternel
 éthanol
 éthique
-ccmnie
+ethnie
 étirer
 étoffer
 étoile
